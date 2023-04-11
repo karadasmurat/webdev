@@ -1,0 +1,21 @@
+/* Pseudo-Class :hover - mouse over link */
+a:hover {
+    background-color: orange;
+    color: whitesmoke;
+}
+
+/* selected link */
+a:active {
+    color: #0000FF;
+}
+
+/* Any button over which the user's pointer is hovering */
+button:hover {
+    color: orange;
+}
+
+/*Pseudo-element ::first-letter*/
+h1::first-letter {
+    color: grey;
+    font-size: 1.5em;
+}

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Display Property Example</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-size: 12px;
+        }
+
+        article {
+            line-height: 1.5;
+            font-size: 16px;
+        }
+
+        /* .boxContainer {
+            display: flex;
+            justify-content: center;
+        } */
+
+        .box {
+            width: 100px;
+            height: 100px;
+            display: inline-block;
+            margin: 10px;
+            padding: 10px;
+            border: 2px solid black;
+            border-radius: 5px;
+        }
+
+        .relative {
+            position: relative;
+            background-color: #DAF5FF8A;
+            /* 8A Alpha channel*/
+        }
+
+        .absRightTop {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #DBE4C6;
+
+        }
+
+        .box1 {
+            width: 200px;
+            height: 100px;
+            background-color: darkorange;
+            padding: 5px;
+            margin: 10px;
+        }
+
+        .footer {
+            width: 100%;
+            color: white;
+            background-color: coral;
+            padding: 1rem;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <p>Change page width, and scroll to see the difference between display properties
+
+        <ul>
+            <li>display: static</li>
+            <li>display: relative</li>
+            <li>display: fixed</li>
+            <li>display: absolute</li>
+        </ul>
+    </p>
+    <div>
+        <div class="box">no position</div>
+        <div id="middleBox" class="box relative"> position: relative;</div>
+        <div id="rightBox" class="box absRightTop"> position: absolute;<br>
+            right: 10px;<br>
+            top: 10px;</div>
+    </div>
+    <br>
+
+    <label for="sliderRelative">Use slider to set relative position</label>
+    <input id="sliderRelative" type="range" min="-100" max="100" value="0" step="10">
+    <span id="topValue"> 0 </span>px
+
+    <div id="footerBox" class="box1">
+        <input type="checkbox" name="isFooter" id="isFooter">
+        <label for="isFooter">a fixed footer. </label>
+    </div>
+
+    <article>
+        <header>
+            <h2>Article #1</h2>
+        </header>
+        <section>
+            <h3>Section 1</h3>
+            <p>Content of section 1 goes here</p>
+        </section>
+        <section>
+            <h3>Section 2</h3>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rem nam, quos voluptate nesciunt repudiandae
+                saepe vero esse sequi illo quia, animi, est fugiat quae optio facilis sed architecto. Minus, fuga?</p>
+            <p><span>Lorem ipsum dolor sit amet consectetur adipisicing elit. At possimus nisi explicabo maiores a quae,
+                    asperiores error minima ipsa eaque sint aspernatur et nemo dicta laboriosam sequi, blanditiis vero
+                    dolorum.</span><span>Eaque distinctio eligendi eos maxime deserunt, beatae, deleniti harum
+                    dignissimos atque impedit illo excepturi similique vero ipsum molestias necessitatibus totam vel hic
+                    aperiam adipisci! Ducimus facilis atque placeat velit voluptate.</span></p>
+        </section>
+        <footer>
+            <p>Article footer goes here</p>
+        </footer>
+    </article>
+
+    <article>
+        <header>
+            <h2>Article #2</h2>
+        </header>
+        <section>
+            <h3>Section 1</h3>
+            <p>Content of section 1 goes here</p>
+        </section>
+        <section>
+            <h3>Section 2</h3>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rem nam, quos voluptate nesciunt
+                repudiandae
+                saepe vero esse sequi illo quia, animi, est fugiat quae optio facilis sed architecto. Minus, fuga?
+            </p>
+            <p><span>Lorem ipsum dolor sit amet consectetur adipisicing elit. At possimus nisi explicabo maiores a
+                    quae,
+                    asperiores error minima ipsa eaque sint aspernatur et nemo dicta laboriosam sequi, blanditiis
+                    vero
+                    dolorum.</span><span>Eaque distinctio eligendi eos maxime deserunt, beatae, deleniti harum
+                    dignissimos atque impedit illo excepturi similique vero ipsum molestias necessitatibus totam vel
+                    hic
+                    aperiam adipisci! Ducimus facilis atque placeat velit voluptate.</span></p>
+        </section>
+        <footer>
+            <p>Article footer goes here</p>
+        </footer>
+    </article>
+
+    <script>
+        const middleBox = document.getElementById("middleBox");
+        const footerBox = document.getElementById("footerBox")
+        const topLabel = document.getElementById("topLabel");
+        const slider = document.getElementById("sliderRelative");
+        const isFooter = document.getElementById("isFooter")
+
+        slider.addEventListener("input", function () {
+            topValue.innerHTML = this.value;
+            middleBox.className = "box relative"
+            middleBox.style.left = this.value + "px";
+        });
+
+        isFooter.addEventListener("change", function () {
+            if (this.checked) {
+                footerBox.className = "footer"
+            } else {
+                footerBox.className = "box1"
+            }
+        });
+    </script>
+</body>
+
+</html>

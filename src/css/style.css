@@ -1,3 +1,26 @@
+.box {
+    text-align: center;
+    margin: 10px;
+    padding: 10px;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+.flexbox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+    border: 2px solid black;
+    text-align: center;
+}
+
+.rounded {
+    border-radius: 5px;
+}
+
 /* Pseudo-Class :hover - mouse over link */
 a:hover {
     background-color: orange;

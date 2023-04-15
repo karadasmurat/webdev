@@ -9,9 +9,35 @@ on a browser:
 In 1995, JavaScript was created by a Netscape developer named Brendan Eich.
 First, its name was Mocha. And then, its name was changed to LiveScript.
 Netscape decided to change LiveScript to JavaScript to leverage Java’ s fame, which was popular.
+After its adoption outside of Netscape, a standard document was written to describe the way the JavaScript language should work so that the various pieces of software that claimed to support JavaScript were actually talking about the same language.
+This is called the ECMAScript standard, after the Ecma International organization that did the standardization.
 
 syntax
 Add a semicolon at the end of each executable statement:
+
+Expression vs Statement
+-----------------------
+ A fragment of code that produces a value is called an "expression".
+ If an expression corresponds to a sentence fragment, a JavaScript statement corresponds to a full sentence.
+ A program is a list of statements.
+
+
+ Bindings
+---------
+ How does a program keep an internal state ? How does it remember things ?
+ To catch and hold values, JavaScript provides a thing called a binding, or variable:
+
+     let caught = 5 * 5;
+
+After a binding has been defined, its name can be used as an expression.
+When a binding points at a value, that does not mean it is tied to that value forever.
+The = operator can be used at any time on existing bindings to disconnect them from their current value and have them point to a new one:
+
+    let mood = "light";
+    mood = "dark";
+
+Two bindings can refer to the same value.
+
 
 Identifiers
 An identifier is a name you choose for variables, parameters, functions, classes, etc.
@@ -66,11 +92,25 @@ JavaScript Datatypes
 ----------------------
 
     1. String: 
-    Text, written within double or single quotes:
+    Text, written within double or single quotes.
+    strings are "immutable". When you take a specific string value, that value will always remain the same. The text inside it cannot be changed.
+    If you have a string that contains "cat", it is not possible for other code to change a character in your string to make it spell "rat".
     
     2. Number: 
     Numbers are written with or without decimals.
     Javascript numbers are always one type: double(64 - bit floating point).
+    There are three special values in JavaScript that are considered numbers but don’ t behave like normal numbers:
+    The first two are Infinity and - Infinity, which represent the positive and negative infinities.
+    
+    The third is NaN, stands for“ not a number”, even though it is a value of the number type.
+        Parsing numbers - failed number conversion(e.g.explicit ones like parseInt("blabla"), Number(undefined), or implicit ones like Math.abs(undefined)) -
+        Math operation where the result is not a real number(e.g.Math.sqrt(-1)) -
+        Indeterminate form(e.g .0 * Infinity, 1 ** Infinity, Infinity / Infinity, Infinity - Infinity) -
+        Using NaN or undefined as an operand(e.g .7 ** NaN, undefined * 2, 7 * "blabla", )— this means NaN is contagious
+
+    Testing against NaN
+    To tell
+    if a value is NaN, use isNaN() to most clearly determine whether a value is NaN
     
     3. Bigint: 
     A new datatype(ES2020) that can be used to store integer values that are too big to be represented by a normal JavaScript Number.
@@ -78,19 +118,24 @@ JavaScript Datatypes
     4. Boolean
     Booleans can only have two values: true or false.
 
-    5. Undefined
-    In JavaScript, a variable without a value, has the value undefined.
+    5. Empty values
+    There are two special values, written null and undefined, that are used to denote the absence of a meaningful value.
+    They are themselves values, but they carry no information.
+    
+        5.1 undefined 
+        In JavaScript, a variable without a value, has the value undefined.
+        Many operations in the language that don’ t produce a meaningful value yield undefined simply because they have to yield some value.
 
-    6. Null
+        5.2 null
 
-    7. Symbol
+    6. Symbol
 
-    8. JavaScript Arrays
+    7. JavaScript Arrays
     JavaScript arrays are written with square brackets, and array items are separated by commas:
         const cars = ["Saab", "Volvo", "BMW"];
     Array indexes are zero - based, which means the first item is[0].
 
-    9. JavaScript objects
+    8. JavaScript objects
     In JavaScript, an object is a collection of properties, where each property is defined as a key - value pair.
 
     The following example defines an empty object using the object literal syntax:
@@ -105,14 +150,7 @@ JavaScript Datatypes
         };
 
     
-The global NaN property is a value representing Not-a-Number.
- - Parsing numbers - failed number conversion (e.g.explicit ones like parseInt("blabla"), Number(undefined), or implicit ones like Math.abs(undefined))
- - Math operation where the result is not a real number(e.g.Math.sqrt(-1))
- - Indeterminate form(e.g.0 * Infinity, 1 ** Infinity, Infinity / Infinity, Infinity - Infinity)
- - Using NaN or undefined as an operand(e.g .7 ** NaN, undefined * 2, 7 * "blabla", )— this means NaN is contagious
- 
- Testing against NaN
- To tell if a value is NaN, use isNaN() to most clearly determine whether a value is NaN
+
 
  Note that JavaScript Types are Dynamic. 
  This means that the same variable can be used to hold different data types:
@@ -143,6 +181,8 @@ You can use the JavaScript typeof operator to find the type of a JavaScript vari
 
  console.log(num); // 0
 
+
+
  JavaScript Operators
  ----------------------
 
@@ -156,14 +196,15 @@ You can use the JavaScript typeof operator to find the type of a JavaScript vari
     A comparison operator compares its operands and returns a logical value based on whether the comparison is true.
     In most cases, if the two operands are not of the same type, JavaScript attempts to convert them to an appropriate type
     for the comparison. Note that comparing data of different types may give unexpected results.
-    - Equal( == )
-    - Not equal( != )
-    - Strict equal( === ) Returns true if the operands are equal and of the same type.
-    - Strict not equal( !== )
-    - Greater than( > )
-    - Greater than or equal( >= )
-    - Less than( < )
-    - Less than or equal( <= )
+
+    Equals                  : a == b
+    Not Equals              : a != b
+    Strict Equal            : a === b
+    Strict Not Equal        : a !== b
+    Less than               : a < b
+    Less than or equal to   : a <= b
+    Greater than            : a > b
+    Greater than or equal to: a >= b
 
   * Logical Operators 
         (&& (and), || (or), ! (not))
@@ -183,14 +224,24 @@ You can use the JavaScript typeof operator to find the type of a JavaScript vari
  JavaScript uses the Unicode character set.
  All JavaScript identifiers are case sensitive.
 
+
 Arrays
---------
+------
 
 // To declare an array, you use the following syntax:
 let items = [];
 
 // To declare an array with some initial elements:
 let items = [1, 2, 3];
+
+    // Array destructuring
+    // Basic variable assignment
+    // on the left-hand side of the assignment to define what values to unpack from the sourced variable.
+    const x = [1, 2, 3, 4, 5];
+    const [y, z] = x;
+    console.log(y); // 1
+    console.log(z); // 2
+
 
 
  Functions
@@ -203,6 +254,40 @@ let items = [1, 2, 3];
         }
         return a / b;
     }
+
+this
+----
+
+A function 's this keyword behaves a little differently in JavaScript compared to other languages. 
+In most cases, the value of this is determined by how a function is called(runtime binding).
+
+    const test = {
+        prop: 333,
+        getProp: function () {
+            return this.prop;
+        },
+    };
+
+    console.log(test.getProp()); // 333
+
+
+TRY-CATCH
+---------
+The try...catch statement is comprised of a try block and either a catch block, a finally block, or both.
+The code in the try block is executed first, and if it throws an exception, the code in the catch block will be executed.
+The catch-block specifies an identifier(e in the example above) that holds the value of the exception; this value is only available in the scope of the catch - block.
+The code in the finally block will ALWAYS be executed before control flow exits the entire construct.
+
+Syntax:
+
+    try {
+        tryStatements
+    } catch (exceptionVar) {
+        catchStatements
+    } finally {
+        finallyStatements
+    }
+
 
 */
 
@@ -247,16 +332,29 @@ console.log(200 + 0 / 0); // NaN
 // operatorBasics();
 // booleanBasics();
 // stringBasics();
-// arrayBasics();
-// objectLiterals();
+arrayBasics();
+// objectBasics();
 // conditionalExprBasics();
-loopBasics();
+// loopBasics();
 friendlyDivider(10, 6);
 console.log(`isEven(8): ${isEven(8)}`)
 
 // randomBasics();
+errorBasics();
 
 
+function errorBasics() {
+
+    console.log("Error Basics")
+    console.log("------------")
+
+    try {
+        nonExistentFunction();
+    } catch (e) {
+        console.error("Houston, we have a problem!");
+        //console.error(e); // Expected output: ReferenceError: nonExistentFunction is not defined
+    }
+}
 
 function input_basics() {
 
@@ -696,8 +794,6 @@ function arrayBasics() {
 
 
 
-
-
     // Accessing every item
     // To iterate over the elements of the items array, 
     // Option 1
@@ -769,10 +865,19 @@ function arrayBasics() {
     let lastColofLastRow = gameBoard[2][2]; // lastRow[2], which is gameBoard[2][2]
     console.log(lastRow)
     console.log(lastColofLastRow);
+
+
+    // Array destructuring
+    // Basic variable assignment
+    // on the left-hand side of the assignment to define what values to unpack from the sourced variable.
+    const x = [1, 2, 3, 4, 5];
+    const [y, z] = x;
+    console.log(y); // 1
+    console.log(z); // 2
 }
 
 
-function objectLiterals() {
+function objectBasics() {
 
     /*
     The syntax always follows this pattern:
@@ -801,6 +906,57 @@ function objectLiterals() {
 
     // Option 2 - Dot notation
     console.log(product.price)
+
+    const square = {
+        area(side) {
+            return side * side;
+        },
+        perimeter(side) {
+            return 4 * side;
+        },
+
+    }
+
+    // member function call using dot notation:
+    console.log("square.area(10): " + square.area(10));
+
+    // member function call using brackets:
+    console.log("square['perimeter'](10): " + square['perimeter'](10));
+
+    const numBox = {
+        value: 10,
+        // Arrow functions do not have their own this context, and instead inherit the this context from their surrounding scope.
+        // Therefore, this.value * this.value evaluates to NaN
+        // square: () => this.value * this.value,
+        square: function () {
+            return this.value * this.value;
+        },
+        // shorthand syntax for binding a function:
+        cube() {
+            return this.value * this.value * this.value;
+        }
+    }
+
+    sq = numBox.square();
+    cb = numBox.cube();
+    console.log("numBox.square(): " + sq);
+    console.log("numBox.cube(): " + cb);
+
+
+    // Example 3 - An object with 3 properties
+    const hen = {
+        name: "Helen",
+        eggCount: 0,
+        layAnEgg: function () {
+            ++this.eggCount;
+            return "EGG";
+        }
+    }
+
+    console.log(hen.name); // "Helen"
+    console.log(hen.layAnEgg()); // "EGG"
+    console.log(hen.layAnEgg()); // "EGG"
+    console.log(hen.eggCount); // 2
 
 }
 

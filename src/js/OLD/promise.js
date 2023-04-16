@@ -11,14 +11,14 @@ let done = true;
 
 // The promise constructor takes one argument: 
 // a callback with two parameters, resolve and reject.
-let myPromise = new Promise( (resolve, reject) => {
+let myPromise = new Promise((resolve, reject) => {
 
     console.log("New Promise...")
 
     if (done) {
 
         // simulate that resolution takes 5 seconds:
-        setTimeout( () => {
+        setTimeout(() => {
             console.log("Done.");
             resolve("RESOLVED")
         }, 5000);

@@ -21,6 +21,17 @@
     border-radius: 5px;
 }
 
+.terminal-box {
+    background-color: #222;
+    color: #fff;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 10px;
+    border: 1px solid #999;
+    overflow: auto;
+}
+
 /* Pseudo-Class :hover - mouse over link */
 a:hover {
     background-color: orange;

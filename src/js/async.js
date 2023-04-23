@@ -90,6 +90,46 @@ without blocking the program while waiting for long - running operations to comp
 Keep in mind that just like a promise chain, await forces asynchronous operations to be completed in series.
 This is necessary if the result of the next operation depends on the result of the last one, but if that 's not the case then something like Promise.all() will be more performant.
 
+
+fetch API
+---------
+There are multiple ways to send a network request and get information from the server
+
+    let promise = fetch(url, [options])
+
+Without options, this is a simple GET request, downloading the contents of the url.
+Getting a response is usually a two - stage process:
+ - First, the promise, returned by fetch, resolves with an object of the built - in Response class as soon as the server responds with headers.
+ At this stage we can check HTTP status, to see whether it is successful or not, check headers, but don’ t have the body yet.
+ -Second, to get the response body, we need to use an additional method call. Response provides multiple promise - based methods to access the body in various formats:
+ 
+    response.text()         – read the response and return as text,
+    response.json()         – parse the response as JSON,
+    response.formData()     – return the response as FormData object,
+    response.blob()         – return the response as Blob(binary data with type),
+    response.arrayBuffer()  – return the response as ArrayBuffer(low - level representation of binary data),
+
+ In summary, a typical fetch request consists of two await calls:
+ 
+    let response = await fetch(url, options);   // resolves with response headers
+    let result = await response.json();         // read body as json
+
+ Or, without await :
+
+ fetch(url, options)
+     .then(response => response.json())     // Note that response.json() returns a Promise, so we can chain another .then() 
+     .then(result => // process result )    
+
+
+
+
+What is Axios ?
+Axios is a promise - based HTTP Client for node.js and the browser.
+It is isomorphic( = it can run in the browser and nodejs with the same codebase).
+On the server - side it uses the native node.js http module, while on the client(browser) it uses XMLHttpRequests.
+
+    < script src = "https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" > < /script>
+
 */
 
 
@@ -295,15 +335,21 @@ document.getElementById("btn_async01").addEventListener('click', callAnotherAsyn
 
 
 // FETCH API Example 1
-// async/await
+// A typical fetch request consists of two await calls
 async function fetch_SWAPI() {
-    // The Response object, is a representation of the entire HTTP response:
+    // The simplest use of fetch() takes one argument — the path to the resource you want to fetch, and
+    // returns a promise that resolves with a Response object.
+    // The Response object, in turn, does not directly contain the actual JSON response body but is instead a representation of the entire HTTP response:
     const response = await fetch("https://swapi.dev/api/people/1");
-    // to extract the JSON body content from the Response object, we use the json() method:
+
+    // So, to extract the JSON body content from the Response object, we use the json() method, 
+    // which returns a second promise that resolves with the result of parsing the response body text as JSON:
     const jsonData = await response.json();
+
     console.log(jsonData);
     displayLog(jsonData['name']);
 
+    // In a linear fashion, use the previous response for the next fetch:
     const resp = await fetch(jsonData['homeworld']); // https://swapi.dev/api/planets/1/
     const data_hw = await resp.json();
     console.log(data_hw);
@@ -313,11 +359,51 @@ async function fetch_SWAPI() {
 document.getElementById("btn_fetch01").addEventListener('click', fetch_SWAPI);
 
 // FETCH API - Example 2
-// no need to put the "async" keyword before the function in this case, older style of asynchronous programming using Promises 
+// the same without await, using pure promises syntax, older style of asynchronous programming using Promises 
+// Note that response.json() returns a Promise, so we can chain another .then() 
+// Note that the function is NOT async
 function fetchPokemons() {
     //fetch("https://pokeapi.co/api/v2/pokemon?limit=100")
     fetch("https://pokeapi.co/api/v2/pokemon/25")
-        .then(response => response.json())
-        .then(pika => displayLog(pika['name']))
+        .then(response => response.json()) // Note that response.json() returns a Promise, so we can chain another .then() 
+        .then(pika => displayLog(pika['name']));
 }
+
 document.getElementById("btn_fetchPoke").addEventListener('click', fetchPokemons);
+
+
+// FETCH API - Example 3
+// catch
+function fetchErr() {
+    fetch('https://err.co/noapi/')
+        .then(response => {
+            // At this stage we can check HTTP status, to see whether it is successful or not, check headers, but don’t have the body yet.
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // do something with data
+        })
+        .catch(error => displayLog('Error fetching data: ' + error.message));
+}
+
+document.getElementById("btn_fetchErr").addEventListener('click', fetchErr);
+
+
+// Axios - Promise based HTTP client for the browser and node.js
+async function axios_getGithubName() {
+
+    try {
+        const response = await axios.get('https://api.github.com/users/karadasmurat')
+        console.log("Axios response:", response);
+        displayLog(response.data['name']);
+    } catch (error) {
+        // handle error
+        displayLog(error);
+    }
+
+}
+
+document.getElementById("btn_axios01").addEventListener('click', axios_getGithubName);

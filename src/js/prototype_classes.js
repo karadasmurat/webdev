@@ -40,6 +40,17 @@ Note that in JavaScript, any function can be added to an object in the form of a
         },
     };
 
+
+Methods are nothing more than properties that hold function values. This is a simple method:
+
+    let rabbit = {};
+    rabbit.speak = function (line) {
+        console.log(`The rabbit says '${line}'`);
+    };
+
+    rabbit.speak("I'm alive.");
+    // → The rabbit says 'I'm alive.'
+
 Note that the object is stored somewhere in memory (at the right of the picture), while the user variable(at the left) has a “reference” to it.
 
 let user = {
@@ -84,20 +95,102 @@ So when we call user.toString(), the browser:
 Note that it's common to see a pattern, in which methods are defined on the prototype, but data properties are defined in the constructor.
 That's because methods are usually the same for every object we create, while we often want each object to have its own value for its data properties.
 
+Prototypes are useful for defining properties for which all instances of a class share the same value, such as methods.
+Properties that differ per instance, such as our cat's breed property, need to be stored directly in the objects themselves.
 
+    // constructor function 
+    function Rabbit(type) {
+        this.type = type;
+    }
+    // Constructors (all functions, in fact) automatically get a property named prototype, which by default holds a plain, empty object that derives from Object.prototype
+    // The prototype object used when constructing objects is found by taking the "prototype property of the constructor function":
+    Rabbit.prototype.speak = function (line) {
+        console.log(`The ${this.type} rabbit says '${line}'`);
+    };
+
+    // If you put the keyword new in front of a function call, the function is treated as a constructor:
+    let weirdRabbit = new Rabbit("weird");
+
+Class notation
+So JavaScript classes are constructor functions with a prototype property.
+That is how they work, and until 2015, that was how you had to write them. These days, we have a less awkward notation:
+The method named "constructor" is treated specially. It provides the actual constructor function:
+
+    class Rabbit {
+        constructor(type) {
+            this.type = type;
+        }
+        speak(line) {
+            console.log(`The ${this.type} rabbit says '${line}'`);
+        }
+    }
+
+    let killerRabbit = new Rabbit("killer");
+
+
+
+Inheritance
+-----------
+Inheritance models what is called an IS - A relationship.
+Inheritance is the mechanism you’ll use to create hierarchies of related classes.
+These related classes will share a common interface that will be defined in the base classes.
+Derived classes can specialize the interface by providing a particular implementation where applies.
+
+Let’s say we have a base class Pet and you derive from it to create a Cat class.
+The inheritance relationship states that a Cat is a Pet.
+This means that Cat inherits the interface and implementation of Pet, and Cat objects can be used to replace Pet objects in the application.
+This is known as the Liskov substitution principle. (SOLID Principles)
 */
 
 class Box {
-    constructor(value) {
-        this.value = value;
+
+    // Constructor
+    constructor(capacity) {
+        this.capacity = capacity;
+        this.size = 0;
     }
 
     // Methods are created on Box.prototype
-    getValue() {
-        return this.value;
+    getCapacity() {
+        return this.capacity;
+    }
+
+    load(amount) {
+        if (this.size + amount >= this.capacity) {
+            console.log("Sorry, the capacity limit has been reached.", amount);
+        } else {
+            console.log("Loading", amount);
+            this.size += amount
+        }
     }
 }
 
+
+// INHERITANCE
+// Superclass - Pet
+class Pet {
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    eat() {
+        console.log(`Pet ${this.name} is eating.`);
+    }
+}
+
+// Subclass - Cat
+class Cat extends Pet {
+    constructor(name, age, breed) {
+        super(name, age);
+        this.breed = breed;
+    }
+
+    // specialize
+    meow() {
+        console.log(`Cat ${this.name} says meow.`);
+    }
+}
 
 
 
@@ -154,11 +247,31 @@ const myCity = {
 
 student.greet();
 
+propertiesThatHoldFunctionValues();
+// prototypeBasics();
+// constructorFunctions();
+// classBasics();
+// inheritanceBasics();
 
-prototypeBasics();
-constructorFunctions();
-classBasics();
+function propertiesThatHoldFunctionValues() {
+    // Methods are nothing more than properties that hold function values:
 
+    let rabbit = {};
+    rabbit.speak = function (line) {
+        console.log(`The rabbit says '${line}'`);
+    };
+
+    rabbit.speak("Hello, there!"); // → The rabbit says 'Hello, there!'
+}
+
+function inheritanceBasics() {
+    console.log("Inheritance Basics");
+    console.log("------------------");
+
+    const fluffy = new Cat('Fluffy', 2, 'Persian');
+    fluffy.eat(); // Pet Fluffy is eating.
+    fluffy.meow(); // Cat Fluffy says meow.
+}
 
 function prototypeBasics() {
     /*
@@ -242,7 +355,11 @@ function classBasics() {
     console.log("Class Basics");
     console.log("------------");
 
-    const box = new Box(333);
-    console.log(box); // Box { value: 333 }
+    const box = new Box(11);
+    console.log(box); // Box { capacity: 11, size: 0 }
+
+    box.load(5); // Loading 5
+    box.load(10);
+    console.log(box); // Box { capacity: 11, size: 5 }
 
 }

@@ -1,0 +1,6 @@
+This app starts a server and listens on port 3000 for connections. 
+
+Run the app with the following command:
+	$ node app.js
+    
+Then, load http://localhost:3000/ in a browser to see the output.

@@ -1,0 +1,53 @@
+ {
+     "orderHeader": {
+         "orderNumber": "12345",
+         "orderDate": "2023-04-27",
+         "orderTotal": 25.99,
+         "Customer": {
+             "CustomerID": "12345",
+             "FirstName": "John",
+             "LastName": "Doe",
+             "Email": "john.doe@example.com",
+             "PhoneNumber": {
+                 "type": "home",
+                 "value": "123-456-7890"
+             }
+         },
+         "shippingAddress": {
+             "streetAddress": "123 Main St.",
+             "city": "Anytown",
+             "state": "CA",
+             "zipCode": "12345",
+             "country": "USA"
+         }
+     },
+     "orderItems": {
+         "orderItem": [{
+                 "product": {
+                     "productCode": "PROD001",
+                     "productName": "Product A",
+                     "manufacturer": "ABC Tools"
+                 },
+                 "price": {
+                     "unit": "USD",
+                     "value": 10.00
+                 },
+                 "discount": 0.00,
+                 "quantity": 2
+             },
+             {
+                 "product": {
+                     "productCode": "PROD002",
+                     "productName": "Product B",
+                     "manufacturer": "ABC Tools"
+                 },
+                 "price": {
+                     "unit": "USD",
+                     "value": 5.99
+                 },
+                 "discount": 0.00,
+                 "quantity": 1
+             }
+         ]
+     }
+ }

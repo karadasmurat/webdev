@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 
 // import the Blog model
-const {
-    Blog
-} = require('./model/Blog');
+const Blog = require('./model/Blog');
 
 const HOST = '127.0.0.1';
 const PORT = '27017';
@@ -56,13 +54,15 @@ movie_amadeus.save();
 
 
 // READ
+// The model class exposes several static and instance methods to perform operations on the database.
 // find all documents
-Movie.find({
-        year: {
-            $gte: 2000
-        }
-    })
-    .then(data => console.log(data));
+let query = {
+    year: {
+        $gte: 2000
+    }
+};
+Movie.find(query)
+    .then(data => log('find', data));
 
 // Finds a single document by its _id field.
 Movie.findById("6450163338496497e004b120")
@@ -76,11 +76,7 @@ Movie.findById("6450163338496497e004b120")
 //     })
 //     .then(res => console.log("UPDATED!" + res.modifiedCount));
 
-let query = {
-    year: {
-        $gte: 2000
-    }
-};
+
 const opt = {
     new: true
 };
@@ -92,6 +88,10 @@ createBasics();
 deleteBasics();
 
 
+function log(title, msg) {
+    console.log(title);
+    console.log(msg);
+}
 
 async function createBasics() {
     // Example 2 - create a schema/model file: model/Blog.js

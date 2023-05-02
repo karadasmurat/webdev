@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- To reduce duplication, we will leverage EJS partials. -->
+    <%- include('../partials/head.ejs') %>
+    <title>Product Details</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1><%= product.name %></h1>
+        <ul>
+            <li>Price: <%= product.price %></li>
+            <li>Category: <%= product.category %></li>
+        </ul>
+        <!-- The .btn classes are designed to be used with the <button> element. 
+        However, you can also use these classes on <a> or <input> elements (though some browsers may apply a slightly different rendering). -->
+        <a href="/products" class="btn btn-outline-primary btn-sm">All Products</a>
+        <a href="/products/<%= product._id%>/update" class="btn btn-outline-primary btn-sm">Edit</a>
+        <form action="/products/<%=product._id%>?_method=DELETE" method="POST">
+            <button type="submit" class="btn btn-outline-danger">Delete</button>
+        </form>
+    </div>
+    <%- include('../partials/footer.ejs') %>
+</body>
+
+
+
+</html>

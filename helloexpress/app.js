@@ -46,6 +46,15 @@ app.set('view engine', 'ejs');
 // If you run the express app from another directory, it’s safer to use the absolute path of the directory that you want to serve:
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+// express.json([options])
+// built-in middleware function in Express. It parses incoming requests with JSON payloads and is based on body-parser.
+app.use(express.json());
+// for parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({
+    extended: true
+}));
+
 const port = 3001
 
 // Sample todo data
@@ -91,17 +100,43 @@ app.get('/', (req, res) => {
     res.render('home.ejs');
 })
 
-app.get("/todos", (request, response) => {
+app.get("/api/todos", (request, response) => {
     response.status(200).json(todos);
 });
 
-// pass a local variable (random die roll) to the view: {varName: value}
+// render with options to pass a local variable (todos) to the view: {varName: value}
 // shortcut: {varName}
-app.get("/ejstodos", (request, response) => {
-    response.render('todo.ejs', {
+app.get("/todos", (request, response) => {
+    response.render('todos/index.ejs', {
         todos
     });
 });
+
+// GET the form, in order to create a todo
+app.get("/todos/new", (request, response) => {
+    response.render('todos/new.ejs');
+});
+
+// Create todo - Respond to a POST request to the /todos route:
+app.post('/todos', (req, res) => {
+    console.log(req.body);
+    const {
+        title,
+        description,
+        due_date,
+        priority
+    } = req.body;
+    todos.push({
+        title,
+        description,
+        due_date,
+        priority
+    });
+    //res.send(req.body);
+    //res.send('Got a POST request at /todos')
+    res.redirect('/todos');
+})
+
 
 // Route parameters are named URL segments
 // The captured values are populated in the req.params object
@@ -144,8 +179,11 @@ app.get("/rand", (request, response) => {
 
 // Respond to POST request on the root route (/):
 app.post('/', (req, res) => {
-    res.send('Got a POST request')
+    console.log(req.body);
+    res.send('Got a POST request');
 })
+
+
 
 // Respond to a PUT request to the / user route:
 app.put('/user', (req, res) => {

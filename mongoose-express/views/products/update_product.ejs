@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- To reduce duplication, we will leverage EJS partials. -->
+    <%- include('../partials/head.ejs') %>
+    <title>Update Product</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Update Product</h1>
+        <!-- use method-override _method=PUT -->
+        <form action="/products/<%=product._id%>?_method=PUT" method="POST">
+
+            <label for="name" class="form-label">Product Name</label>
+            <input type="text" name="name" id="name" placeholder="Product Name" value="<%= product.name %>"
+                class="form-control mb-3">
+
+            <label for="price" class="form-label">Unit Price</label>
+            <input type="number" name="price" id="price" placeholder="0.00" value="<%= product.price %>"
+                class="form-control mb-3">
+
+            <label for="category" class="form-label">Category</label>
+            <select name="category" id="category" class="form-select mb-3">
+                <option>Please Select</option>
+                <option value="fruit" <%= product.category == 'fruit' ? 'selected' : ''%>>Fruit</option>
+                <option value="vegetable" <%= product.category == 'vegetable' ? 'selected' : ''%>>Vegetable</option>
+                <option value="dairy" <%= product.category == 'dairy' ? 'selected' : ''%>>Dairy</option>
+            </select>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a href="/products/<%=product._id %>" class="btn btn-outline-primary">Cancel</a>
+        </form>
+    </div>
+    <%- include('../partials/footer.ejs') %>
+</body>
+
+</html>

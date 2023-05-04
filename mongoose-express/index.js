@@ -1,3 +1,6 @@
+// user info
+const sec = require('./env');
+
 const express = require('express');
 
 // The app object conventionally denotes the Express application. 
@@ -16,15 +19,13 @@ const EXPRESS_PORT = 3000;
 const HOST = '127.0.0.1';
 const MONGO_PORT = '27017';
 const DBASE = 'farmstand';
-
-// import the Product model
-const Product = require('./model/Product');
-
+const LOCAL_CONN_STR = `mongodb://${HOST}:${MONGO_PORT}/${DBASE}`;
+const ATLAS_CONN_STR = `mongodb+srv://${sec.MONGO_USER}:${sec.MONGO_PASS}@dev-cluster.ct6sszv.mongodb.net/test`;
 const options = {};
 
-// connect the 'test' database running locally on the default port (27017):
-mongoose.connect(`mongodb://${HOST}:${MONGO_PORT}/${DBASE}`, options)
-    .then(console.log("Connected to " + DBASE + " running on " + HOST))
+
+mongoose.connect(ATLAS_CONN_STR, options)
+    .then(console.log("Connected to mongodb."))
     .catch(error => console.log("Error " + error));
 
 
@@ -52,10 +53,16 @@ app.use(express.urlencoded({
     extended: true
 }));
 
-// Respond to GET request on the root route (/):
+
+// import the Product model
+const Product = require('./model/Product');
+
+
+
+// GET /hello
 app.get('/hello', (req, res) => {
     res.send('Hello, there!')
-})
+});
 
 // GET all products
 // Note - async callback handler - await mongooose and then response.

@@ -40,6 +40,27 @@ app.set('views', path.join(__dirname, '/views'));
 // Set EJS as the view engine
 app.set('view engine', 'ejs');
 
+
+// app.use - middleware
+// Since path defaults to “/”, middleware mounted without a path will be executed for every request to the app.
+app.use(function (req, res, next) {
+    console.log(`[${new Date().toISOString()}] ${req.method } ${req.url} ${res.statusCode}`);
+
+    // If the current middleware function does not end the request-response cycle, it must call callback handler (next) to pass control to the next middleware function. 
+    // Otherwise, the request will be left hanging.
+    next();
+});
+
+// create a middleware function called “requestTime” to add a property called "requestTime" to the request object:
+// This property can be accessed by the subsequent middleware functions or the routes 
+// to perform certain actions based on the timestamp.
+const requestTime = function (req, res, next) {
+    req.requestTime = Date.now();
+    next();
+}
+
+app.use(requestTime);
+
 // Serving static files in Express
 // here, we use a top-level directory named "public"
 // app.use(express.static("public"));
@@ -135,7 +156,7 @@ app.post('/todos', (req, res) => {
     //res.send(req.body);
     //res.send('Got a POST request at /todos')
     res.redirect('/todos');
-})
+});
 
 
 // Route parameters are named URL segments
@@ -190,6 +211,12 @@ app.put('/user', (req, res) => {
     res.send('Got a PUT request at /user')
 })
 
+
+// last middleware, 404
+app.use(function (req, res, next) {
+    // res.status(404).send('Not Found');
+    res.sendStatus(404); // Since Express 4.0
+});
 
 // bind and listen for connections on the specified host and port.
 // identical to Node’s http.Server.listen()

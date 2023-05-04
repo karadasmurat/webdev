@@ -1,3 +1,7 @@
 helloexpress/node_modules/
 mongodb-mongoose/node_modules/
 mongoose-express/node_modules/
+
+**/env.js
+**/.DS_Store
+**/package-lock.json

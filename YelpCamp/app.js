@@ -210,6 +210,27 @@ app.delete("/campgrounds/:id", async (req, res) => {
 
 });
 
+// DELETE api
+// Note that form has POST method, so will use method-override
+app.delete("/api/campgrounds/:id", async (req, res) => {
+    console.log("DELETE /api/campgrounds/:id");
+
+    try {
+        const id = req.params.id;
+        const campground = await Campground.findByIdAndDelete(id);
+        if (!campground) {
+            // Not Found
+            return res.sendStatus(404);
+        }
+        // OK - respond with a 204 status code
+        res.sendStatus(204);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+
+});
+
 
 // last middleware, 404
 app.use(function (req, res, next) {

@@ -11,7 +11,8 @@
     <div class="row">
         <div class="col-6 offset-3">
             <h1>Create Campground</h1>
-            <form action="/campgrounds" method="POST">
+            <!-- create or update, based on the existence of id -->
+            <form action="/campgrounds<%= campground._id ? '/' + campground._id +'?_method=PUT' : '' %>" method="POST">
 
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
@@ -45,7 +46,7 @@
 
                 <div class="d-flex justify-content-end">
                     <a href="/campgrounds" class="btn btn-outline-secondary mx-2">Cancel</a>
-                    <button type="submit" class="btn btn-success">Save</button>
+                    <button type="submit" class="btn btn-success"> <i class="bi bi-upload"></i> Save</button>
                 </div>
 
             </form>

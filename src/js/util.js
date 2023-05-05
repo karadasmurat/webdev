@@ -3,6 +3,7 @@ function sayHi() {
     console.log("Hello, there!");
 }
 
+
 // examining the global module object in each file. 
 // The module object has an "exports" property which is an empty object.
 console.log(module);

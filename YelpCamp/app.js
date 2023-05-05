@@ -231,6 +231,8 @@ const validateCampground = (req, res, next) => {
     if (error) {
         console.log(error);
         return next(new yerr.InvalidParameterError("Invalid Campground Data.", 400));
+    } else {
+        next(); // note that this is a middleware, so call next() without arguments to go on.
     }
 }
 
@@ -252,7 +254,8 @@ app.post('/campgrounds', validateCampground, async (req, res, next) => {
     //     return next(new yerr.MissingParameterError("Invalid Campground Data.", 400));
     // }
 
-    const new_campground = new Campground(req.body);
+    // we use input names campground[title], campground[price] etc
+    const new_campground = new Campground(req.body.campground);
     await new_campground.save();
 
     console.log(new_campground);

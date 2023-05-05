@@ -1,5 +1,15 @@
 // user info
-const sec = require('./env');
+const sec = require('./lib/env');
+
+// custom error
+const yerr = require('./lib/YelpError');
+
+// server-side validation
+const Joi = require("joi");
+// object desct, like without a module name
+const {
+    campgroundJoiSchema
+} = require('./lib/joi_schemas');
 
 const express = require('express');
 
@@ -54,6 +64,9 @@ app.use(express.urlencoded({
 
 // import mongoose Model
 const Campground = require("./model/Campground");
+const {
+    YelpError
+} = require('./lib/YelpError');
 
 // GET /hello
 app.get('/hello', (req, res) => {
@@ -69,6 +82,35 @@ app.get('/simplecamptest', async (req, res) => {
 
     res.send(camp);
 });
+
+// a route to throw an error
+// Errors that occur in synchronous code inside route handlers and middleware require no extra work. 
+app.get('/error', (req, res) => {
+    throw new Error('EXPLICIT ERROR');
+});
+
+// For errors returned from asynchronous functions invoked by route handlers and middleware, 
+// you MUST pass them to the next() function, where Express will catch and process them.:
+app.get('/asyncerror1', (req, res, next) => {
+    setTimeout(() => {
+        try {
+            throw new Error('BROKEN AFTER SOME TIME...')
+        } catch (err) {
+            next(err)
+        }
+    }, 1000);
+});
+
+app.get('/asyncerror2', (req, res, next) => {
+    // Use promises to avoid the overhead of the try...catch block or when using functions that return promises:
+    Promise.resolve()
+        .then(() => {
+            throw new Error('BROKEN')
+        })
+        .catch(next) // Errors will be passed to Express.
+});
+
+
 
 // GET /campgrounds
 app.get('/campgrounds', async (req, res) => {
@@ -168,10 +210,47 @@ app.put("/campgrounds/:id", async (req, res) => {
     res.redirect('/campgrounds');
 });
 
+// function for validation, will be middleware
+// SERVER-SIDE VALIDATION USING JOI
+const validateCampground = (req, res, next) => {
+
+    // 1. a schema is constructed using the provided types and constraints:
+    // campgroundJoiSchema = joischemas.campgroundJoiSchema;
+
+    // 2. the value is validated against the defined schema:
+    // returns an object. we can use object destructuring to access properties:
+    const {
+        error,
+        value
+    } = campgroundJoiSchema.validate(req.body);
+
+    // If the input is valid, then the error will be undefined
+    // ValidationError: "campground" is required
+    // "campground.title" is not allowed to be empty
+    // "campground.price" must be greater than or equal to 0
+    if (error) {
+        console.log(error);
+        return next(new yerr.InvalidParameterError("Invalid Campground Data.", 400));
+    }
+}
+
 // Create Part 2
 // POST /campgrounds
-app.post('/campgrounds', async (req, res) => {
+// validateCampground middleware 
+app.post('/campgrounds', validateCampground, async (req, res, next) => {
     console.log(req.body);
+
+    // for async errors, you must pass them to the next() function
+    // so, catch your own throw, or create an error and pass it to next.
+
+    // MANUAL SERVER-SIDE VALIDATION
+    // if (!req.body.campground) {
+    //     // throw new Error("Invalid Campground Data.");
+
+    //     // create an error and pass it to next.
+    //     // 400 Bad Request
+    //     return next(new yerr.MissingParameterError("Invalid Campground Data.", 400));
+    // }
 
     const new_campground = new Campground(req.body);
     await new_campground.save();
@@ -231,12 +310,28 @@ app.delete("/api/campgrounds/:id", async (req, res) => {
 
 });
 
-
-// last middleware, 404
+// 2 last middlewares, 404 and error handler
 app.use(function (req, res, next) {
     // res.status(404).send('Not Found');
     res.sendStatus(404); // Since Express 4.0
 });
+
+// error handler
+// Define error-handling middleware functions in the same way as other middleware functions, 
+// except error-handling functions have four arguments instead of three: (err, req, res, next)
+app.use((err, req, res, next) => {
+    // console.error(err.statusCode);
+    // next(err); // we can pass the error is explicitly to the next error handler (i.e default, or custom below this one).
+    // res.status(500).send('Something broke!');
+
+    // render a custom error page with the err object
+    res.status(err.statusCode || 500).render('error.ejs', {
+        err
+    });
+
+});
+
+
 
 // bind and listen for connections on the specified host and port.
 // identical to Node’s http.Server.listen()

@@ -13,6 +13,7 @@
         <ul>
             <li>Price: <%= product.price %></li>
             <li>Category: <%= product.category %></li>
+            <li>Farm: <a href="/farms/<%= product.farm._id %>"><%= product.farm.name %></a></li>
         </ul>
         <!-- The .btn classes are designed to be used with the <button> element. 
         However, you can also use these classes on <a> or <input> elements (though some browsers may apply a slightly different rendering). -->

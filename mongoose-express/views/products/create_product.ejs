@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <h1>Create Product</h1>
-        <form action="/products" method="POST">
+        <form action="/farms/<%=farm_id%>/products" method="POST">
 
             <label for="name" class="form-label">Product Name</label>
             <input type="text" name="name" id="name" placeholder="Product Name" class="form-control mb-3">
@@ -26,7 +26,12 @@
                 <option value="dairy">Dairy</option>
             </select>
 
-            <button type="submit" class="btn btn-primary">Create</button>
+            <div class="d-flex justify-content-end">
+                <a href="/products" class="btn btn-outline-secondary mx-2">Cancel</a>
+                <button type="submit" class="btn btn-primary mx-2">Create</button>
+            </div>
+
+
         </form>
     </div>
     <%- include('../partials/footer.ejs') %>

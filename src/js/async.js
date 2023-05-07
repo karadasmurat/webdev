@@ -6,7 +6,7 @@ But, what if the synchronous function takes a long time ? Our program may be com
 Asynchronous programming is a technique that enables your program to start a potentially long-running task and still be able to be responsive to other events
 while that task runs, rather than having to wait until that task has finished. Once that task has finished, your program is presented with the result.
 
-The asynchronous methods do not block, they immediately return a "promise" to supply the value at some point in the future.
+The asynchronous methods do not block, they IMMEDIATELY return a "promise" to supply the value "at some point in the future".
 
 Here are some common asynchronous operations:
     - Fetching data over a network.
@@ -16,19 +16,40 @@ Here are some common asynchronous operations:
     An event handler is a particular type of callback.
     A callback is just a function that 's passed into another function, with the expectation that the callback will be called at the appropriate time.
 
-2. Promises are the foundation of asynchronous programming in modern JavaScript.
-    A promise is an object returned by an asynchronous function, which represents the current state of the operation. 
-    At the time the promise is returned to the caller, the operation often isn 't finished, but the promise object provides methods to handle the eventual success or failure of the operation.
 
+    setTimeout
+    ----------
+    setTimeout(callback, delay)
+    setTimeout(functionRef, delay, param1, param2, …, paramN)
+
+    API takes as arguments a callback function and a delay, given in milliseconds.
+    When setTimeout() is called, it starts a timer set to the given delay, and when the time expires, it calls the given function.
+
+    Notice that, .setTimeout ilk arguman olarak fonksiyon alıyor.
+    YANI setTimeout parantezi acip ICINE KODU DIREKT YAZMIYORUZ, .then() ICINE DE OYLE.
+    FONKSIYONUN ADINI, YA DA(ANONIM) FONKSIYON OLACAK SEKILDE YAZIYORUZ
+    setTimeout ZAMANI GELINCE BU FONKSIYONU CAGIRACAK!!
+
+        setTimeout(() => {
+            console.log("Delayed for 1 second.");
+        }, "1000");
+
+
+2. PROMISES
+    The foundation of asynchronous programming in modern JavaScript.
+    A promise is an object returned by an asynchronous function, which represents the current state of the operation. 
+    At the time the promise is returned to the caller, the operation often isn 't finished, but the promise object provides methods (.then, .catch) to handle the eventual success or failure of the operation.
+
+A Promise represents a computation that doesn’ t complete immediately. 
 In simple words, a Promise object in JavaScript is a container that represents a value that might not be available yet, but will be at some point in the future.
-A Promise represents a computation that doesn’ t complete immediately.
 
 When a Promise is created, it starts out in the pending state.
-Once the operation completes, the Promise is either fulfilled with a value or rejected with a reason.
+Once the operation completes, the Promise is either resolved (fullfilled) with a value or rejected with a reason.
 Once the Promise object is returned, it can be used with the then() and catch () methods to handle the result or any errors that occur during the operation.
 
 Promise Syntax: 
-    constructor: new Promise(executor)
+
+    how to construct: new Promise(executor)
 
     function executor(resolveFunc, rejectFunc) { ... }
 
@@ -39,35 +60,32 @@ Promise Syntax:
     * Simply, we call resolve with the return value as the argument when we want to return in the executor.
 
 
-    let myPromise = new Promise( (resolveFunc, rejectFunc) => {
+        let myPromise = new Promise( (resolveFunc, rejectFunc) => {
 
-        // "Producing Code" (May take some time)
-        ...
+            // "Producing Code" (May take some time)
+            ...
 
-        // When the producing code obtains the result, it should call one of the two callbacks:
-        resolveFunc(return_value); // when successful - call resolve with the return value as the argument.
-        rejectFunc(error_object); // when error - call resolve with the error value as the argument.
-    });
+            // When the producing code obtains the result, it should call one of the two callbacks:
 
-    // "Consuming Code" (Must wait for a fulfilled Promise)
-    myPromise.then(
-        function (value) {// code if successful },
-        function (error) {// code if some error }
-    );
+            resolveFunc(return_value); // when successful - call resolve with the return value as the argument.
 
-Option 2 - chain catch() 
-catch () method of a Promise object schedules a function to be called when the promise is rejected.
+            rejectFunc(error_object); // when error - call resolve with the error value as the argument.
+        });
+
+        // "Consuming Code" (Must wait for a fulfilled Promise)
+        // Note that The then() method of a Promise object takes up to two arguments: then(onFulfilled, onRejected) callback functions
+        // for the fulfilled and rejected cases of the Promise: Promise.then(f, f)
+        myPromise.then(
+            function (value) {// code if successful },
+            function (error) {// code if some error, option 1 }
+        );
+
+        // code if some error, option 2
+        // .catch () method of a Promise object schedules a function to be called when the promise is rejected.
     
-    myPromise.then((val) => {}).catch((err) => {})
-
-
-Note that The then() method of a Promise object takes up to two arguments: then(onFulfilled, onRejected)
-callback functions for the fulfilled and rejected cases of the Promise: Promise.then(f, f)
-
-Wrapping setTimeout()
-We 'll use the setTimeout() API to implement our alarm() function. 
-The setTimeout() API takes as arguments a callback function and a delay, given in milliseconds. 
-When setTimeout() is called, it starts a timer set to the given delay, and when the time expires, it calls the given function.
+        myPromise
+            .then((val) => {})
+            .catch((err) => {})
 
 
 async and await
@@ -90,6 +108,32 @@ without blocking the program while waiting for long - running operations to comp
 Keep in mind that just like a promise chain, await forces asynchronous operations to be completed in series.
 This is necessary if the result of the next operation depends on the result of the last one, but if that 's not the case then something like Promise.all() will be more performant.
 
+
+
+CHAINING ASYNC FUNCTIONS
+------------------------
+(there is a sample implementation tied to a button: .then chain)
+
+    getUser()
+        .then(getPosts)
+        .then(processPosts)
+        .then((cnt) => displayLog("Post count: " + cnt))
+        .catch(error => {
+            console.error(error);
+        });
+
+In this example, we call getUser() first, which returns a promise. (ASYNC FUNCTION - using fetch api)
+We then call getPosts() and pass it the user object returned by getUser()
+processPosts() returns a promise that resolves to number of posts. 
+Finally, we log the result of processing as the number of posts.( Note that we could use it as: .then(displayLog), but we wanted to log a full message )
+
+Note that in the then() method, the result of the previous function is automatically passed as the first argument to the next function in the chain.
+This means that the getPosts() function will receive the user object returned by getUser() as its first argument, 
+and the processPosts() function will receive the object returned by getPosts() as its first argument.
+
+This is one of the key features of chaining async functions with then(): 
+each function in the chain can depend on the result of the previous function WITHOUT NEEDING TO PASS EXPLICIT PARAMETERS. 
+This makes the code simpler and easier to read and write.
 
 fetch API
 ---------
@@ -407,3 +451,60 @@ async function axios_getGithubName() {
 }
 
 document.getElementById("btn_axios01").addEventListener('click', axios_getGithubName);
+
+
+
+
+
+
+
+
+async function getUser() {
+    displayLog("Getting details of user 1 ...");
+    const response = await fetch('https://jsonplaceholder.typicode.com/users/1');
+    const user = await response.json();
+    displayLog("Email is: " + user.email + " Getting posts...");
+    return user;
+}
+
+async function getPosts(user) {
+    const response = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${user.id}`);
+    const posts = await response.json();
+    return posts;
+}
+
+// to simulate waiting, we return a promise which resolves after a timeout.
+async function processPosts(posts) {
+
+    displayLog("Processing posts...");
+
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log(posts.length);
+            resolve(posts.length);
+        }, 1000);
+    });
+
+}
+
+
+/*
+In the then() method, the result of the previous function is automatically passed as the first argument to the next function in the chain.
+This means that the getPosts() function will receive the user object returned by getUser() as its first argument, 
+and the processPosts() function will receive the object returned by getPosts() as its first argument.
+
+This is one of the key features of chaining async functions with then(): each function in the chain can depend on the result of the previous
+function WITHOUT NEEDING TO PASS EXPLICIT PARAMETERS. 
+This makes the code simpler and easier to read and write.
+
+*/
+document.getElementById("getDataButton").addEventListener("click", function () {
+
+    getUser()
+        .then(getPosts)
+        .then(processPosts)
+        .then(displayLog)
+        .catch(error => {
+            console.error(error);
+        });
+});

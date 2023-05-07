@@ -1,9 +1,15 @@
 // user info
-const sec = require('./env');
+const sec = require('./lib/env');
 
-const express = require('express');
+// import the Product model
+const {
+    Farm,
+    Product
+} = require('./model/FarmProducts');
+
 
 // The app object conventionally denotes the Express application. 
+const express = require('express');
 const app = express();
 
 // The Path module provides a way of working with directories and file paths.
@@ -54,10 +60,6 @@ app.use(express.urlencoded({
 }));
 
 
-// import the Product model
-const Product = require('./model/Product');
-
-
 
 // GET /hello
 app.get('/hello', (req, res) => {
@@ -83,6 +85,27 @@ app.get('/products', async (req, res) => {
     });
 })
 
+// GET all farms
+// Note - async callback handler - await mongooose and then response.
+app.get('/farms', async (req, res) => {
+    // const filter_category = req.query.category;
+    // let products = {};
+    // if (filter_category && filter_category != 'All Categories') {
+    //     products = await Product.find({
+    //         category: filter_category
+    //     });
+    // } else {
+    //     products = await Product.find({});
+    // }
+
+    const farms = await Farm.find({});
+
+    // console.log(products);
+    res.render('farms/index.ejs', {
+        farms
+    });
+})
+
 
 // Route parameters are named URL segments
 // The captured values are populated in the req.params object
@@ -90,10 +113,11 @@ app.get('/products/:id', async (req, res) => {
 
     // console.log("GET /products/:id");
 
-    const id = req.params.id;
-    console.log(id);
-    const product = await Product.findById(id);
-    console.log(product);
+    // using the id from the route, read existing product
+    // note that a Product has a ref property to Farm, so we use .populate('property') to get Farm details:
+    const product_id = req.params.id;
+    const product = await Product.findById(product_id).populate('farm');
+    // console.log(product);
 
     res.render('products/product_details.ejs', {
         product
@@ -111,14 +135,31 @@ app.get('/products/:id', async (req, res) => {
 
 });
 
-// Create Part 1
+// Create Product Part 1
 // GET the form, in order to create a todo
 app.get("/forms/products/create", (request, response) => {
     //console.log("GET /products/create");
     response.render('products/create_product.ejs', {});
 });
 
-// Create Part 2
+// Create Product of a Farm Part 1
+// GET the form, in order to create a todo
+app.get("/farms/:fid/products/create", (req, res) => {
+
+    // get farmID from route, and pass it to page
+    const farm_id = req.params.fid;
+    res.render('products/create_product.ejs', {
+        farm_id
+    });
+});
+
+// Create Farm Part 1
+// GET the form, in order to create a todo
+app.get("/farms/create", (request, response) => {
+    response.render('farms/create_farm.ejs', {});
+});
+
+// Create Product Part 2
 app.post('/products', async (req, res) => {
     console.log(req.body);
     const {
@@ -143,6 +184,91 @@ app.post('/products', async (req, res) => {
 
     // redirect to list all products after saving:
     res.redirect('/products');
+});
+
+// Create Product of a Farm Part 2
+app.post('/farms/:fid/products', async (req, res) => {
+
+    // res.send(req.body);
+
+    // get farmID from route
+    const farm_id = req.params.fid;
+
+    // findById existing farm, and connect with the new Product.
+    const farm = await Farm.findById(farm_id);
+    // res.send(farm);
+
+
+    const {
+        name,
+        price,
+        category
+    } = req.body;
+
+    // create a model object, and save
+    const new_product = new Product({
+        name,
+        price,
+        category
+    });
+
+    // connect the farm with the new Product, on both ends:
+    farm.products.push(new_product);
+    new_product.farm = farm;
+
+    // save both ends of relation
+    await new_product.save();
+    await farm.save();
+
+    console.log(new_product);
+
+    // res.send(req.body);
+    // res.send(new_product);
+    //res.send('POST /products')
+
+    // redirect to list all products after saving:
+    res.redirect(`/farms/${farm._id}`);
+});
+
+// Create Farm Part 2
+app.post('/farms', async (req, res) => {
+
+    // console.log(req.body);
+
+    // we use input names farm[name], farm[city] etc
+    const new_farm = new Farm(req.body.farm);
+    await new_farm.save();
+
+    // redirect to list all products after saving:
+    res.redirect('/farms');
+});
+
+// READ specific farm
+// Note the order of this, since the URL has a parameter, not to catch any similar pattern (i.e. /farms/create), this must be last.
+// Route parameters are named URL segments
+// The captured values are populated in the req.params object
+app.get('/farms/:id', async (req, res) => {
+
+    // using the id from the route, read existing farm
+    // note that a Farm has an array of ObjectIds for related Products, so we use populate() to get Product details
+    const farm_id = req.params.id;
+    const farm = await Farm.findById(farm_id).populate('products');
+    // console.log(selectedFarm);
+
+    res.render('farms/farm_details.ejs', {
+        farm
+    });
+
+    // if (!product) {
+    //     // If not found, return 404 error
+    //     return res.status(404).send('Product not found');
+    // } else {
+    //     res.status(200).send('Product found');
+    // }
+
+    // If todo is found, return it as JSON
+    // res.json(product);
+
 });
 
 // UPDATE Part 1

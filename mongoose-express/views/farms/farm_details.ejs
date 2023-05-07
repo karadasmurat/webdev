@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- To reduce duplication, we will leverage EJS partials. -->
+    <%- include('../partials/head.ejs') %>
+    <title>Farm Details</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1><%= farm.name %></h1>
+        <ul>
+            <li>City: <%= farm.city %></li>
+            <li>Email: <%= farm.email %></li>
+        </ul>
+
+        <h2>Products</h2>
+        <ul>
+            <% for( let product of farm.products ) { %>
+            <li><a href="/products/<%=product._id%>"><%= product.name %></a></li>
+            <% } %>
+        </ul>
+
+
+        <div class="d-flex justify-content-end">
+            <!-- The .btn classes are designed to be used with the <button> element. 
+        However, you can also use these classes on <a> or <input> elements (though some browsers may apply a slightly different rendering). -->
+            <a href="/farms" class="btn btn-outline-primary me-auto">All Farms</a>
+            <a href="/farms/<%= farm._id%>/update" class="btn btn-outline-primary">Edit</a>
+            <a href="/farms/<%=farm._id%>/products/create" class="btn btn-primary mx-2">Add a Product</a>
+            <form action="/farms/<%=farm._id%>?_method=DELETE" method="POST">
+                <button type="submit" class="btn btn-outline-danger">Delete</button>
+            </form>
+        </div>
+
+    </div>
+
+    <%- include('../partials/footer.ejs') %>
+</body>
+
+
+
+</html>

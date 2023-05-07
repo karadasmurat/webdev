@@ -1,0 +1,100 @@
+{
+    "title": "Thriller",
+    "releaseYear": 1982,
+    "artist": {
+        "name": "Michael Jackson"
+    },
+    "recordLabel": "Epic Records",
+    "tracks": [{
+            "title": "Wanna Be Startin' Somethin'",
+            "duration": 386000,
+            "trackNo": 1,
+            "genres": [
+                "Pop",
+                "Funk"
+            ]
+        },
+        {
+            "title": "Baby Be Mine",
+            "duration": 258000,
+            "trackNo": 2,
+            "genres": [
+                "Pop",
+                "Funk"
+            ]
+        },
+        {
+            "title": "The Girl Is Mine",
+            "duration": 203000,
+            "trackNo": 3,
+            "genres": [
+                "Pop",
+                "R&B"
+            ]
+        },
+        {
+            "title": "Thriller",
+            "duration": 357000,
+            "trackNo": 4,
+            "genres": [
+                "Pop",
+                "Rock",
+                "Disco"
+            ]
+        },
+        {
+            "title": "Beat It",
+            "duration": 258000,
+            "trackNo": 5,
+            "genres": [
+                "Pop",
+                "Rock"
+            ]
+        },
+        {
+            "title": "Billie Jean",
+            "duration": 295000,
+            "trackNo": 6,
+            "genres": [
+                "Pop",
+                "Funk",
+                "Disco"
+            ]
+        },
+        {
+            "title": "Human Nature",
+            "duration": 243000,
+            "trackNo": 7,
+            "genres": [
+                "Pop",
+                "R&B"
+            ]
+        },
+        {
+            "title": "P.Y.T. (Pretty Young Thing)",
+            "duration": 230000,
+            "trackNo": 8,
+            "genres": [
+                "Pop",
+                "R&B"
+            ]
+        },
+        {
+            "title": "The Lady in My Life",
+            "duration": 285000,
+            "trackNo": 9,
+            "genres": [
+                "Pop",
+                "R&B"
+            ]
+        }
+    ],
+    "genres": [
+        "Pop",
+        "Funk",
+        "R&B",
+        "Rock",
+        "Disco"
+    ]
+
+}

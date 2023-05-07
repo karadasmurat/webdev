@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- To reduce duplication, we will leverage EJS partials. -->
+    <%- include('../partials/head.ejs') %>
+    <title>Farms</title>
+</head>
+
+<body>
+    <div class="container">
+        <h2>All Farms</h2>
+        <!-- 
+When a form is submitted with a method of "GET" and no action property specified, 
+the browser will submit the form data as query parameters in the URL of the current page.  -->
+        <form method="GET">
+
+            <div class="d-flex justify-content-end">
+                <label for="category-select" class="form-label">Filter by category:</label>
+                <select id="category-select" name="category" class="d-inline-block mx-3">
+                    <option>All Categories</option>
+                    <option value="fruit">Fruit</option>
+                    <option value="vegetable">Vegetable</option>
+                    <option value="dairy">Dairy</option>
+                </select>
+                <button type="submit" class="btn btn-outline-secondary btn-sm">Filter results</button>
+
+            </div>
+
+
+        </form>
+        <hr>
+        <ul>
+            <% for(let farm of farms){ %>
+            <li><a href="/farms/<%= farm._id %>"><%= farm.name %> </a></li>
+            <% } %>
+
+        </ul>
+
+        <div class="d-flex justify-content-end">
+
+            <a href="/farms/create" class="btn btn-primary">Create New Farm</a>
+
+        </div>
+
+    </div>
+    <%- include('../partials/footer.ejs') %>
+</body>
+
+</html>

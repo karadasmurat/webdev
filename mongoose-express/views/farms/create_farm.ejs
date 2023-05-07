@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- To reduce duplication, we will leverage EJS partials. -->
+    <%- include('../partials/head.ejs') %>
+    <title>Create Farm</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Create Farm</h1>
+        <form action="/farms" method="POST">
+            <!-- farm{name:string, city:string, email:string, products:[]} -->
+
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" name="farm[name]" id="name" placeholder="Farm Name" class="form-control" required>
+                <div class="invalid-feedback">
+                    Please provide a farm name.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="city" class="form-label">City</label>
+                <input type="text" name="farm[city]" id="city" placeholder="City" class="form-control" required>
+                <div class="invalid-feedback">
+                    Please provide a city.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="farm[email]" id="email" placeholder="Email" class="form-control" required>
+                <div class="invalid-feedback">
+                    Please provide a valid email.
+                </div>
+            </div>
+
+
+            <div class="d-flex justify-content-end">
+                <a href="/products" class="btn btn-outline-secondary mx-2">Cancel</a>
+                <button type="submit" class="btn btn-success mx-2">Save</button>
+            </div>
+
+
+        </form>
+    </div>
+    <%- include('../partials/footer.ejs') %>
+</body>
+
+</html>

@@ -20,7 +20,7 @@ const farmSchema = new mongoose.Schema({
     // shall we embed products in farms? 
     // Q1: do we have an "all products" page? Yes. then do not embed - use a seperate collection.
     // Q2: will you have a farm page with all products frequently listed? Yes. Then use an array of IDs.
-    products: [{ // an array of child references
+    products: [{ // an array containing references to children
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product'
     }]

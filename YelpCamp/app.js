@@ -4,11 +4,18 @@ const sec = require('./lib/env');
 // custom error
 const yerr = require('./lib/YelpError');
 
+// import mongoose Model
+const {
+    Campground,
+    Review
+} = require("./model/Campground");
+
 // server-side validation
 const Joi = require("joi");
 // object desct, like without a module name
 const {
-    campgroundJoiSchema
+    campgroundJoiSchema,
+    reviewJoiSchema
 } = require('./lib/joi_schemas');
 
 const express = require('express');
@@ -58,15 +65,28 @@ app.use(express.json());
 
 // parse form
 // for parsing application/x-www-form-urlencoded
+// body-parser was previously a separate npm package, but starting from Express 4.16.0, it has been integrated into the core express module. 
+// const bodyParser = require('body-parser');
+// app.use(bodyParser.urlencoded({
+//     extended: true
+// }));
+
 app.use(express.urlencoded({
     extended: true
 }));
 
-// import mongoose Model
-const Campground = require("./model/Campground");
+
 const {
     YelpError
 } = require('./lib/YelpError');
+
+
+
+
+// Express Route
+const campgroundsRouter = require('./routes/campgrounds_router');
+app.use('/campgrounds', campgroundsRouter);
+
 
 // GET /hello
 app.get('/hello', (req, res) => {
@@ -112,117 +132,22 @@ app.get('/asyncerror2', (req, res, next) => {
 
 
 
-// GET /campgrounds
-app.get('/campgrounds', async (req, res) => {
-    const campgrounds = await Campground.find({});
-    res.render("campgrounds/index.ejs", {
-        campgrounds
-    });
-});
-
-// Create Part 1
-// GET the form, in order to create a model object
-// In order not to crash, keep this route before /campgrounds/:id, since it would act as if "create" is an id.
-app.get("/campgrounds/create", (req, res) => {
-    console.log("GET /forms/campgrounds/create");
-
-    // pass an empty campground object, create/update will use the same page.
-    const campground = {};
-    res.render('campgrounds/create_campground.ejs', {
-        campground
-    });
-});
-
-// Route parameters are named URL segments
-// The captured values are populated in the req.params object
-app.get('/campgrounds/:id', async (req, res) => {
-
-    // console.log("GET /campgrounds/:id");
-
-    const id = req.params.id;
-    console.log(id);
-    const campground = await Campground.findById(id);
-    console.log(campground);
-
-    res.render('campgrounds/campground_details.ejs', {
-        campground
-    });
-
-    // if (!product) {
-    //     // If not found, return 404 error
-    //     return res.status(404).send('Product not found');
-    // } else {
-    //     res.status(200).send('Product found');
-    // }
-
-    // If todo is found, return it as JSON
-    // res.json(product);
-
-});
-
-// UPDATE Part 1
-// GET the filled form 
-app.get("/campgrounds/:id/update", async (req, res) => {
-    // findById
-    const id = req.params.id;
-    const campground = await Campground.findById(id);
-
-    // render filled form, by passing the model object to page
-    // res.render('campgrounds/update_campground.ejs', {
-    //     campground
-    // });
-
-    // send to create instead
-    res.render('campgrounds/create_campground.ejs', {
-        campground
-    });
-});
-
-// UPDATE Part 2
-// PUT 
-// Note that form has POST method, so will use method-override
-app.put("/campgrounds/:id", async (req, res) => {
-    console.log("PUT /campgrounds/:id");
-
-    // construct an object from using the submitted form:
-    const id = req.params.id;
-    console.log(id);
-
-    const updated_campground = {
-        title: req.body.title,
-        location: req.body.location,
-        price: req.body.price
-    };
-    console.log(updated_campground);
 
 
-    const camp = await Campground.findByIdAndUpdate(id, updated_campground);
-
-    // We could also use 
-    // const filter = {
-    //     _id: id
-    // };
-    // const result = await Campground.findOneAndUpdate(filter, updated_campground);
-    // console.log(result);
-
-
-    // redirect to list all products after saving:
-    res.redirect('/campgrounds');
-});
+// REVIEW ROUTES
 
 // function for validation, will be middleware
 // SERVER-SIDE VALIDATION USING JOI
-const validateCampground = (req, res, next) => {
+const validateReview = (req, res, next) => {
 
-    // 1. a schema is constructed using the provided types and constraints:
-    // campgroundJoiSchema = joischemas.campgroundJoiSchema;
+    // 1. a schema is constructed (we imported using require)
 
     // 2. the value is validated against the defined schema:
     // returns an object. we can use object destructuring to access properties:
     const {
         error,
         value
-    } = campgroundJoiSchema.validate(req.body);
+    } = reviewJoiSchema.validate(req.body);
 
     // If the input is valid, then the error will be undefined
     // ValidationError: "campground" is required
@@ -230,80 +155,84 @@ const validateCampground = (req, res, next) => {
     // "campground.price" must be greater than or equal to 0
     if (error) {
         console.log(error);
-        return next(new yerr.InvalidParameterError("Invalid Campground Data.", 400));
+        return next(new yerr.InvalidParameterError("Invalid Review Data.", 400));
     } else {
         next(); // note that this is a middleware, so call next() without arguments to go on.
     }
 }
 
-// Create Part 2
-// POST /campgrounds
+// CREATE a Review
 // validateCampground middleware 
-app.post('/campgrounds', validateCampground, async (req, res, next) => {
-    console.log(req.body);
+app.post('/campgrounds/:id/reviews', validateReview, async (req, res) => {
 
-    // for async errors, you must pass them to the next() function
-    // so, catch your own throw, or create an error and pass it to next.
+    // note that campground id is a route parameter
+    const cid = req.params.id;
 
-    // MANUAL SERVER-SIDE VALIDATION
-    // if (!req.body.campground) {
-    //     // throw new Error("Invalid Campground Data.");
+    // we use input names review[rating], review[body] etc
+    // therefore, we have a review object in the request:
+    const {
+        review
+    } = req.body
 
-    //     // create an error and pass it to next.
-    //     // 400 Bad Request
-    //     return next(new yerr.MissingParameterError("Invalid Campground Data.", 400));
-    // }
+    // res.send(review);
+    // { rating: "4", body: "test" }
 
-    // we use input names campground[title], campground[price] etc
-    const new_campground = new Campground(req.body.campground);
-    await new_campground.save();
+    // update the relationship, then save both:
+    const campground = await Campground.findOne({
+        _id: cid
+    })
+    if (!campground) {
+        return res.sendStatus(404);
 
-    console.log(new_campground);
-
-    // res.send(req.body);
-    // res.send(new_campground);
-    //res.send('POST /products')
-
-    // redirect to list all products after saving:
-    res.redirect('/campgrounds');
-});
-
-// DELETE
-// Note that form has POST method, so will use method-override
-app.delete("/campgrounds/:id", async (req, res) => {
-    console.log("DELETE /campgrounds/:id");
-
-    try {
-        const id = req.params.id;
-        const campground = await Campground.findByIdAndDelete(id);
-        if (!campground) {
-            return res.status(404).send({
-                error: 'campground not found'
-            });
-        }
-        // redirect to list all products after saving:
-        res.redirect('/campgrounds');
-    } catch (error) {
-        console.log(error);
-        res.status(500).send({
-            error: 'Internal server error'
-        });
     }
 
+    const new_review = new Review(review);
+    console.log(new_review);
+
+    // update both ends of relationship
+    new_review.campground = campground;
+    campground.reviews.push(new_review);
+
+    // save both ends of relationship
+    await campground.save()
+    await new_review.save();
+
+    // console.log(new_campground);
+
+    // redirect to list all products after saving:
+    res.redirect(`/campgrounds/${cid}`);
 });
 
-// DELETE api
-// Note that form has POST method, so will use method-override
-app.delete("/api/campgrounds/:id", async (req, res) => {
-    console.log("DELETE /api/campgrounds/:id");
+// DELETE a Review
+app.delete("/campgrounds/:cid/reviews/:rid", async (req, res) => {
+
+    console.log("DELETE /campgrounds/:cid/reviews/:rid");
 
     try {
-        const id = req.params.id;
-        const campground = await Campground.findByIdAndDelete(id);
-        if (!campground) {
-            // Not Found
+        // in our model, the relationship has 2 ends.
+        // so we delete the review, and update campground's array of references accordingly:
+
+        const rid = req.params.rid;
+        const review = await Review.findOneAndDelete({
+            _id: rid
+        });
+        console.log(review);
+        if (!review) {
+            // Not Found, return
             return res.sendStatus(404);
         }
+
+        // update campground's array of references:
+        // $pull operator 
+        // removes from an "existing array" all instances of a value or values that match a specified condition.
+        const campground = Campground.findOneAndUpdate({
+            _id: req.params.cid
+        }, {
+            $pull: {
+                reviews: rid // remove from array "reviews", where item = rid
+            }
+        });
+
         // OK - respond with a 204 status code
         res.sendStatus(204);
     } catch (error) {
@@ -312,6 +241,7 @@ app.delete("/api/campgrounds/:id", async (req, res) => {
     }
 
 });
+
 
 // 2 last middlewares, 404 and error handler
 app.use(function (req, res, next) {

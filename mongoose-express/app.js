@@ -19,6 +19,12 @@ const path = require('path');
 const methodOverride = require('method-override');
 app.use(methodOverride('_method'));
 
+// COOKIES
+// Parse Cookie header and populate req.cookies with an object keyed by the cookie names.
+var cookieParser = require('cookie-parser');
+app.use(cookieParser(sec.COOKIE_SECRET));
+
+
 const mongoose = require('mongoose');
 
 const EXPRESS_PORT = 3000;
@@ -60,11 +66,96 @@ app.use(express.urlencoded({
 }));
 
 
+// GET /
+// redirect to home
+app.get('/', (req, res) => {
+    res.redirect("/products")
+});
 
 // GET /hello
 app.get('/hello', (req, res) => {
     res.send('Hello, there!')
 });
+
+// See request headers
+app.get('/headers', function (req, res) {
+    // res.send(req.headers.cookie);
+    res.send(req.headers);
+
+});
+
+
+// sending a COOKIE
+// Also see /preferences to set a cookie using form input
+app.get("/setcookies", (req, res) => {
+    res.cookie('school', 'Hogwarts School of Witchcraft and Wizardry');
+
+    // setting cookie attribute: expires in 60 seconds:
+    res.cookie('rememberme', true, {
+        // expires: new Date(Date.now() + 60 * 1000)
+        maxAge: 60 * 1000 // Convenient option for setting the expiry time relative to the current time in milliseconds.
+    });
+
+    // signed cookie
+    res.cookie('grade', 90, {
+        signed: true
+    });
+
+    res.send("Say hi to your newest cookies :)");
+});
+
+app.get('/getcookies', function (req, res) {
+
+    // When using cookie-parser middleware, "req.cookies" property is an object that contains cookies sent by the request.
+    // Note that the browser then sends them back to the server with every request
+
+    // Cookies that have not been signed
+    console.log('Cookies: ', req.cookies)
+
+    // Cookies that have been signed
+    console.log('Signed Cookies: ', req.signedCookies)
+
+    const allcookies = {
+        unsigned: req.cookies,
+        signed: req.signedCookies
+    }
+    console.log(allcookies);
+    res.send(allcookies);
+
+    /*
+        {
+            unsigned: {
+                school: 'Hogwarts School of Witchcraft and Wizardry',
+                lang: 'FR',
+                rememberme: 'true'
+            },
+            signed: {
+                grade: '90'
+            }
+        }
+    */
+});
+
+// Cookie usecase - show a simple form to collect user preferences
+app.get("/preferences", (req, res) => {
+    //res.send(req.body);
+    res.render("prefs.ejs");
+});
+
+// store user preferences from a form: set cookie
+app.post("/preferences", (req, res) => {
+    // res.send(req.body);
+
+    const preferredLanguage = req.body.lang;
+    if (preferredLanguage) {
+        res.cookie('lang', preferredLanguage);
+    }
+
+    res.redirect("/getcookies");
+});
+
+
+
 
 // GET all products
 // Note - async callback handler - await mongooose and then response.

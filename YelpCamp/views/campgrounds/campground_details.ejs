@@ -13,7 +13,7 @@
         <div class="row">
             <!-- To center a .col element that takes up half the width of a .row, you can use the Bootstrap utility class
             mx-auto. This class sets the element's horizontal margin to "auto", which centers it within its container. -->
-            <div class="col-md-6 mx-auto">
+            <div class="col-md-8">
 
                 <div class="card">
                     <img src=" <%=campground.image%>" class="card-img-top" alt="..." />
@@ -41,6 +41,43 @@
                     </div>
                 </div>
 
+
+            </div>
+
+            <div class="col-md-4">
+
+                <h2>Leave a Review</h2>
+                <!-- begin review form -->
+                <form action="/campgrounds/<%=campground._id%>/reviews" method="POST">
+                    <div class="mb-3">
+                        <label for="rating" class="form-label">Rating</label>
+                        <input type="range" name="review[rating]" id="rating" min="1" max="5" class="form-range">
+                    </div>
+                    <div class="mb-3">
+                        <label for="body" class="form-label">Review</label>
+                        <textarea name="review[body]" id="body" cols="30" rows="3" class="form-control"></textarea>
+                    </div>
+                    <button class="btn btn-success">Submit Review</button>
+                </form>
+                <!-- end review form -->
+
+
+                <h2>Reviews</h2>
+                <div id="review-container">
+
+                    <% for( let  review of campground.reviews ) { %>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= review.rating %> </h5>
+                            <p class="card-text"><%= review.body %></p>
+                            <button id="btn_review_del_<%=review._id%>" data-cid="<%= campground._id %>"
+                                data-rid="<%=review._id%>" class="btn btn-outline-danger "> <i class="bi bi-trash3"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                    <% } %>
+                </div>
             </div>
         </div>
 
@@ -50,13 +87,16 @@
             <!-- Auto margins start/end: pushing two items to the right (.me-auto), and pushing two items to the left (.ms-auto) -->
             <a href="/campgrounds" class="btn btn-outline-primary me-auto">All Campgrounds</a>
 
-
-
         </div>
 
 
+
+
+        <%- include('../partials/footer.ejs') %>
     </div>
-    <%- include('../partials/footer.ejs') %>
+    <!--end container -->
+
+
 
     <!-- a modal dialog to confirm before sending the DELETE request using Bootstrap 5 -->
     <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
@@ -90,14 +130,16 @@
     <script>
         // Using the Fetch API to delete a resource
         const deleteButton = document.getElementById('delete-button');
-        const itemId = deleteButton.dataset.id;
+        const cid = deleteButton.dataset.id;
+
+        const btn_review_del = document.getElementById('btn_review_del');
 
         // Get the confirm delete button element from modal
         const confirmDeleteButton = document.getElementById('confirmDeleteButton');
 
         // Add a click event listener to the confirm delete button
         confirmDeleteButton.addEventListener('click', async () => {
-            const response = await fetch(`/api/campgrounds/${itemId}`, {
+            const response = await fetch(`/campgrounds/${cid}`, {
                 method: 'DELETE'
             });
             console.log(response);
@@ -108,6 +150,42 @@
                 // Do something if there was an error deleting the item
             }
         });
+
+
+        // Add a click event listener: DELETE a Review
+        // btn_review_del.addEventListener('click', async () => {
+
+        // });
+
+
+
+        // Get all delete buttons in the document
+        const buttons_review_del = document.querySelectorAll('#review-container .btn.btn-outline-danger');
+
+
+        // Add event listener to each button
+        for (const button of buttons_review_del) {
+
+            button.addEventListener('click', async () => {
+                // Handle delete button click here
+                //console.log('Clicked delete button');
+
+                // note that we use data-* on the button to store camp and review IDs
+                const response = await
+                fetch(`/campgrounds/${button.dataset.cid}/reviews/${button.dataset.rid}`, {
+                    method: 'DELETE'
+                });
+                console.log(response);
+
+                if (response.ok) {
+                    window.location.href = `/campgrounds/${button.dataset.cid}`;
+                } else {
+                    // Do something if there was an error deleting the item
+                }
+
+
+            });
+        }
     </script>
 </body>
 

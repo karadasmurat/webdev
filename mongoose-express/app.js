@@ -183,7 +183,7 @@ app.post('/products', async (req, res) => {
     //res.send('POST /products')
 
     // redirect to list all products after saving:
-    res.redirect('/products');
+    res.redirect('/products/' + new_product._id);
 });
 
 // Create Product of a Farm Part 2
@@ -233,14 +233,14 @@ app.post('/farms/:fid/products', async (req, res) => {
 // Create Farm Part 2
 app.post('/farms', async (req, res) => {
 
-    // console.log(req.body);
+    // res.send(req.body);
 
     // we use input names farm[name], farm[city] etc
     const new_farm = new Farm(req.body.farm);
     await new_farm.save();
 
     // redirect to list all products after saving:
-    res.redirect('/farms');
+    res.redirect(`/farms/${new_farm._id}`);
 });
 
 // READ specific farm
@@ -340,6 +340,27 @@ app.delete("/products/:id", async (req, res) => {
         res.status(500).send({
             error: 'Internal server error'
         });
+    }
+
+});
+
+
+// DELETE a Farm - api
+app.delete("/api/farms/:id", async (req, res) => {
+    console.log("DELETE /api/farms/:id");
+
+    try {
+        const id = req.params.id;
+        const farm = await Farm.findByIdAndDelete(id);
+        if (!farm) {
+            // Not Found
+            return res.sendStatus(404);
+        }
+        // OK - respond with a 204 status code
+        res.sendStatus(204);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
     }
 
 });

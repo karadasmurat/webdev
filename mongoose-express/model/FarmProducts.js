@@ -50,6 +50,26 @@ const productSchema = new mongoose.Schema({
 });
 
 
+// Middleware (also called pre and post hooks) is specified on the schema level 
+// functions which are passed control during execution of asynchronous functions.
+// Query middleware executes when you call exec() or then() on a Query object, or await on a Query object.
+// "post middleware" are executed after the hooked method and all of its pre middleware have completed.
+farmSchema.post('findOneAndDelete', async function (farm) {
+
+    console.log("POST MIDDLEWARE ACTIVATED.");
+
+    if (farm.products.length != 0) {
+        const res = await Product.deleteMany({
+            _id: {
+                $in: farm.products
+            }
+        });
+        console.log(res)
+    }
+
+});
+
+
 const Farm = mongoose.model('Farm', farmSchema);
 const Product = mongoose.model('Product', productSchema);
 

@@ -1,0 +1,207 @@
+const express = require('express');
+const router = express.Router();
+
+
+// custom error
+const {
+    AuthError
+} = require('../lib/AppError')
+
+
+// import mongoose Model
+const {
+    User
+} = require("../model/User");
+
+// server-side validation
+const Joi = require("joi");
+// object desct, like without a module name
+const {
+    userJoiSchema
+} = require('../lib/joi_schemas');
+
+// import bcrypt
+const bcrypt = require('bcrypt');
+const SALTROUNDS = 12;
+
+
+
+// function for validation, will be middleware
+// SERVER-SIDE VALIDATION USING JOI
+const validateUser = (req, res, next) => {
+
+    // 1. a schema is constructed (we imported using require)
+
+    // 2. the value is validated against the defined schema:
+    // returns an object. we can use object destructuring to access properties:
+    const {
+        error,
+        value
+    } = userJoiSchema.validate(req.body);
+
+    // If the input is valid, then the error will be undefined
+    // ValidationError: "campground" is required
+    // "campground.title" is not allowed to be empty
+    // "campground.price" must be greater than or equal to 0
+    if (error) {
+        console.log(error);
+        // next with an error:
+        return next(new AuthError("Invalid User Data.", 400));
+    } else {
+        next(); // note that this is a middleware, so call next() without arguments to go on.
+    }
+}
+
+
+
+// middleware to check auth status 
+// highly coupled with the login implementation which sets a session object named "account"
+const requireLogin = (req, res, next) => {
+
+    if (!req.session.account) {
+
+        // stop execution, return with a redirect.
+        return res.redirect('/auth/signin');
+    }
+
+    next();
+}
+
+
+
+// GET /secret
+router.get('/secret', requireLogin, (req, res, next) => {
+
+    // Note that requireLogin middleware checks authentication status.
+    const account = req.session.account;
+    res.render("secret.ejs", {
+        account
+    });
+});
+
+// GET /topsecret
+router.get('/topsecret', requireLogin, (req, res, next) => {
+
+    // Note that requireLogin middleware checks authentication status.
+    res.send("Top Secret!");
+});
+
+// GET register form
+
+router.get('/register', (req, res) => {
+    res.render("auth/register");
+});
+
+// CREATE a new user after validating.
+// there could be errors handled to next, so there is a third parameter in the route handler.
+router.post('/register', validateUser, async (req, res, next) => {
+
+    console.log("/POST register")
+    // res.send(req.body);
+
+    // get form information in request body
+    const userinfo = req.body.user;
+
+    // hash the password, and store in db:
+    const salt = await bcrypt.genSalt(SALTROUNDS);
+    const hash = await bcrypt.hash(userinfo.password, salt);
+
+    const user = new User({
+        username: userinfo.username,
+        password: hash
+    });
+
+    try {
+        await user.save();
+    } catch (e) {
+        // res.send(e);
+        // res.send(e.errmsg);
+
+        // catch the error, stop executing, create a custom error and give this error to the next:
+        return next(new AuthError(e.errmsg));
+
+    }
+
+
+    res.redirect("/auth/signin");
+
+});
+
+
+// GET signin form
+router.get('/signin', (req, res) => {
+    res.render("auth/signin");
+});
+
+
+// POST signin form
+// Sign in with username and password
+router.post('/signin', async (req, res, next) => {
+
+    // res.send(req.body);
+
+    // 1. get the credentials from request body, 
+    // 2. get the user from db.
+    // 3. compare plain password with hash from db.
+
+    // get the object containing the parameters from request body
+    // note that input names on the form are: user[username], user[password]
+    const body_user = req.body.user;
+
+    const existing_user = await User.findOne({
+        username: body_user.username
+    });
+
+    if (!existing_user) {
+        console.log("user not found");
+        //res.status(404).send("User not found.");
+
+        // stop execution, and handle error to next middleware: (return next with an error)
+        return next(new AuthError("User not found", 403));
+
+    } else {
+        // compare plain password with hash from db.
+        const pass_match = await bcrypt.compare(body_user.password, existing_user.password);
+        if (!pass_match) {
+            // res.status(404).send("Incorrect Password.");
+
+            // stop execution, and handle error to next middleware: (return next with an error)
+            return next(new AuthError("Incorrect Password", 403));
+        } else {
+
+            // Successfully signed in. 
+            // since we use express-session, there is a cookie "connect.sid"
+            // Store a session variable:
+
+            const account = {
+                id: existing_user._id,
+                username: existing_user.username
+            }
+            req.session.account = account;
+
+            console.log("Session set. redirecting to secret resource.");
+
+            // pass session object to ejs
+            res.render("secret.ejs", {
+                account
+            });
+        }
+    }
+});
+
+
+// LOGOUT
+// In the case of a /logout route, which is used to log out a user, it makes more sense to use the POST method. 
+// The reason for this is that logging out typically involves modifying the server-side state (i.e. the session), 
+// and the POST method is more appropriate for modifying server-side data.
+// Using GET to log out a user could be problematic because GET requests are usually cached by the browser
+router.post('/signout', (req, res, next) => {
+
+    // req.session.userID = null;
+    req.session.destroy();
+
+    res.redirect("/auth/signin");
+});
+
+
+module.exports = router;

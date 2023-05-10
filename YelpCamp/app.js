@@ -1,5 +1,23 @@
+// The app object conventionally denotes the Express application. 
+const express = require('express');
+const app = express();
+
 // user info
 const sec = require('./lib/env');
+
+//session
+const session = require('express-session');
+app.use(session({
+    secret: sec.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true
+}));
+
+
+//connect-flash
+const flash = require("connect-flash");
+app.use(flash());
+
 
 // custom error
 const yerr = require('./lib/YelpError');
@@ -10,18 +28,18 @@ const {
     Review
 } = require("./model/Campground");
 
+
+
 // server-side validation
 const Joi = require("joi");
-// object desct, like without a module name
+
+
+// import Model - object desct, like without a module name
 const {
     campgroundJoiSchema,
     reviewJoiSchema
 } = require('./lib/joi_schemas');
 
-const express = require('express');
-
-// The app object conventionally denotes the Express application. 
-const app = express();
 
 // The Path module provides a way of working with directories and file paths.
 const path = require('path');
@@ -30,6 +48,22 @@ const path = require('path');
 const methodOverride = require('method-override');
 app.use(methodOverride('_method'));
 
+
+
+// Passport is js library authentication middleware 
+const User = require("./model/User");
+
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
+
+// Mongoose - ODM layer for MongoDB
 const mongoose = require('mongoose');
 
 const EXPRESS_PORT = 3000;
@@ -83,9 +117,17 @@ const {
 
 
 
-// Express Route
+// Express Routes
 const campgroundsRouter = require('./routes/campgrounds_router');
 app.use('/campgrounds', campgroundsRouter);
+
+const reviewsRouter = require('./routes/reviews_router');
+app.use('/', reviewsRouter);
+
+const authRouter = require('./routes/auth_router');
+app.use('/', authRouter);
+
+
 
 
 // GET /hello
@@ -101,6 +143,43 @@ app.get('/simplecamptest', async (req, res) => {
     await camp.save();
 
     res.send(camp);
+});
+
+app.get('/fake-user', async (req, res) => {
+
+    const user = new User({
+        email: 'fake@example.com',
+        username: 'fake01'
+    });
+
+    // take the instance of Model, and plain-text password
+    const newUser = await User.register(user, 'monkey');
+
+    res.send(newUser);
+});
+
+// set a flash message
+app.get('/setflashmsg', (req, res) => {
+
+    // Set a flash message by passing the key, followed by the value: req.flash(key, msg)
+    req.flash("success", "The flash is a special area of the session used for storing messages.");
+    req.flash("error", "Messages are written to the flash and cleared after being displayed to the user. ");
+
+    res.redirect("/getflashmsg");
+});
+
+
+// display a flash message
+app.get('/getflashmsg', (req, res) => {
+
+    // Render an ejs page with messages - pass an object with different messages
+    // Get an array of flash messages by passing the key: req.flash(key)
+    res.render("messages.ejs", {
+        messages_success: req.flash("success"),
+        messages_error: req.flash("error"),
+
+    });
+
 });
 
 // a route to throw an error
@@ -132,115 +211,6 @@ app.get('/asyncerror2', (req, res, next) => {
 
 
 
-
-
-// REVIEW ROUTES
-
-// function for validation, will be middleware
-// SERVER-SIDE VALIDATION USING JOI
-const validateReview = (req, res, next) => {
-
-    // 1. a schema is constructed (we imported using require)
-
-    // 2. the value is validated against the defined schema:
-    // returns an object. we can use object destructuring to access properties:
-    const {
-        error,
-        value
-    } = reviewJoiSchema.validate(req.body);
-
-    // If the input is valid, then the error will be undefined
-    // ValidationError: "campground" is required
-    // "campground.title" is not allowed to be empty
-    // "campground.price" must be greater than or equal to 0
-    if (error) {
-        console.log(error);
-        return next(new yerr.InvalidParameterError("Invalid Review Data.", 400));
-    } else {
-        next(); // note that this is a middleware, so call next() without arguments to go on.
-    }
-}
-
-// CREATE a Review
-// validateCampground middleware 
-app.post('/campgrounds/:id/reviews', validateReview, async (req, res) => {
-
-    // note that campground id is a route parameter
-    const cid = req.params.id;
-
-    // we use input names review[rating], review[body] etc
-    // therefore, we have a review object in the request:
-    const {
-        review
-    } = req.body
-
-    // res.send(review);
-    // { rating: "4", body: "test" }
-
-    // update the relationship, then save both:
-    const campground = await Campground.findOne({
-        _id: cid
-    })
-    if (!campground) {
-        return res.sendStatus(404);
-
-    }
-
-    const new_review = new Review(review);
-    console.log(new_review);
-
-    // update both ends of relationship
-    new_review.campground = campground;
-    campground.reviews.push(new_review);
-
-    // save both ends of relationship
-    await campground.save()
-    await new_review.save();
-
-    // console.log(new_campground);
-
-    // redirect to list all products after saving:
-    res.redirect(`/campgrounds/${cid}`);
-});
-
-// DELETE a Review
-app.delete("/campgrounds/:cid/reviews/:rid", async (req, res) => {
-
-    console.log("DELETE /campgrounds/:cid/reviews/:rid");
-
-    try {
-        // in our model, the relationship has 2 ends.
-        // so we delete the review, and update campground's array of references accordingly:
-
-        const rid = req.params.rid;
-        const review = await Review.findOneAndDelete({
-            _id: rid
-        });
-        console.log(review);
-        if (!review) {
-            // Not Found, return
-            return res.sendStatus(404);
-        }
-
-        // update campground's array of references:
-        // $pull operator 
-        // removes from an "existing array" all instances of a value or values that match a specified condition.
-        const campground = Campground.findOneAndUpdate({
-            _id: req.params.cid
-        }, {
-            $pull: {
-                reviews: rid // remove from array "reviews", where item = rid
-            }
-        });
-
-        // OK - respond with a 204 status code
-        res.sendStatus(204);
-    } catch (error) {
-        console.log(error);
-        res.sendStatus(500);
-    }
-
-});
 
 
 // 2 last middlewares, 404 and error handler

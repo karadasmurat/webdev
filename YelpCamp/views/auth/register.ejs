@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- To reduce duplication, we will leverage EJS partials. -->
+    <%- include('../partials/head.ejs') %>
+    <title>Register</title>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <h1>Sign Up</h1>
+            <form action="/register" method="POST" class="needs-validation" novalidate>
+                <!-- <label for="username" class="form-label">Username</label> -->
+                <div class="input-group mb-3">
+                    <!-- <label for="username" class="form-label">Username</label> -->
+                    <span class="input-group-text" id="biuser"><i class="bi bi-person-circle"></i></span>
+                    <input type="text" name="user[username]" id="username" placeholder="username" aria-label="username"
+                        aria-describedby="biuser" class="form-control" required>
+                    <div class="invalid-feedback">
+                        Please provide a username.
+                    </div>
+                </div>
+
+
+                <div class="input-group mb-3">
+                    <!-- <label for="username" class="form-label">Username</label> -->
+                    <span class="input-group-text" id="bimail"><i class="bi bi-envelope"></i></span>
+                    <input type="email" name="user[email]" id="email" placeholder="email" aria-label="email"
+                        aria-describedby="bimail" class="form-control" required>
+                    <div class="invalid-feedback">
+                        Please provide an email.
+                    </div>
+                </div>
+
+
+                <div class="input-group mb-3">
+                    <!-- <label for="password" class="form-label">Password</label> -->
+                    <span class="input-group-text" id="bilock"><i class="bi bi-lock-fill"></i></span>
+                    <input type="password" name="user[password]" id="password" placeholder="password"
+                        aria-label="Password" aria-describedby="bilock" class="form-control" required>
+
+                    <div class="invalid-feedback">
+                        Please provide a password.
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success">Sign up</button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- bootstrap validation script -->
+    <%- include('../partials/bs-validation.ejs') %>
+</body>
+
+</html>

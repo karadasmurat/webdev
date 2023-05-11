@@ -1,20 +1,23 @@
-<% if(typeof messages_s !== 'undefined') {
-    for (let m of messages_s) { %>
+<!-- if(typeof messages_success !== 'undefined')  -->
 
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-    <i class="bi bi-check-circle"></i> <%=m%>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="container my-3" id="flash-messages">
+    <% for (let message of messages_success) {%>
+
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle"></i> <%=message%>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <% } %>
+
+
+    <% for (let message of messages_error) {%>
+
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="bi bi-info-circle"></i> <%=message%>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <% } %>
+
 </div>
-
-<% }} %>
-
-
-<% if(typeof messages_e !== 'undefined')  {
-    for (let m of messages_e) { %>
-
-<div class="alert alert-warning alert-dismissible fade show" role="alert">
-    <i class="bi bi-info-circle"></i> <%=m%>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-
-<% }} %>

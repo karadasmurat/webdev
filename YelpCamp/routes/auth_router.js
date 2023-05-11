@@ -143,21 +143,32 @@ router.post('/register', validateUser, async (req, res, next) => {
 // GET signin form
 router.get('/signin', (req, res) => {
 
-    // note that we could be redirected here from an unsuccessfull login, with an 'error' flash message.
-    // therefore we render the page with an object:
-    res.render("auth/signin", {
-        // messages_success: req.flash('success'),
-        messages_error: req.flash('error')
-    });
+    // note that we might be here from a fresh signin request, or 
+    // redirected after a FAILED login, with an 'error' flash message by passport.
+
+
+
+    // Option 1 - without a flash-message middleware that uses req.locals:
+    // render the page with an object:
+    // res.render("auth/signin", {
+    //     // messages_success: req.flash('success'),
+    //     messages_error: req.flash('error')
+    // });
+
+
+    res.render("auth/signin.ejs");
 });
 
 
 // POST signin form
-// Sign in with username and password
+// Sign in with username and password, using passport.authenticate() middleware
 router.post('/signin', passport.authenticate('local', {
     failureFlash: true, //TODO
     failureRedirect: '/signin'
 }), async (req, res, next) => {
+
+    // note that if we are here, it means passport.authanticate middleware passed.
+    // if it failed, it would have failureRedirect to GET /signin
 
     const message_error = req.flash('error')[0]; // get the first error message from the array
     res.redirect("/campgrounds");
@@ -173,10 +184,21 @@ router.post('/signin', passport.authenticate('local', {
 // Using GET to log out a user could be problematic because GET requests are usually cached by the browser
 router.post('/signout', (req, res, next) => {
 
+    // manual
     // req.session.userID = null;
-    req.session.destroy();
+    // req.session.destroy();
 
-    res.redirect("/signin");
+    // passport
+    req.logOut(function (err) {
+        if (err) {
+            return next(err);
+        }
+
+        // Logout successful, redirect to the desired destination
+        req.flash('success', 'Goodbye!');
+        res.redirect('/campgrounds');
+    });
+
 });
 
 

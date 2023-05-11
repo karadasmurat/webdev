@@ -21,6 +21,11 @@ app.use(flash());
 
 // custom error
 const yerr = require('./lib/YelpError');
+const {
+    YelpError
+} = require('./lib/YelpError');
+
+
 
 // import mongoose Model
 const {
@@ -110,10 +115,12 @@ app.use(express.urlencoded({
 }));
 
 
-const {
-    YelpError
-} = require('./lib/YelpError');
+// custom middlewares
+// const sayHi = require("./middlewares/sayHi");
+// app.use(sayHi);
 
+const ejsLocals = require("./middlewares/ejs-locals");
+app.use(ejsLocals);
 
 
 
@@ -172,13 +179,17 @@ app.get('/setflashmsg', (req, res) => {
 // display a flash message
 app.get('/getflashmsg', (req, res) => {
 
-    // Render an ejs page with messages - pass an object with different messages
+    // Render an ejs page with messages 
+    // Option 1: without the use of res.locals - pass an object with different messages
     // Get an array of flash messages by passing the key: req.flash(key)
-    res.render("messages.ejs", {
-        messages_success: req.flash("success"),
-        messages_error: req.flash("error"),
+    // res.render("messages.ejs", {
+    //     messages_success: req.flash("success"),
+    //     messages_error: req.flash("error"),
 
-    });
+    // });
+
+    // Option 2 - use a middleware, for all routes, which puts flash messages into res.locals
+    res.render("messages_test.ejs");
 
 });
 

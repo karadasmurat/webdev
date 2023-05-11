@@ -88,6 +88,7 @@ router.post('/campgrounds/:id/reviews', validateReview, async (req, res) => {
     // console.log(new_campground);
 
     // redirect to list all products after saving:
+    req.flash("success", "Saved review.");
     res.redirect(`/campgrounds/${cid}`);
 });
 
@@ -122,6 +123,7 @@ router.delete("/campgrounds/:id/reviews/:rid", async (req, res) => {
         });
 
         // OK - respond with a 204 status code
+        req.flash("success", "Deleted review.");
         res.sendStatus(204);
     } catch (error) {
         console.log(error);

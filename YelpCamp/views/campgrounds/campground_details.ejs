@@ -4,19 +4,31 @@
 <head>
     <!-- To reduce duplication, we will leverage EJS partials. -->
     <%- include('../partials/head.ejs') %>
-    <title>Product Details</title>
+    <title>Campground Info</title>
 </head>
 
 <body>
     <div class="container">
 
+        <!-- flash messages -->
+        <!-- 
+            To center a .col element that takes up half the width of a .row, you can use the Bootstrap utility class
+            mx-auto. This class sets the element's horizontal margin to "auto", which centers it within its container. 
+        -->
         <div class="row">
-            <!-- To center a .col element that takes up half the width of a .row, you can use the Bootstrap utility class
-            mx-auto. This class sets the element's horizontal margin to "auto", which centers it within its container. -->
+            <div class="col-lg-6 mx-auto" id="flashmsg">
+                <%- include('../partials/flash-messages.ejs') %>
+            </div>
+        </div>
+
+
+        <div class="row">
+
             <div class="col-md-8">
 
                 <div class="card">
-                    <img src=" <%=campground.image%>" class="card-img-top" alt="..." />
+                    <img src="<%=campground.image%>" onerror="this.src='/images/fallback-image.png'"
+                        class="card-img-top" alt="..." />
                     <div class="card-body">
                         <h5 class="card-title"><%=campground.title%></h5>
                         <p class="card-text"><%=campground.description%></p>
@@ -32,15 +44,16 @@
                             data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"> <i class="bi bi-trash3"></i>
                             Delete
                         </button>
-                        <!-- <form action="/campgrounds/ID?_method=DELETE" method="POST">
+                        <!-- 
+                        <form action="/campgrounds/ID?_method=DELETE" method="POST">
                             <button type="submit" class="btn btn-outline-danger ">Delete</button>
-                        </form> -->
+                        </form> 
+                    -->
                     </div>
                     <div class="card-footer text-body-secondary">
                         2 days ago
                     </div>
                 </div>
-
 
             </div>
 

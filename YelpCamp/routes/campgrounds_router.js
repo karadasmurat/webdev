@@ -8,8 +8,13 @@ const {
 } = require("../model/Campground");
 
 const {
-    YelpError
-} = require('../lib/YelpError');
+    AppError,
+    InvalidParameterError
+} = require('../lib/AppError');
+
+
+// check if user is logged in, middleware
+const ensureLoggedIn = require("../middlewares/authentication");
 
 // server-side validation
 const Joi = require("joi");
@@ -24,6 +29,7 @@ const {
 
 // GET /campgrounds
 router.get('/', async (req, res) => {
+
     const campgrounds = await Campground.find({});
     res.render("campgrounds/index.ejs", {
         campgrounds
@@ -34,7 +40,6 @@ router.get('/', async (req, res) => {
 // GET the form, in order to create a model object
 // In order not to crash, keep this route before /campgrounds/:id, since it would act as if "create" is an id.
 router.get("/create", (req, res) => {
-    console.log("GET /forms/campgrounds/create");
 
     // pass an empty campground object, create/update will use the same page.
     const campground = {};
@@ -86,7 +91,7 @@ router.get('/:id', async (req, res) => {
 
 // UPDATE Part 1
 // GET the filled form 
-router.get("/:id/update", async (req, res) => {
+router.get("/:id/update", ensureLoggedIn, async (req, res) => {
     // findById
     const id = req.params.id;
     const campground = await Campground.findById(id);
@@ -152,7 +157,7 @@ const validateCampground = (req, res, next) => {
     // "campground.price" must be greater than or equal to 0
     if (error) {
         console.log(error);
-        return next(new yerr.InvalidParameterError("Invalid Campground Data.", 400));
+        return next(new InvalidParameterError("Invalid Campground Data.", 400));
     } else {
         next(); // note that this is a middleware, so call next() without arguments to go on.
     }
@@ -161,14 +166,20 @@ const validateCampground = (req, res, next) => {
 // Create Part 2
 // POST /campgrounds
 // validateCampground middleware 
-router.post('/', validateCampground, async (req, res, next) => {
-    console.log(req.body);
+router.post('/', ensureLoggedIn, validateCampground, async (req, res, next) => {
+
+    //console.log(req.body);
+
+    // get form data from request body
+    // note that since we use input names campground[title], campground[price] etc there will be "campground" object
+    const campground_data = req.body.campground;
+
 
     // for async errors, you must pass them to the next() function
     // so, catch your own throw, or create an error and pass it to next.
 
     // MANUAL SERVER-SIDE VALIDATION
-    // if (!req.body.campground) {
+    // if (!campground_data) {
     //     // throw new Error("Invalid Campground Data.");
 
     //     // create an error and pass it to next.
@@ -176,17 +187,14 @@ router.post('/', validateCampground, async (req, res, next) => {
     //     return next(new yerr.MissingParameterError("Invalid Campground Data.", 400));
     // }
 
-    // we use input names campground[title], campground[price] etc
-    const new_campground = new Campground(req.body.campground);
+    //create a model instance, and save it to db
+    const new_campground = new Campground(campground_data);
     await new_campground.save();
 
-    console.log(new_campground);
+    // console.log(new_campground);
 
-    // res.send(req.body);
-    // res.send(new_campground);
-    //res.send('POST /products')
-
-    // redirect to list all products after saving:
+    // redirect to list all products after saving, with a message:
+    req.flash('success', "Campground saved.");
     res.redirect('/campgrounds');
 });
 
@@ -206,6 +214,7 @@ router.delete("/:id", async (req, res) => {
             return res.sendStatus(404);
         }
         // OK - respond with a 204 status code
+        req.flash("success", "Deleted campground.");
         res.sendStatus(204);
     } catch (error) {
         console.log(error);

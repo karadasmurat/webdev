@@ -25,6 +25,9 @@ const userSchema = new mongoose.Schema({
 // salt, hash properties
 // authenticate(), register(), serialize(), deserialize() methods
 userSchema.plugin(passportLocalMongoose);
+// userSchema.plugin(passportLocalMongoose, {
+//     usernameField: 'email'
+// });
 
 
 userSchema.statics.findOrCreate = async function findOrCreate(profile, done) {

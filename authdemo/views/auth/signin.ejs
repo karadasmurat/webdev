@@ -21,10 +21,10 @@
         <div class="col-md-6" style="max-width: 500px;">
 
             <!-- flash messages -->
-            <%# include('../partials/flash-messages.ejs') %>
+            <%- include('../partials/flash-messages.ejs') %>
 
             <h1 class=" text-center mb-5">Sign In</h1>
-            <form action="/auth/signin" method="POST" class="needs-validation" novalidate>
+            <form action="/auth/signin/local" method="POST" class="needs-validation" novalidate>
 
                 <!-- <div class="input-group mb-3">
                     <span class="input-group-text" id="biuser"><i class="bi bi-person-circle"></i></span>
@@ -63,8 +63,9 @@
 
                 <p class="text-center">or</p>
                 <div class="d-grid gap-2 col-6 mx-auto">
-                    <a href="/auth/google" class="btn btn-outline-primary"><i class="bi bi-google"></i> Sign in with
-                        Google</a>
+                    <a href="/auth/signin/google" class="btn btn-outline-primary">
+                        <i class="bi bi-google"></i> Sign in with Google
+                    </a>
                 </div>
 
 
@@ -74,7 +75,7 @@
             </form>
 
             <div class="container text-muted my-3">
-                <hr> Don't you have an account? <a href="/register">Sign up
+                <hr> Don't you have an account? <a href="/auth/register">Sign up
                     ></a>
             </div>
         </div>

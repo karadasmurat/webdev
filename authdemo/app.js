@@ -8,6 +8,12 @@ const session = require('express-session');
 // Passport is js library authentication middleware 
 const passport = require("passport");
 const mongoose = require('mongoose');
+//connect-flash
+const flash = require("connect-flash");
+
+// middleware to make things available to views - using res.locals
+const ejsLocals = require("./middlewares/ejs-locals");
+
 
 // user info
 const sec = require('./lib/env');
@@ -41,6 +47,11 @@ app.use(session({
 }));
 
 
+app.use(flash());
+app.use(ejsLocals);
+
+
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -67,13 +78,14 @@ mongoose.connect(ATLAS_CONN_STR, options)
     .catch(error => console.log("Cannot connect. " + error));
 
 
+// check if user is logged in, middleware
+const ensureLoggedIn = require("./middlewares/authentication");
+
 
 
 // GET /home
-app.get('/home', (req, res) => {
+app.get('/home', ensureLoggedIn, (req, res) => {
 
-    // res.send(req.session);
-    // res.send(req.user);
     res.locals.currentUser = req.user;
     res.render("secret.ejs");
 

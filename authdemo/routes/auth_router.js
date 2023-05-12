@@ -11,8 +11,10 @@ const {
 // Passport is js library authentication middleware
 const passport = require("passport");
 
-var GoogleStrategy = require('passport-google-oauth20').Strategy;
+const LocalStrategy = require("passport-local").Strategy;
+passport.use(new LocalStrategy(User.authenticate()));
 
+var GoogleStrategy = require('passport-google-oauth20').Strategy;
 passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -53,6 +55,7 @@ const {
 // import bcrypt
 const bcrypt = require('bcrypt');
 const SALTROUNDS = 12;
+
 
 
 
@@ -122,6 +125,7 @@ router.get('/register', (req, res) => {
     res.render("auth/register");
 });
 
+// 1. manual register
 // CREATE a new user after validating.
 // there could be errors handled to next, so there is a third parameter in the route handler.
 router.post('/register', validateUser, async (req, res, next) => {
@@ -157,6 +161,39 @@ router.post('/register', validateUser, async (req, res, next) => {
 
 });
 
+// 2. passport-local register
+// CREATE a new user after validating.
+// there could be errors handled to next, so there is a third parameter in the route handler.
+router.post('/register/local', validateUser, async (req, res, next) => {
+
+    console.log(req.body.user);
+    // res.send(req.body);
+
+    // get form data from the request body
+    const userinfo = req.body.user;
+
+    const user = new User({
+        username: userinfo.username,
+        email: userinfo.email
+    });
+
+    console.log("Register user:");
+    console.log(user);
+
+    try {
+        // Register the user using passport-local-mongoose
+        // use an instance of Model, and plain-text password
+        await User.register(user, userinfo.password);
+
+        req.flash("success", "Welcome, you can login now.");
+        res.redirect("/auth/signin");
+    } catch (e) {
+        // catch the error, stop executing, create a custom error and give this error to the next:
+        return next(new AuthError(e.errmsg));
+    }
+
+});
+
 
 // GET signin form
 router.get('/signin', (req, res) => {
@@ -164,7 +201,7 @@ router.get('/signin', (req, res) => {
 });
 
 
-// POST signin form
+// 1. manual signin
 // Sign in with username and password
 router.post('/signin', async (req, res) => {
 
@@ -221,8 +258,35 @@ router.post('/signin', async (req, res) => {
 });
 
 
-// Sign in with Google
-router.get('/google', passport.authenticate('google', {
+
+// 2. passport-local
+// Sign in with username and password, using passport.authenticate() middleware
+// note that since forms are user[username] and user[password] we use a middleware to update req.body
+router.post('/signin/local', (req, res, next) => {
+        req.body.username = req.body.user.username;
+        req.body.password = req.body.user.password;
+
+        console.log(req.body.username);
+        console.log(req.body.password);
+
+        next();
+    },
+    passport.authenticate('local', {
+        failureFlash: true, //TODO
+        failureRedirect: '/auth/signin'
+    }), async (req, res, next) => {
+
+        // note that if we are here, it means passport.authanticate middleware passed.
+        // if it failed, it would have failureRedirect to GET /signin
+
+        const message_error = req.flash('error')[0]; // get the first error message from the array
+        res.redirect("/home");
+
+    });
+
+
+// 3. Sign in with Google
+router.get('/signin/google', passport.authenticate('google', {
     scope: ['profile', 'email']
 }));
 

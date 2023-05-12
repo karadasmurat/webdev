@@ -8,35 +8,83 @@
 </head>
 
 <body>
-    <div class="row">
-        <div class="col-md-6 mx-auto">
-            <h1>Sign Up</h1>
-            <form action="/auth/register" method="POST" class="needs-validation" novalidate>
-                <!-- <label for="username" class="form-label">Username</label> -->
-                <div class="input-group mb-3">
-                    <!-- <label for="username" class="form-label">Username</label> -->
+    <div class="row justify-content-center align-items-center" style="height: 100vh;">
+        <div class="col-md-6" style="max-width: 500px;">
+            <h1 class=" text-center mb-5">Create your account</h1>
+            <form action="/auth/register/local" method="POST" class="needs-validation" novalidate>
+
+
+                <!-- 
+                    <div class="input-group mb-3">
                     <span class="input-group-text" id="biuser"><i class="bi bi-person-circle"></i></span>
+
+                    <div class="form-floating">
+                        <input type="text" name="user[username]" id="username" placeholder="username"
+                            aria-label="username" aria-describedby="biuser" class="form-control" required>
+                        <label for="floatingInput"><i class="bi bi-person-circle"></i> Username</label>
+
+                        <div class="invalid-feedback">
+                            Please provide a username.
+                        </div>
+                    </div>
+                </div> 
+                -->
+
+
+                <div class="form-floating mb-3">
                     <input type="text" name="user[username]" id="username" placeholder="username" aria-label="username"
                         aria-describedby="biuser" class="form-control" required>
+                    <label for="floatingInput"><i class="bi bi-person-circle"></i> Username</label>
+
                     <div class="invalid-feedback">
                         Please provide a username.
                     </div>
                 </div>
 
-                <div class="input-group mb-3">
-                    <!-- <label for="password" class="form-label">Password</label> -->
-                    <span class="input-group-text" id="bilock"><i class="bi bi-lock-fill"></i></span>
+
+                <div class="form-floating mb-3">
+                    <input type="email" name="user[email]" id="email" placeholder="email" aria-label="email"
+                        aria-describedby="bimail" class="form-control" required>
+                    <label for="email"><i class="bi bi-envelope"></i> Email</label>
+
+                    <div class="invalid-feedback">
+                        Please provide an email.
+                    </div>
+                </div>
+
+
+                <div class="form-floating mb-3">
                     <input type="password" name="user[password]" id="password" placeholder="password"
                         aria-label="Password" aria-describedby="bilock" class="form-control" required>
-
+                    <label for="password"><i class="bi bi-lock-fill"></i> Password</label>
                     <div class="invalid-feedback">
                         Please provide a password.
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-success">Sign up</button>
+
+                <div class="form-check">
+                    <input type="checkbox" value="" id="conditions" class="form-check-input" required>
+                    <label for="conditions" class="form-check-label ms-auto">
+                        I agree to the terms and conditions.
+                    </label>
+                    <div class="invalid-feedback">
+                        You must agree before submitting.
+                    </div>
+                </div>
+
+
+                <div class="container text-center my-4">
+                    <button type="submit" class="btn btn-success my-3">Create Account</button>
+                </div>
+
 
             </form>
+
+
+            <div class="container text-center text-muted my-3">
+                Already have an account? <a href="/auth/signin">Sign In</a>
+            </div>
 
         </div>
 

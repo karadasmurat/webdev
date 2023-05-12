@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 // The app object conventionally denotes the Express application. 
 const express = require('express');
 const app = express();
@@ -5,12 +7,25 @@ const app = express();
 // user info
 const sec = require('./lib/env');
 
-//session
+//express-session with connect-mongo
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
+
 app.use(session({
     secret: sec.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true
+    saveUninitialized: false, // don't create session until something stored
+    resave: false, //don't save session if unmodified
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000
+    },
+    store: MongoStore.create({
+        mongoUrl: process.env.ATLAS_CONN_STR,
+        touchAfter: 24 * 60 * 60, // 24 hours period in seconds
+        crypto: {
+            secret: process.env.MONGOSTORE_SECRET
+        }
+    })
 }));
 
 
@@ -72,15 +87,9 @@ passport.deserializeUser(User.deserializeUser());
 const mongoose = require('mongoose');
 
 const EXPRESS_PORT = 3000;
-//const HOST = '127.0.0.1';
-const HOST = 'dev-cluster.ct6sszv.mongodb.net';
-const MONGO_PORT = '27017';
-const DBASE = 'yelp-camp';
-const LOCAL_CONN_STR = `mongodb://${HOST}:${MONGO_PORT}/${DBASE}`;
-const ATLAS_CONN_STR = `mongodb+srv://${sec.MONGO_USER}:${sec.MONGO_PASS}@${HOST}/${DBASE}`;
 const options = {};
 
-mongoose.connect(ATLAS_CONN_STR, options)
+mongoose.connect(process.env.ATLAS_CONN_STR, options)
     .then(console.log("Connected to mongodb."))
     .catch(error => console.log("Cannot connect. " + error));
 

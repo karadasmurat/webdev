@@ -2,16 +2,46 @@ const express = require('express');
 const router = express.Router();
 
 
+// import mongoose Model
+const {
+    User
+} = require("../model/User");
+
+
+// Passport is js library authentication middleware
+const passport = require("passport");
+
+var GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+passport.use(new GoogleStrategy({
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: "http://localhost:3000/auth/google/callback"
+    },
+    function (accessToken, refreshToken, profile, cb) {
+
+        console.log("GoogleStrategy verify - with given profile:")
+        console.log(profile);
+
+        User.findOrCreate(profile,
+            function (err, user) {
+                return cb(err, user);
+            });
+    }
+));
+
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
 // custom error
 const {
     AuthError
 } = require('../lib/AppError')
 
 
-// import mongoose Model
-const {
-    User
-} = require("../model/User");
+
 
 // server-side validation
 const Joi = require("joi");
@@ -130,15 +160,15 @@ router.post('/register', validateUser, async (req, res, next) => {
 
 // GET signin form
 router.get('/signin', (req, res) => {
-    res.render("auth/signin");
+    res.render("auth/signin.ejs");
 });
 
 
 // POST signin form
 // Sign in with username and password
-router.post('/signin', async (req, res, next) => {
+router.post('/signin', async (req, res) => {
 
-    // res.send(req.body);
+    // res.send(request.body);
 
     // 1. get the credentials from request body, 
     // 2. get the user from db.
@@ -147,6 +177,7 @@ router.post('/signin', async (req, res, next) => {
     // get the object containing the parameters from request body
     // note that input names on the form are: user[username], user[password]
     const body_user = req.body.user;
+    // console.log(body_user);
 
     const existing_user = await User.findOne({
         username: body_user.username
@@ -188,6 +219,20 @@ router.post('/signin', async (req, res, next) => {
         }
     }
 });
+
+
+// Sign in with Google
+router.get('/google', passport.authenticate('google', {
+    scope: ['profile', 'email']
+}));
+
+// Sign in with Google - Redirect URL
+router.get('/google/callback',
+    passport.authenticate('google', {
+        successRedirect: '/home',
+        failureRedirect: '/auth/signin'
+    })
+);
 
 
 // LOGOUT

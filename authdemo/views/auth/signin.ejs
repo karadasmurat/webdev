@@ -8,36 +8,82 @@
 </head>
 
 <body>
-    <div class="row">
-        <div class="col-md-6 mx-auto">
-            <h1>Sign In</h1>
+
+
+    <%# ejs does not like this syntax if variable is undefined: if (!nonexistingvariable) %>
+    <% if (typeof nonexistingvariable !== 'undefined') { %>
+    <h1>non existing variable.</h1>
+    <% } %>
+
+
+    <div class="row justify-content-center align-items-center" style="height: 100vh;">
+
+        <div class="col-md-6" style="max-width: 500px;">
+
+            <!-- flash messages -->
+            <%# include('../partials/flash-messages.ejs') %>
+
+            <h1 class=" text-center mb-5">Sign In</h1>
             <form action="/auth/signin" method="POST" class="needs-validation" novalidate>
 
-                <div class="input-group mb-3">
-                    <!-- <label for="username" class="form-label">Username</label> -->
+                <!-- <div class="input-group mb-3">
                     <span class="input-group-text" id="biuser"><i class="bi bi-person-circle"></i></span>
-                    <input type="text" name="user[username]" id="username" placeholder="username" aria-label="username"
+                    <input type="text" name="username" id="username" placeholder="username" aria-label="username"
                         aria-describedby="biuser" class="form-control" required>
+                    <div class="invalid-feedback">
+                        Please provide a username.
+                    </div>
+                </div> -->
+
+                <div class="form-floating mb-3">
+                    <input type="text" name="user[username]" id="username" placeholder="username" aria-label="username"
+                        class="form-control" required>
+                    <label for="username"><i class="bi bi-person-circle"></i> Username</label>
+
                     <div class="invalid-feedback">
                         Please provide a username.
                     </div>
                 </div>
 
-                <div class="input-group mb-3">
-                    <!-- <label for="password" class="form-label">Password</label> -->
-                    <span class="input-group-text" id="bilock"><i class="bi bi-lock-fill"></i></span>
+
+
+                <div class="form-floating mb-3">
                     <input type="password" name="user[password]" id="password" placeholder="password"
-                        aria-label="Password" aria-describedby="bilock" class="form-control" required>
+                        aria-label="Password" class="form-control" required>
+                    <label for="password"><i class="bi bi-lock-fill"></i> Password</label>
                     <div class="invalid-feedback">
                         Please provide a password.
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-success">Sign in <i class="bi bi-box-arrow-in-right"></i></button>
+                <div class="d-grid gap-2 col-6 mx-auto mb-3">
+                    <button type="submit" class="btn btn-success">Sign in <i
+                            class="bi bi-box-arrow-in-right"></i></button>
+                </div>
+
+                <p class="text-center">or</p>
+                <div class="d-grid gap-2 col-6 mx-auto">
+                    <a href="/auth/google" class="btn btn-outline-primary"><i class="bi bi-google"></i> Sign in with
+                        Google</a>
+                </div>
+
+
+
+
 
             </form>
+
+            <div class="container text-muted my-3">
+                <hr> Don't you have an account? <a href="/register">Sign up
+                    ></a>
+            </div>
         </div>
+
+        <!-- footer -->
+        <%- include('../partials/footer.ejs') %>
     </div>
+
+
 
 
     <!-- bootstrap validation script -->

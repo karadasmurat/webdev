@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const passportLocalMongoose = require("passport-local-mongoose");
+
+
 // const {Schema} = require('mongoose');
 
 // With Mongoose, everything is derived from a Schema. 
@@ -9,11 +12,56 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Username required.']
     },
     password: {
-        type: String,
-        required: [true, 'Password required.']
+        type: String
+        //required: [true, 'Password required.']
     },
+    googleId: String,
+    displayName: String,
+    email: String
 
 });
+
+// passport-local-mangoose adds fields and methods related to authentication:
+// salt, hash properties
+// authenticate(), register(), serialize(), deserialize() methods
+userSchema.plugin(passportLocalMongoose);
+
+
+userSchema.statics.findOrCreate = async function findOrCreate(profile, done) {
+
+    console.log("User.findOrCreate()");
+    // console.log(profile);
+
+    try {
+        // Find or create the user in the database 
+        var userObj = new this();
+        const existingUser = await this.findOne({
+            googleId: profile.googleId // search using googleId field
+            // username: profile.email
+        }).exec();
+
+        if (!existingUser) {
+            // Create a new user
+            console.log("Creating user with Google credentials.");
+            const newUser = new User({
+                username: profile.email,
+                googleId: profile.googleId,
+                displayName: profile.displayName,
+                email: profile.emails[0].value
+                // Set any other user properties from the profile if needed
+            });
+
+            await newUser.save();
+            done(null, newUser);
+        } else {
+            console.log("Existing User with related Google credentials is found.");
+            done(null, existingUser);
+        }
+    } catch (error) {
+        done(error);
+    }
+
+};
 
 
 // Creating and exporting model

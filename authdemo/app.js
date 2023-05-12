@@ -1,29 +1,65 @@
+require('dotenv').config();
+
 // The app object conventionally denotes the Express application. 
 const express = require('express');
-const app = express();
+// The Path module provides a way of working with directories and file paths.
+const path = require('path');
+const session = require('express-session');
+// Passport is js library authentication middleware 
+const passport = require("passport");
+const mongoose = require('mongoose');
 
 // user info
 const sec = require('./lib/env');
 
-//session
-const session = require('express-session');
-app.use(session({
-    secret: sec.SESSION_SECRET
+// Routers
+const authRouter = require('./routes/auth_router');
+
+
+const app = express();
+
+// view engine setup
+app.set('views', path.join(__dirname, '/views'));
+app.set('view engine', 'ejs');
+
+// Parse JSON bodies
+app.use(express.json());
+
+// Parse URL-encoded bodies
+app.use(express.urlencoded({
+    extended: true
 }));
 
-// The Path module provides a way of working with directories and file paths.
-const path = require('path');
+// Serving static files: use the express.static built-in middleware function
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false, // don't save session if unmodified
+    saveUninitialized: false, // don't create session until something stored
+}));
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+
+app.use('/auth', authRouter);
+
+
 
 // web forms has method="POST"
 // const methodOverride = require('method-override');
 // app.use(methodOverride('_method'));
 
-const mongoose = require('mongoose');
+
 
 const EXPRESS_PORT = 3000;
 const DBASE = 'auth-demo';
 const LOCAL_CONN_STR = `mongodb://127.0.0.1:27017/${DBASE}`;
-const ATLAS_CONN_STR = `mongodb+srv://${sec.MONGO_USER}:${sec.MONGO_PASS}@dev-cluster.ct6sszv.mongodb.net/${DBASE}`;
+const ATLAS_CONN_STR = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@dev-cluster.ct6sszv.mongodb.net/${DBASE}`;
 const options = {};
 
 mongoose.connect(ATLAS_CONN_STR, options)
@@ -31,59 +67,23 @@ mongoose.connect(ATLAS_CONN_STR, options)
     .catch(error => console.log("Cannot connect. " + error));
 
 
-// Set the "views" directory, relative to this file
-// If you run the express app from another directory, it’s safer to use the absolute path of the directory 
-app.set('views', path.join(__dirname, '/views'));
-
-// Set EJS as the view engine
-app.set('view engine', 'ejs');
-
-// Serving static files: use the express.static built-in middleware function
-// here, we use a directory, at the same level of this script, named "public"
-// app.use(express.static("public"));
-// If you run the express app from another directory, it’s safer to use the absolute path of the directory that you want to serve:
-app.use(express.static(path.join(__dirname, 'public')));
-
-// express.json([options])
-// built-in middleware function in Express. It parses incoming requests with JSON payloads and is based on body-parser.
-app.use(express.json());
-
-// parse form
-// for parsing application/x-www-form-urlencoded
-// body-parser was previously a separate npm package, but starting from Express 4.16.0, it has been integrated into the core express module. 
-// const bodyParser = require('body-parser');
-// app.use(bodyParser.urlencoded({
-//     extended: true
-// }));
-app.use(express.urlencoded({
-    extended: true
-}));
-
-// middleware to check auth status 
-// highly coupled with the login implementation which sets a session object named "account"
-const requireLogin = (req, res, next) => {
-
-    if (!req.session.account) {
-
-        // stop execution, return with a redirect.
-        return res.redirect('/auth/signin');
-    }
-
-    next();
-}
 
 
-// Express Router
-const authRouter = require('./routes/auth_router');
-app.use('/auth', authRouter);
+// GET /home
+app.get('/home', (req, res) => {
 
+    // res.send(req.session);
+    // res.send(req.user);
+    res.locals.currentUser = req.user;
+    res.render("secret.ejs");
 
-
-// GET /hello
-app.get('/hello', (req, res) => {
-    res.send('Hello, there!');
 });
 
+
+// List environment variables
+app.get('/env', (req, res) => {
+    res.send(process.env);
+});
 
 // a route to throw an error
 // Errors that occur in synchronous code inside route handlers and middleware require no extra work. 

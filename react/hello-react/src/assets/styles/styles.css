@@ -13,11 +13,17 @@
     flex-direction: row; /* Stack items horizontally */
     justify-content: center; /* main-axis */
     align-items: center;   /* cross-axis */
+    flex-wrap: wrap; /* flex items are not forced onto one line, can wrap onto multiple lines */
     padding: 10px;
     margin-bottom: 10px;
 
 }
 
+.ColorBox{
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+}
 
 .bordered{
     border: 1px solid lightgrey;

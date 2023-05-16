@@ -2,6 +2,7 @@ import './App.css';
 
 
 import CntButton from './components/CntButton';
+import ColorGrid from './components/ColorBox';
 import Garage from './components/Garage';
 import Greeter, { NamedGreeter } from './components/Greeter';
 import NameList from './components/NameList';
@@ -32,6 +33,8 @@ function App() {
       <Slot />
 
       <Todo items={todos}/>
+
+      <ColorGrid boxCnt={25} />
 
     </div>
   );

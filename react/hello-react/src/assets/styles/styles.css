@@ -1,0 +1,53 @@
+.dflex-col{
+    display: flex;
+    flex-direction: column; /* Stack items horizontally */
+    justify-content: center; /* main-axis */
+    align-items: center;   /* cross-axis */
+    padding: 10px;
+    margin-bottom: 10px;
+
+}
+
+.dflex-row{
+    display: flex;
+    flex-direction: row; /* Stack items horizontally */
+    justify-content: center; /* main-axis */
+    align-items: center;   /* cross-axis */
+    padding: 10px;
+    margin-bottom: 10px;
+
+}
+
+
+.bordered{
+    border: 1px solid lightgrey;
+    border-radius: 10px;
+}
+
+.SlotItem{
+    font-size: 3rem;
+    border: 1px solid coral;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+}
+
+.Pokemon{
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center; /* Since direction is "column", vertical alignment. (main-axis) */
+    align-items: center;   /* Since direction is "column", horizontal alignment. */
+    width: 300px;
+    height: 300px;
+    border: 1px solid lightgrey;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.Pokemon img{
+    width: 150px;
+}
+
+.Pokemon h1{
+    color:coral
+}

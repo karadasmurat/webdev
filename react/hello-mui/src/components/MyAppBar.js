@@ -19,7 +19,9 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
+import Badge from "@mui/material/Badge";
 
+import MailIcon from "@mui/icons-material/Mail";
 import ContentCopy from "@mui/icons-material/ContentCopy";
 import InboxIcon from "@mui/icons-material/Inbox";
 
@@ -74,16 +76,17 @@ function MyAppBar(props) {
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
-  const sm_flex = { xs: "none", sm: "flex" };
-  const sm_none = { xs: "flex", sm: "none" };
+  const after_sm__flex = { xs: "none", sm: "flex" };
+  const after_sm__none = { xs: "flex", sm: "none" };
 
   return (
     <Box>
       <AppBar position="static">
+        {/* spread of the apbar, from left to right, centered. */}
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            {/* en solda brand icon & text */}
-            <Icon sx={{ display: sm_flex, mr: 1 }}>rocket_launch</Icon>
+            {/* en solda brand icon & text (DISPLAY REQ: sm+) */}
+            <Icon sx={{ display: after_sm__flex, mr: 1 }}>rocket_launch</Icon>
             <Typography
               variant="h6"
               noWrap
@@ -91,7 +94,7 @@ function MyAppBar(props) {
               href="/"
               sx={{
                 mr: 2,
-                display: sm_flex,
+                display: after_sm__flex,
                 color: "inherit",
                 textDecoration: "none",
               }}
@@ -99,8 +102,8 @@ function MyAppBar(props) {
               FIRST
             </Typography>
 
-            {/* ekran kuculurse, en solda hamburger menu for drawer */}
-            <Box sx={{ flexGrow: 1, display: sm_none }}>
+            {/* ekran kuculurse, en solda hamburger menu for drawer (DISPLAY REQ: sm-)*/}
+            <Box sx={{ flexGrow: 1, display: after_sm__none }}>
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
@@ -111,8 +114,8 @@ function MyAppBar(props) {
               </IconButton>
             </Box>
 
-            {/* ekran kuculurse, ortada title */}
-            <Icon sx={{ display: sm_none, mr: 1 }}>rocket_launch</Icon>
+            {/* ekran kuculurse, ortada title (DISPLAY REQ: sm-) */}
+            <Icon sx={{ display: after_sm__none, mr: 1 }}>rocket_launch</Icon>
             <Typography
               variant="h5"
               noWrap
@@ -120,7 +123,7 @@ function MyAppBar(props) {
               href=""
               sx={{
                 mr: 2,
-                display: sm_none,
+                display: after_sm__none,
                 flexGrow: 1,
                 fontWeight: 700,
                 color: "inherit",
@@ -131,7 +134,7 @@ function MyAppBar(props) {
             </Typography>
 
             {/* top links, expected to be visible with brand icon */}
-            <Box sx={{ flexGrow: 1, display: sm_flex }}>
+            <Box sx={{ flexGrow: 1, display: after_sm__flex }}>
               {pages.map((page) => (
                 <Button
                   key={page}
@@ -150,6 +153,7 @@ function MyAppBar(props) {
                   <Avatar
                     alt="profile"
                     src="https://source.unsplash.com/random/200x200/?portrait"
+                    variant="rounded"
                   />
                   <Icon
                     sx={{
@@ -160,6 +164,7 @@ function MyAppBar(props) {
                   </Icon>
                 </IconButton>
               </Tooltip>
+
               <Menu
                 sx={{ mt: "45px" }}
                 id="menu-appbar"
@@ -179,7 +184,9 @@ function MyAppBar(props) {
                 {settings.map((setting) => (
                   <MenuItem key={setting} onClick={handleCloseUserMenu}>
                     <ListItemIcon>
-                      <ContentCopy fontSize="small" />
+                      <Badge badgeContent={4} color="secondary">
+                        <MailIcon fontSize="small" />
+                      </Badge>
                     </ListItemIcon>
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>

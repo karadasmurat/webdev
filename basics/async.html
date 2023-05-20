@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asyncronous Programming</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div id="hello" class="box">Waiting...</div>
+        <button id="roll-die" class="btn btn-primary">Roll the Die!</button>
+        <div id="promiseLog" class="box"> 🎲 Let's roll the die and see what luck brings us.</div>
+        <input type="text" name="duration" id="duration" placeholder="Enter duration (sec)">
+        <button id="set-alarm" class="btn btn-primary">Set Alarm</button>
+        <div id="output"></div>
+
+        <p>The global <code>setTimeout(code, delay)</code> method sets a timer which executes a function or specified
+            piece
+            of code once the timer expires. setTimeout() is an asynchronous function, meaning that the timer function
+            will not pause execution of other functions in the functions stack. In other words, you CANNOT use
+            setTimeout()
+            to create a "pause" before the next function in the function
+            stack fires.</p>
+        <button id="set-timeout" class="btn btn-primary" type="button">Set Timeout</button>
+
+        <button id="btn_async01" class="btn btn-primary">callAnotherAsync</button>
+        <h2>fetch API</h2>
+        <button id="btn_fetch01" class="btn btn-primary">fetch</button>
+        <button id="btn_fetchPoke" class="btn btn-primary">fetch pokemons</button>
+        <button id="btn_fetchErr" class="btn btn-primary">fetch err</button>
+        <button id="btn_axios01" class="btn btn-primary">Axios</button>
+
+        <button id="getDataButton">.then() chain</button>
+
+        <h3>Console:</h3>
+
+        <div id="console" class="terminal-box">
+            <!-- Your terminal content goes here -->
+        </div>
+
+        <div id="error-message"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js">
+    </script>
+    <script src="js/async.js">
+    </script>
+</body>
+
+</html>

@@ -3,3 +3,5 @@
 **/env.js
 **/.DS_Store
 **/package-lock.json
+
+/react/hello-vite/

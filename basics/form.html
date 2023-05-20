@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sample Form Page</title>
+</head>
+
+<body>
+    <header>
+        <h1>HTML Forms</h1>
+    </header>
+    <h2>Form submission</h2>
+    <p>When an HTML form is submitted, the values of the form elements are sent to the server in the HTTP request. The
+        form data is sent in the form of name=value pairs, where the name is the <code>name</code> attribute of the form
+        element, and the value
+        is the value entered by the user or selected by the user from the form element. The <code>id</code> attribute is
+        not used in
+        the form submission process, but can be used to reference the element with JavaScript and CSS. </p>
+
+    <h2>client-side form validation</h2>
+    <p>Before submitting data to the server, it is important to ensure all required form controls are filled out, in the
+        correct format. This is called client-side form validation, and helps ensure data submitted matches the
+        requirements set forth in the various form controls.
+    </p>
+    <p>
+        There are two different types of client-side validation that you'll encounter on the web:
+        <ul>
+            <li>Built-in form validation uses HTML form validation features</li>
+            <li>JavaScript validation is coded using JavaScript.</li>
+        </ul>
+
+        Built-in form validation has better performance than JavaScript, but it is not as customizable as JavaScript
+        validation.
+        JavaScript validation is coded using JavaScript. This validation is completely customizable, but you need to
+        create it all (or use a library).
+    </p>
+    <p>
+        <h3>Using built-in form validation</h3>
+        This is done by using validation attributes on form elements:
+        <ul>
+            <li><a href="/en-US/docs/Web/HTML/Attributes/required"><code>required</code></a>: Specifies whether a form
+                field needs to be filled in before the form can be submitted.</li>
+            <li><a href="/en-US/docs/Web/HTML/Attributes/minlength"><code>minlength</code></a> and <a
+                    href="/en-US/docs/Web/HTML/Attributes/maxlength"><code>maxlength</code></a>: Specifies the minimum
+                and maximum length of textual data (strings).</li>
+            <li><a href="/en-US/docs/Web/HTML/Attributes/min"><code>min</code></a> and <a
+                    href="/en-US/docs/Web/HTML/Attributes/max"><code>max</code></a>: Specifies the minimum and maximum
+                values of numerical input types.</li>
+            <li><a href="/en-US/docs/Web/HTML/Element/input#input_types"><code>type</code></a>: Specifies whether the
+                data needs to be a number, an email address, or some other specific preset type.</li>
+            <li><a href="/en-US/docs/Web/HTML/Attributes/pattern"><code>pattern</code></a>: Specifies a <a
+                    href="/en-US/docs/Web/JavaScript/Guide/Regular_expressions">regular expression</a> that defines a
+                pattern the entered data needs to follow.</li>
+        </ul>
+    </p>
+    <p>Client-side validation should not be considered an exhaustive security measure! Your apps should always perform
+        security checks on any form-submitted data on the server-side as well as the client-side,
+        because client-side validation is too easy to bypass, so malicious users can still easily send bad data
+        through to your server.</p>
+
+    <main>
+        <form>
+            <label for="name">Name (text):</label>
+            <input type="text" id="name" name="name" required maxlength="55"><br><br>
+
+            <label for="password">Password (password):</label>
+            <input type="password" name="password" id="password" minlength="6">
+
+            <label for="email">Email (email):</label>
+            <input type="email" id="email" name="email"><br><br>
+
+            <label for="url">Website (url):</label>
+            <input type="url" id="url" name="url"><br><br>
+
+            <label for="age">Age (number):</label>
+            <input type="number" id="age" name="age" min="6" max="200"><br><br>
+
+            <!-- item1 = milk & item3 = eggs -->
+            <!-- value property is not displayed on the client-side, 
+                but on the server this is the value given to the data submitted with the checkbox's name. -->
+            <h2>Select the items you need:</h2>
+            <ul>
+                <li>
+                    <input type="checkbox" id="item1" name="item1" value="milk">
+                    <label for="item1">Milk</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="item2" name="item2" value="bread">
+                    <label for="item2">Bread</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="item3" name="item3" value="eggs">
+                    <label for="item3">Eggs</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="item4" name="item4" value="cheese">
+                    <label for="item4">Cheese</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="item5" name="item5" value="fruit">
+                    <label for="item5">Fruit</label>
+                </li>
+            </ul>
+
+            <label for="terms">I agree to the terms and conditions (checkbox):</label>
+            <input type="checkbox" id="terms" name="terms"><br><br>
+
+            <label for="gender">Gender (radio):</label>
+            <input type="radio" id="male" name="gender" value="male">Male
+            <input type="radio" id="female" name="gender" value="female">Female<br><br>
+
+            <label for="birthdate">Date of birth (date):</label>
+            <input type="date" id="birthdate" name="birthdate"><br><br>
+
+            <label for="begin">Meeting (time):</label>
+            <input type="time" id="begin" name="begin"><br><br>
+
+            <label for="color">Favorite color (color):</label>
+            <input type="color" id="color" name="color"><br><br>
+
+            <label for="range">How happy are you today 1-10 (range):</label>
+            <input type="range" id="range" name="range" min="1" max="10"><br><br>
+
+            <label for="photo">Upload a photo (file):</label>
+            <input type="file" id="photo" name="photo"><br><br>
+
+            <label for="tel">Phone (tel):</label>
+            <input type="tel" id="tel" name="tel"><br><br>
+
+
+            <input type="hidden">
+
+
+
+            <!-- select:name = option:value -->
+            <select id="fruit" name="fruit">
+                <option value="apple">Apple</option>
+                <option value="banana">Banana</option>
+                <option value="orange">Orange</option>
+                <option value="kiwi">Kiwi</option>
+                <option value="strawberry">Strawberry</option>
+            </select><br><br>
+
+            <label for="comments">Comments (textarea):</label>
+            <textarea name="comments" id="comments" cols="30" rows="10"
+                placeholder="Enter your comments here"></textarea><br><br>
+
+            <!-- there are two ways to create a submit button for a form input:submit and button:submit.
+                button:submit elements offer more flexibility in terms of content and styling than input:submit -->
+            <input type="button" value="Do something other than submit">
+            <input type="submit" value="Submit">
+            <button type="submit">Register</button>
+            <input type="reset" value="Reset">
+
+
+        </form>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,12 @@
+[
+  {
+    "name": "John Doe",
+    "email": "johndoe@example.com",
+    "username": "johndoe",
+    "birth_year": 1990,
+    "phones": [
+      { "number": "9876543210", "label": "Work" },
+      { "number": "5555555555", "label": "Mobile" }
+    ]
+  }
+]

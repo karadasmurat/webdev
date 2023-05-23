@@ -4,4 +4,6 @@
 **/.DS_Store
 **/package-lock.json
 
+**/dist
+
 /react/hello-vite/

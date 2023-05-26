@@ -595,23 +595,45 @@ function firstClassFunctions() {
 
 // CALLBACK
 
-// Example 1
-function followMyCommandsAfterCompletingSpecificTasks(callback) {
-  // perform tasks..
+// Example 1a - Execute provided callback with no parameters
+
+// implementation of a function, which performs some operations of uncertion duration,
+// and then execute provided callback when ready.
+function completeSomeTasks_thenFollowProvidedCommands(callback) {
+  console.log("Started working on some operations of uncertion duration");
+  // process
+  console.log("Done. Now I get back to you, through the provided callback.");
 
   // and then execute callback when ready
   // do not know implementation details of callback
+  // here, the function who is accepting the callback (this function)
+  // declares that it will execute the provided callback WITHOUT an argument!
   callback();
+
+  console.log("All done. Bye.");
 }
 
-// Callback implementation
+// Callback implementation, no parameters
 function executeMeWhenReady() {
   console.log("I see that you are done. Thanks for your hard work.");
 }
 
 // this is the actual function call
 // caller provides callback implementation - flexibility and customization
-followMyCommandsAfterCompletingSpecificTasks(executeMeWhenReady);
+completeSomeTasks_thenFollowProvidedCommands(executeMeWhenReady);
+
+// Example 1.b
+// callback where the actual api accepts no paramters, but out implementation of callback has a parameter.
+// so, we wrap our function with an anonymous function
+
+// Callback implementation, WITH parameters
+function doubleTheValue(number) {
+  const value = number * 2;
+  console.log("Did somebody call me? Here are the results: ", value);
+}
+
+// this is the actual function call
+completeSomeTasks_thenFollowProvidedCommands(() => doubleTheValue(11)); // 22
 
 // Example 2 - callback with arguments
 
@@ -626,6 +648,11 @@ function performOperation(param1, param2, callback) {
   callback(result);
 
   // why not return directly?
+  // for this simple demo case we could.
+  // for cases where callback provides logic (higher-order array func),
+  // event-processing: handler assignments where you do not know when
+  // you will have results (if ever),
+  // async events where we do not know when computation will finish
   // return result;
 }
 

@@ -12,6 +12,7 @@ const schema_Phone = Joi.object({
 
 const schema_User = Joi.object({
   username: Joi.string().alphanum().min(3).max(30).required(),
+  birth_year: Joi.number().integer().min(1900).max(2023),
   // nested object
   name: schema_Name,
   // an array of strings

@@ -2,6 +2,32 @@
 const users = require("../data/users.json");
 const schema_User = require("./userSchema");
 
+// Using backticks allows you to include line breaks and easily format the JSON structure.
+// It also allows for string interpolation,
+// where you can embed JavaScript expressions within ${} inside the template literal.
+const jsonText = `  {
+    "username": "johndoe",
+    "fullname": { "name": "John", "lastname": "Doe" },
+    "email": "johndoe@example.com",
+    "hobbies": ["swimming", "guitar"],
+    "birth_year": 1990,
+    "phones": [
+      { "number": "9876543210", "label": "Work" },
+      { "number": "5555555555", "label": "Mobile" }
+    ]
+  }`;
+
+function jsonapi_basics() {
+  // Convert a JSON string into an object.
+  const obj = JSON.parse(jsonText);
+  console.log(obj.phones[0].number); // 9876543210
+
+  // Convert a JavaScript value to a JSON string.
+  // @param space = 2 for indentation
+  const txt = JSON.stringify(users, null, 2);
+  console.log(txt);
+}
+
 const getAllUsers = () => {
   console.log("All users: ");
 
@@ -34,6 +60,8 @@ const validateUser = (user) => {
 const sampleUser = {
   username: "abc",
   name: { first: "John", last: "Doe" },
+  birth_year: 2000,
+  email: "doe@example.com",
   hobbies: ["swimming", "soccer", "trekking"],
   phones: [
     { number: "9876543210", label: "Work" },
@@ -41,4 +69,5 @@ const sampleUser = {
   ],
 };
 
-validateUser(sampleUser);
+// validateUser(sampleUser);
+jsonapi_basics();

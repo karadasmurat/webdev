@@ -337,11 +337,11 @@ console.log(200 + 0 / 0); // NaN
 // stringBasics();
 // arrayBasics();
 array_higherOrder();
-// objectBasics();
+// objectBasics(); // moved to objects.js
 // conditionalExprBasics();
 // loopBasics();
-friendlyDivider(10, 6);
-console.log(`isEven(8): ${isEven(8)}`);
+// friendlyDivider(10, 6);
+// console.log(`isEven(8): ${isEven(8)}`);
 
 // randomBasics();
 errorBasics();
@@ -880,90 +880,33 @@ function array_higherOrder() {
   const chessmaster = students.find((student) => student.id === 20);
   console.log("The chessmaster is: " + chessmaster.name);
 
-  // map(): keep the array unchanged, and return a new array iterating over the items
-  nums = [1, 2, 3];
-  const nums_double = nums.map((num) => 2 * num);
-  console.log("original_array: " + nums);
-  console.log("original_array.map(): " + nums_double);
-}
+  // Array.prototype.map(callbackFn)
+  // It calls a provided callbackFn function once for each element in an array, and push the return value from callbackFn into a "new" array.
+  // callbackFn is called with the following arguments: (element, index, array)
+  // Note that map() method is a copying method. It does not alter this.
+  // Note. Even if we omit in anonymous single line arrow functions, callbackFn actually returns a value for the input:
 
-function objectBasics() {
-  /*
-    The syntax always follows this pattern:
+  // Example: Mapping an array of numbers to an array of square roots
+  const numbers = [1, 4, 9];
+  const roots = numbers.map((num) => Math.sqrt(num));
+  console.log("original_array: " + numbers);
+  console.log("original_array.map(): " + roots);
 
-        const objectName = {
-            member1Name: member1Value,
-            member2Name: member2Value,
-            member3Name: member3Value,
-        };
+  // Example: Create an array of objects using an array of strings
+  // Note. Even if we omit in anonymous single line arrow functions, callbackFn actually returns a value for the input:
+  const names = ["John", "Jane", "Mike"];
+  const participants = names.map((name) => {
+    return { name }; // Notice object property shorthand {name: name}
+  });
 
-     */
+  console.log(participants); // [ { name: 'John' }, { name: 'Jane' }, { name: 'Mike' } ]
 
-  console.log("objectLiterals Basics");
-  console.log("---------------------");
+  // Example: return the squares only if the number is even.
+  const numlist = [1, 2, 3, 4, 5, 6];
+  const squares_of_evens = numlist.filter((n) => n % 2 == 0).map((n) => n * n);
 
-  const product = {
-    name: "Gummy Bears",
-    inStock: true,
-    price: 1.99,
-    flavors: ["grape", "apple", "cherry"],
-  };
-
-  // access the object's properties:
-  // Option 1 - Bracket notation
-  console.log(product["name"]);
-
-  // Option 2 - Dot notation
-  console.log(product.price);
-
-  const square = {
-    area(side) {
-      return side * side;
-    },
-    perimeter(side) {
-      return 4 * side;
-    },
-  };
-
-  // member function call using dot notation:
-  console.log("square.area(10): " + square.area(10));
-
-  // member function call using brackets:
-  console.log("square['perimeter'](10): " + square["perimeter"](10));
-
-  const numBox = {
-    value: 10,
-    // Arrow functions do not have their own this context, and instead inherit the this context from their surrounding scope.
-    // Therefore, this.value * this.value evaluates to NaN
-    // square: () => this.value * this.value,
-    square: function () {
-      return this.value * this.value;
-    },
-    // shorthand syntax for binding a function:
-    cube() {
-      return this.value * this.value * this.value;
-    },
-  };
-
-  sq = numBox.square();
-  cb = numBox.cube();
-  console.log("numBox.square(): " + sq);
-  console.log("numBox.cube(): " + cb);
-
-  // Example 3 - An object with 3 properties
-  const hen = {
-    name: "Helen",
-    eggCount: 0,
-    layAnEgg: function () {
-      ++this.eggCount;
-      return "EGG";
-    },
-  };
-
-  console.log(hen.name); // "Helen"
-  console.log(hen.layAnEgg()); // "EGG"
-  console.log(hen.layAnEgg()); // "EGG"
-  console.log(hen.eggCount); // 2
+  console.log("Numbers: ", numlist);
+  console.log("Squares of evens: ", squares_of_evens);
 }
 
 function randomBasics() {
@@ -997,4 +940,9 @@ function randomBasics() {
   }
 
   console.log(rolls); // something like [ 344, 319, 337 ]
+}
+
+function getMaxValue(a, b) {
+  // Return the maximum value between a and b
+  return a > b ? a : b;
 }

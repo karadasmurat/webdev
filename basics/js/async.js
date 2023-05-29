@@ -1,5 +1,13 @@
 /*
 
+what happens when you have function calls in the Call Stack that take a huge amount of time to be processed?
+
+Imagine, for example, a complex image transformation algorithm that’s running in the browser.
+While the Call Stack has functions to execute, the browser can’t do anything else — it’s being blocked. 
+This means that the browser can’t render, it can’t run any other code, it’s just stuck. 
+And here comes the problem — your app UI is no longer efficient and pleasing. Your app is stuck.
+
+
 Synchronous operations block other operations from executing until it completes. 
 But, what if the synchronous function takes a long time ? Our program may be completely unresponsive!
 
@@ -19,20 +27,11 @@ Here are some common asynchronous operations:
 
     setTimeout
     ----------
+    look at "async_node.js" for description and examples
     setTimeout(callback, delay)
-    setTimeout(functionRef, delay, param1, param2, …, paramN)
 
     API takes as arguments a callback function and a delay, given in milliseconds.
     When setTimeout() is called, it starts a timer set to the given delay, and when the time expires, it calls the given function.
-
-    Notice that, .setTimeout ilk arguman olarak fonksiyon alıyor.
-    YANI setTimeout parantezi acip ICINE KODU DIREKT YAZMIYORUZ, .then() ICINE DE OYLE.
-    FONKSIYONUN ADINI, YA DA(ANONIM) FONKSIYON OLACAK SEKILDE YAZIYORUZ
-    setTimeout ZAMANI GELINCE BU FONKSIYONU CAGIRACAK!!
-
-        setTimeout(() => {
-            console.log("Delayed for 1 second.");
-        }, "1000");
 
 
 2. PROMISES
@@ -176,317 +175,298 @@ On the server - side it uses the native node.js http module, while on the client
 
 */
 
-
-// Once a promise has been called, it will start in a pending state. 
+// Once a promise has been called, it will start in a pending state.
 // This means that the calling function continues executing, while the promise is pending until it resolves, giving the calling function whatever data was being requested.
 
 // The created promise will eventually end in a resolved state, or in a rejected state, calling the respective callback functions (passed to then and catch) upon finishing.
 
-
 function displayLog(msg, mode = "a") {
-    if (mode === "a") {
-        document.getElementById("console").innerHTML += "<br>" + msg;
-    } else if (mode === "w") {
-        document.getElementById("console").innerText = msg;
-    }
-
+  if (mode === "a") {
+    document.getElementById("console").innerHTML += "<br>" + msg;
+  } else if (mode === "w") {
+    document.getElementById("console").innerText = msg;
+  }
 }
 
 function timeoutBasics() {
+  displayLog("timeoutBasics() activated.");
 
-    displayLog("timeoutBasics() activated.");
+  // The global setTimeout() method sets a timer which executes a function or specified piece of code once the timer expires.
+  // It takes as arguments a callback function and a delay, given in milliseconds: setTimeout(code, delay)
+  // When setTimeout() is called, it starts a timer set to the given delay, and when the time expires, it calls the given function.
 
-    // The global setTimeout() method sets a timer which executes a function or specified piece of code once the timer expires.
-    // It takes as arguments a callback function and a delay, given in milliseconds: setTimeout(code, delay)
-    // When setTimeout() is called, it starts a timer set to the given delay, and when the time expires, it calls the given function.
+  setTimeout(() => {
+    //console.log("Delayed for 1 second.");
+    displayLog("Delayed for 1 second.");
+  }, 1000);
 
-    setTimeout(() => {
-        //console.log("Delayed for 1 second.");
-        displayLog("Delayed for 1 second.")
-    }, 1000);
+  // setTimeout() is an asynchronous function, meaning that the timer function will not pause execution of other functions in the functions stack.
+  // In other words, you CANNOT use setTimeout() to create a "pause" before the next function in the function stack fires.
+  setTimeout(() => {
+    // console.log("Delayed for 2 seconds.");
+    displayLog("Delayed for 4 seconds.");
+  }, 4000);
 
-    // setTimeout() is an asynchronous function, meaning that the timer function will not pause execution of other functions in the functions stack. 
-    // In other words, you CANNOT use setTimeout() to create a "pause" before the next function in the function stack fires.
-    setTimeout(() => {
-        // console.log("Delayed for 2 seconds.");
-        displayLog(("Delayed for 4 seconds."))
-    }, 4000);
+  //since the previous does not block, this will finish before the previous one!
+  setTimeout(() => {
+    // console.log("Delayed for 4 seconds.");
+    displayLog(
+      "Delayed for 2 seconds. Should I wait everyone else before me? No, I am done :)"
+    );
+  }, 2000);
 
-    //since the previous does not block, this will finish before the previous one!
-    setTimeout(() => {
-        // console.log("Delayed for 4 seconds.");
-        displayLog("Delayed for 2 seconds. Should I wait everyone else before me? No, I am done :)")
-    }, 2000);
-
-    // for the same reason, the overall delay is not 1 + 2 + 4 = 7 sec, but only 4secs.
-
+  // for the same reason, the overall delay is not 1 + 2 + 4 = 7 sec, but only 4secs.
 }
 
-
-document.getElementById("set-timeout").addEventListener('click', timeoutBasics);
-
-
+document.getElementById("set-timeout").addEventListener("click", timeoutBasics);
 
 function roll() {
-    return Math.floor(Math.random() * 6) + 1; // a dice roll
+  return Math.floor(Math.random() * 6) + 1; // a dice roll
 }
 
 // Scenario 1 - create a simple Promise, global variable
 // say hello (call resolve with hello) after 4 seconds. (using setTimeout)
 // in a normal scenario, Promise would be returned from a service, like an API
 const promise1 = new Promise((resolve, reject) => {
-    setTimeout(() => {
-        resolve('hello, there!');
-    }, 4000);
+  setTimeout(() => {
+    resolve("hello, there!");
+  }, 4000);
 });
 
 promise1.then((value) => {
-    document.getElementById("hello").innerText = value;
+  document.getElementById("hello").innerText = value;
 });
-
-
 
 // Scenario 2 - a function returning a Promise
 // roll a dice. If not 1, return face value.
 function rollDiceService() {
-    return new Promise((resolve, reject) => {
-
-        // Simulate the producing code which takes time
-        setTimeout(() => {
-            n = roll();
-            if (n != 1) {
-                // finally, callback resolve with the result - to give the caller.
-                resolve(n);
-            } else {
-                const reason = "Rejected due to lack of Luck!"
-                reject(reason);
-            }
-        }, 1000);
-
-    });
+  return new Promise((resolve, reject) => {
+    // Simulate the producing code which takes time
+    setTimeout(() => {
+      n = roll();
+      if (n != 1) {
+        // finally, callback resolve with the result - to give the caller.
+        resolve(n);
+      } else {
+        const reason = "Rejected due to lack of Luck!";
+        reject(reason);
+      }
+    }, 1000);
+  });
 }
 
-document.getElementById('roll-die').addEventListener('click', () => {
-    document.getElementById("promiseLog").innerText = "please wait...";
-    rollDiceService().then((val) => {
-        // document.getElementById("promiseLog").innerHTML = `<img style='width:50px' src='https://cdn.emojidex.com/emoji/seal/die_face_${val}.png'>`;
-        document.getElementById("promiseLog").innerHTML = `<img style='width:50px' src='images/die_face_${val}.png'>`;
-    }).catch((err) => {
-        const errImg = document.createElement("img");
-        errImg.src = "images/err.png";
-        errImg.setAttribute("width", "50px")
-        const logDiv = document.getElementById("promiseLog");
-        logDiv.innerHTML = ""; // remove all the content
-        logDiv.appendChild(errImg); // append new content
+document.getElementById("roll-die").addEventListener("click", () => {
+  document.getElementById("promiseLog").innerText = "please wait...";
+  rollDiceService()
+    .then((val) => {
+      // document.getElementById("promiseLog").innerHTML = `<img style='width:50px' src='https://cdn.emojidex.com/emoji/seal/die_face_${val}.png'>`;
+      document.getElementById(
+        "promiseLog"
+      ).innerHTML = `<img style='width:50px' src='images/die_face_${val}.png'>`;
+    })
+    .catch((err) => {
+      const errImg = document.createElement("img");
+      errImg.src = "images/err.png";
+      errImg.setAttribute("width", "50px");
+      const logDiv = document.getElementById("promiseLog");
+      logDiv.innerHTML = ""; // remove all the content
+      logDiv.appendChild(errImg); // append new content
     });
 });
 
-
-
-
-
-const output = document.getElementById('output');
-const button = document.getElementById('set-alarm');
+const output = document.getElementById("output");
+const button = document.getElementById("set-alarm");
 const sec = document.getElementById("duration");
 
 function alarmP(delay, person = "mk") {
-    return new Promise((resolve, reject) => {
-        if (delay < 0) {
-            throw new Error('Alarm delay must not be negative');
-        }
-        // wrap resolve with timeout
-        setTimeout(() => {
-            // If the work is successful, call the resolve function with the result
-            resolve(`Alarm, ${person}!`);
-        }, delay);
-    });
+  return new Promise((resolve, reject) => {
+    if (delay < 0) {
+      throw new Error("Alarm delay must not be negative");
+    }
+    // wrap resolve with timeout
+    setTimeout(() => {
+      // If the work is successful, call the resolve function with the result
+      resolve(`Alarm, ${person}!`);
+    }, delay);
+  });
 }
 
 function alarm() {
-    const duration = parseInt(sec.value) * 1000;
-    setTimeout(() => {
-        output.textContent = 'Time is up!';
-    }, duration);
+  const duration = parseInt(sec.value) * 1000;
+  setTimeout(() => {
+    output.textContent = "Time is up!";
+  }, duration);
 }
 
 // button.addEventListener('click', alarm);
-button.addEventListener('click', () => {
-    // display a message immediately
-    displayLog("Info: Alarm set.");
+button.addEventListener("click", () => {
+  // display a message immediately
+  displayLog("Info: Alarm set.");
 
-    // wait for async function, using then, and work with the results (just display in this case)
-    const delay = parseInt(sec.value) * 1000;
-    alarmP(delay).then((msg) => displayLog(msg)); //output.textContent = msg);
+  // wait for async function, using then, and work with the results (just display in this case)
+  const delay = parseInt(sec.value) * 1000;
+  alarmP(delay).then((msg) => displayLog(msg)); //output.textContent = msg);
 });
-
 
 // ASYNC example 1 - an empty function, marked async
 // Note that you can call this function on chrome Developer Tools> Console: doNothing_async();
 // it is marked async, therefore it will return Promise.
 async function doNothing_async() {
-    // note that this function does not explicityly return anything.
-    // however, it is marked async, therefore it will return Promise.
+  // note that this function does not explicityly return anything.
+  // however, it is marked async, therefore it will return Promise.
 }
 
 // ASYNC example 2
 // fake api to return a list of grocery items:
 async function getData_async() {
-    const groceryList = [{
-            'name': 'apples',
-            'price': 2.5,
-            'quantity': 3
-        },
-        {
-            'name': 'bread',
-            'price': 2,
-            'quantity': 2
-        }
-    ];
+  const groceryList = [
+    {
+      name: "apples",
+      price: 2.5,
+      quantity: 3,
+    },
+    {
+      name: "bread",
+      price: 2,
+      quantity: 2,
+    },
+  ];
 
-    // return a Promise, which will resolve after a timeout:
-    // buna alternatif olarak Promise'i kaldırıp, setTimout içinde retun diyemeyiz, neden?: 
-    // since setTimeout() is an asynchronous function, it does not wait for the delay to complete before moving on to the next line of code, 
-    // which in this case is the implicit return statement at the end of the function!
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(groceryList);
-        }, 1000);
-    });
+  // return a Promise, which will resolve after a timeout:
+  // buna alternatif olarak Promise'i kaldırıp, setTimout içinde retun diyemeyiz, neden?:
+  // since setTimeout() is an asynchronous function, it does not wait for the delay to complete before moving on to the next line of code,
+  // which in this case is the implicit return statement at the end of the function!
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(groceryList);
+    }, 1000);
+  });
 }
 
-
-// async example 2: async functions can contain zero or more await expressions. 
+// async example 2: async functions can contain zero or more await expressions.
 async function callAnotherAsync() {
+  // async functions can contain zero or more await expressions.
+  // Await expressions make promise-returning functions behave as though they're synchronous
+  // by suspending execution until the returned promise is fulfilled or rejected.
+  let glist = await getData_async();
 
-    // async functions can contain zero or more await expressions. 
-    // Await expressions make promise-returning functions behave as though they're synchronous 
-    // by suspending execution until the returned promise is fulfilled or rejected.
-    let glist = await getData_async();
-
-    // wait for getting the data from an async function (await)
-    // process the data to calculate and return total cost:
-    let sum = 0;
-    for (let item of glist) {
-        sum += (item.price * item.quantity);
-
-    }
-    displayLog("Total: " + sum);
-    return sum;
+  // wait for getting the data from an async function (await)
+  // process the data to calculate and return total cost:
+  let sum = 0;
+  for (let item of glist) {
+    sum += item.price * item.quantity;
+  }
+  displayLog("Total: " + sum);
+  return sum;
 }
 
-
-document.getElementById("btn_async01").addEventListener('click', callAnotherAsync);
-
+document
+  .getElementById("btn_async01")
+  .addEventListener("click", callAnotherAsync);
 
 // FETCH API Example 1
 // A typical fetch request consists of two await calls
 async function fetch_SWAPI() {
-    // The simplest use of fetch() takes one argument — the path to the resource you want to fetch, and
-    // returns a promise that resolves with a Response object.
-    // The Response object, in turn, does not directly contain the actual JSON response body but is instead a representation of the entire HTTP response:
-    const response = await fetch("https://swapi.dev/api/people/1");
+  // The simplest use of fetch() takes one argument — the path to the resource you want to fetch, and
+  // returns a promise that resolves with a Response object.
+  // The Response object, in turn, does not directly contain the actual JSON response body but is instead a representation of the entire HTTP response:
+  const response = await fetch("https://swapi.dev/api/people/1");
 
-    // So, to extract the JSON body content from the Response object, we use the json() method, 
-    // which returns a second promise that resolves with the result of parsing the response body text as JSON:
-    const jsonData = await response.json();
+  // So, to extract the JSON body content from the Response object, we use the json() method,
+  // which returns a second promise that resolves with the result of parsing the response body text as JSON:
+  const jsonData = await response.json();
 
-    console.log(jsonData);
-    displayLog(jsonData['name']);
+  console.log(jsonData);
+  displayLog(jsonData["name"]);
 
-    // In a linear fashion, use the previous response for the next fetch:
-    const resp = await fetch(jsonData['homeworld']); // https://swapi.dev/api/planets/1/
-    const data_hw = await resp.json();
-    console.log(data_hw);
-    displayLog(data_hw['name']);
+  // In a linear fashion, use the previous response for the next fetch:
+  const resp = await fetch(jsonData["homeworld"]); // https://swapi.dev/api/planets/1/
+  const data_hw = await resp.json();
+  console.log(data_hw);
+  displayLog(data_hw["name"]);
 }
 
-document.getElementById("btn_fetch01").addEventListener('click', fetch_SWAPI);
+document.getElementById("btn_fetch01").addEventListener("click", fetch_SWAPI);
 
 // FETCH API - Example 2
-// the same without await, using pure promises syntax, older style of asynchronous programming using Promises 
-// Note that response.json() returns a Promise, so we can chain another .then() 
+// the same without await, using pure promises syntax, older style of asynchronous programming using Promises
+// Note that response.json() returns a Promise, so we can chain another .then()
 // Note that the function is NOT async
 function fetchPokemons() {
-    //fetch("https://pokeapi.co/api/v2/pokemon?limit=100")
-    fetch("https://pokeapi.co/api/v2/pokemon/25")
-        .then(response => response.json()) // Note that response.json() returns a Promise, so we can chain another .then() 
-        .then(pika => displayLog(pika['name']));
+  //fetch("https://pokeapi.co/api/v2/pokemon?limit=100")
+  fetch("https://pokeapi.co/api/v2/pokemon/25")
+    .then((response) => response.json()) // Note that response.json() returns a Promise, so we can chain another .then()
+    .then((pika) => displayLog(pika["name"]));
 }
 
-document.getElementById("btn_fetchPoke").addEventListener('click', fetchPokemons);
-
+document
+  .getElementById("btn_fetchPoke")
+  .addEventListener("click", fetchPokemons);
 
 // FETCH API - Example 3
 // catch
 function fetchErr() {
-    fetch('https://err.co/noapi/')
-        .then(response => {
-            // At this stage we can check HTTP status, to see whether it is successful or not, check headers, but don’t have the body yet.
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // do something with data
-        })
-        .catch(error => displayLog('Error fetching data: ' + error.message));
+  fetch("https://err.co/noapi/")
+    .then((response) => {
+      // At this stage we can check HTTP status, to see whether it is successful or not, check headers, but don’t have the body yet.
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      // do something with data
+    })
+    .catch((error) => displayLog("Error fetching data: " + error.message));
 }
 
-document.getElementById("btn_fetchErr").addEventListener('click', fetchErr);
-
+document.getElementById("btn_fetchErr").addEventListener("click", fetchErr);
 
 // Axios - Promise based HTTP client for the browser and node.js
 async function axios_getGithubName() {
-
-    try {
-        const response = await axios.get('https://api.github.com/users/karadasmurat')
-        console.log("Axios response:", response);
-        displayLog(response.data['name']);
-    } catch (error) {
-        // handle error
-        displayLog(error);
-    }
-
+  try {
+    const response = await axios.get(
+      "https://api.github.com/users/karadasmurat"
+    );
+    console.log("Axios response:", response);
+    displayLog(response.data["name"]);
+  } catch (error) {
+    // handle error
+    displayLog(error);
+  }
 }
 
-document.getElementById("btn_axios01").addEventListener('click', axios_getGithubName);
-
-
-
-
-
-
-
+document
+  .getElementById("btn_axios01")
+  .addEventListener("click", axios_getGithubName);
 
 async function getUser() {
-    displayLog("Getting details of user 1 ...");
-    const response = await fetch('https://jsonplaceholder.typicode.com/users/1');
-    const user = await response.json();
-    displayLog("Email is: " + user.email + " Getting posts...");
-    return user;
+  displayLog("Getting details of user 1 ...");
+  const response = await fetch("https://jsonplaceholder.typicode.com/users/1");
+  const user = await response.json();
+  displayLog("Email is: " + user.email + " Getting posts...");
+  return user;
 }
 
 async function getPosts(user) {
-    const response = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${user.id}`);
-    const posts = await response.json();
-    return posts;
+  const response = await fetch(
+    `https://jsonplaceholder.typicode.com/posts?userId=${user.id}`
+  );
+  const posts = await response.json();
+  return posts;
 }
 
 // to simulate waiting, we return a promise which resolves after a timeout.
 async function processPosts(posts) {
+  displayLog("Processing posts...");
 
-    displayLog("Processing posts...");
-
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            console.log(posts.length);
-            resolve(posts.length);
-        }, 1000);
-    });
-
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log(posts.length);
+      resolve(posts.length);
+    }, 1000);
+  });
 }
-
 
 /*
 In the then() method, the result of the previous function is automatically passed as the first argument to the next function in the chain.
@@ -499,12 +479,11 @@ This makes the code simpler and easier to read and write.
 
 */
 document.getElementById("getDataButton").addEventListener("click", function () {
-
-    getUser()
-        .then(getPosts)
-        .then(processPosts)
-        .then(displayLog)
-        .catch(error => {
-            console.error(error);
-        });
+  getUser()
+    .then(getPosts)
+    .then(processPosts)
+    .then(displayLog)
+    .catch((error) => {
+      console.error(error);
+    });
 });

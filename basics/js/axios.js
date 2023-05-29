@@ -222,11 +222,3 @@ document
   .addEventListener("click", transformResponse);
 document.getElementById("error").addEventListener("click", errorHandling);
 document.getElementById("cancel").addEventListener("click", cancelToken);
-
-axios.get("/user/12345").then(function (response) {
-  console.log(response.data);
-  console.log(response.status);
-  console.log(response.statusText);
-  console.log(response.headers);
-  console.log(response.config);
-});

@@ -22,6 +22,7 @@ export default function ReminderList({
     // When a user interacts with a component, the component’s output changes: update state
     setSelectedItemID(id);
 
+    // notify parent of results, through callback
     onSelectItem(id);
   };
 

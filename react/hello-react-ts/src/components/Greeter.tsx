@@ -1,6 +1,7 @@
 import { FaUserCircle } from "react-icons/fa";
 import { BsBatteryCharging } from "react-icons/bs";
 
+// The type for the component props
 interface GreeterProps {
   name: string;
   location?: string;

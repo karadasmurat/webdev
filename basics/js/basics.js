@@ -895,8 +895,8 @@ function array_higherOrder() {
   // Example: Create an array of objects using an array of strings
   // Note. Even if we omit in anonymous single line arrow functions, callbackFn actually returns a value for the input:
   const names = ["John", "Jane", "Mike"];
-  const participants = names.map((name) => {
-    return { name }; // Notice object property shorthand {name: name}
+  const participants = names.map((name, index) => {
+    return { name, index }; // Notice object property shorthand {name: name}
   });
 
   console.log(participants); // [ { name: 'John' }, { name: 'Jane' }, { name: 'Mike' } ]

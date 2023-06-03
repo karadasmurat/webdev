@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { produce } from "immer";
 import "./App.css";
 import ReminderList from "./components/ReminderList";
@@ -9,13 +9,21 @@ import BugList from "./components/BugList";
 import Bug from "./models/Bug";
 import NestedState from "./components/NestedState";
 import Form from "./components/Form";
-import FormRHF from "./components/FormRHF";
+import FormRHF from "./components/Form03RHF";
 import Form01Controlled from "./components/Form02useState";
 import Form02Ref from "./components/Form01useRef";
 import Form01useRef from "./components/Form01useRef";
 import Form02useState from "./components/Form02useState";
-import Counter from "./components/Counter";
+import Counter from "./components/Quantity";
 import { EffectThen, EffectAsync } from "./components/Effect01";
+import Form03RHF from "./components/Form03RHF";
+import Form_RHF_ZOD from "./components/Form_RHF_ZOD";
+import TodoList_Axios from "./components/TodoList_Axios";
+import { Todo } from "./models/Todo";
+import axios from "axios";
+import Quantity from "./components/Quantity";
+import TodoDetails from "./components/TodoSearch";
+import TodoSearch from "./components/TodoSearch";
 
 function App() {
   const [bugs, setBugs] = useState<Bug[]>([
@@ -26,6 +34,17 @@ function App() {
     { id: 11, title: "Reminder #01" },
     { id: 22, title: "Reminder #02" },
   ]);
+
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  // Fetching data with Effects
+  // Note that an Effect with empty dependencies doesn’t re-run when any of your component’s props or state change.
+  useEffect(() => {
+    axios
+      .get<Todo[]>("https://jsonplaceholder.typicode.com/todos")
+      .then((res) => setTodos(res.data)) // onfulfilled: update state
+      .catch((err) => console.log(err)); // onrejected
+  }, []);
 
   // handler defined by parent, to be passed to child using props.
   // through calling this, child will notify the parent about the results (somewhat like return)
@@ -69,7 +88,7 @@ function App() {
       {/* <Greeter name="Potter" location="Hogwarts" /> */}
       {/* props is of type GreeterProps, which has on optional propery */}
       {/* <Greeter name="Baggins" /> */}
-      <Counter />
+      {/* <Quantity /> */}
       {/* <Alert type="primary">
         <strong>Hello,</strong> there!
       </Alert> */}
@@ -77,11 +96,14 @@ function App() {
       {/* <BugList bugs={bugs} onSelectItem={handleBugSelection_immer} /> */}
       {/* <NestedState /> */}
       {/* <Form /> */}
-      {/* <FormRHF /> */}
       {/* <Form01useRef /> */}
       {/* <Form02useState /> */}
+      {/* <Form03RHF /> */}
+      {/* <Form_RHF_ZOD /> */}
       {/* <EffectThen /> */}
-      <EffectAsync />
+      {/* <EffectAsync /> */}
+      {/* <TodoList_Axios todos={todos} /> */}
+      <TodoSearch />
     </>
   );
 }

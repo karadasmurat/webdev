@@ -1,11 +1,14 @@
+import image1 from "../assets/images/mk.webp";
+
 export default function NavBar_Offcanvas() {
   return (
     <>
-      <nav className="navbar navbar-expand-md fixed-top">
+      {/* .navbar-expand{-sm | -md | -lg | -xl | -xxl} for responsive collapsing */}
+      <nav className="navbar navbar-expand-md fixed-top bg-primary-subtle">
         <div className="container">
           {/* toggler button - hamburger, on the left when collapsed */}
           <button
-            className="navbar-toggler"
+            className="navbar-toggler p-1"
             type="button"
             data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasNavbar"
@@ -16,6 +19,7 @@ export default function NavBar_Offcanvas() {
           </button>
           {/* brand, on the right (comes after hamburger) when collapsed */}
           <a className="navbar-brand" href="#">
+            <img src={image1} alt="brand" width="30"></img>
             Offcanvas navbar
           </a>
           {/* top menu as "Responsive Offcanvas" visible from md breakpoint (offcanvas-md) */}
@@ -26,10 +30,10 @@ export default function NavBar_Offcanvas() {
             aria-labelledby="offcanvasNavbarNavLabel"
           >
             <div className="offcanvas-body">
-              <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav">
+              <ul class="navbar-nav nav-underline">
                 <li class="nav-item">
                   <a class="nav-link" href="#">
-                    Docs
+                    Home
                   </a>
                 </li>
                 <li class="nav-item">
@@ -60,14 +64,14 @@ export default function NavBar_Offcanvas() {
           <div className="nav-item dropdown ms-3">
             {/* <!-- .dropdown-toggle for small triangle on the right of the button --> */}
             <button
-              className="btn btn-light p-1"
+              className="btn btn-light p-0"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
               <img
                 src="https://source.unsplash.com/random/200x200/?portrait"
                 width="40"
-                className="rounded"
+                className="rounded-start"
               />
               &nbsp;
               <i className="bi bi-three-dots-vertical"></i>
@@ -110,7 +114,6 @@ export default function NavBar_Offcanvas() {
           </div>
         </div>
       </nav>
-
       {/* drawer - offcanvas */}
       <div
         className="offcanvas offcanvas-start"

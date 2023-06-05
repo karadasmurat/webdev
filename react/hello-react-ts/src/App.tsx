@@ -14,16 +14,17 @@ import Form01Controlled from "./components/Form02useState";
 import Form02Ref from "./components/Form01useRef";
 import Form01useRef from "./components/Form01useRef";
 import Form02useState from "./components/Form02useState";
-import Counter from "./components/Quantity";
+import Counter from "./components/ShoppingCartItem";
 import { EffectThen, EffectAsync } from "./components/Effect01";
 import Form03RHF from "./components/Form03RHF";
 import Form_RHF_ZOD from "./components/Form_RHF_ZOD";
 import TodoList_Axios from "./components/TodoList_Axios";
 import { Todo } from "./models/Todo";
 import axios from "axios";
-import Quantity from "./components/Quantity";
+import ShoppingItem from "./components/ShoppingCartItem";
 import TodoDetails from "./components/TodoSearch";
 import TodoSearch from "./components/TodoSearch";
+import SimpleShoppingCart from "./components/SimpleShoppingCart";
 
 function App() {
   const [bugs, setBugs] = useState<Bug[]>([
@@ -103,7 +104,9 @@ function App() {
       {/* <EffectThen /> */}
       {/* <EffectAsync /> */}
       {/* <TodoList_Axios todos={todos} /> */}
-      <TodoSearch />
+      {/* <TodoSearch /> */}
+
+      <SimpleShoppingCart />
     </>
   );
 }

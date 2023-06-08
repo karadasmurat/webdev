@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { BsPlusCircle, BsDashCircle } from "react-icons/bs";
+import { BsPlusCircle, BsDashCircle, BsTrash } from "react-icons/bs";
 import { ShoppingItem } from "../models/Shop";
 
 export default function ShoppingCartItem({
   item,
   onUpdate,
+  onDelete,
 }: {
   item: ShoppingItem;
   onUpdate(item: ShoppingItem): void;
+  onDelete: (item: ShoppingItem) => void;
 }) {
   const [shoppingItem, setShoppingItem] = useState(item);
 
@@ -39,6 +41,11 @@ export default function ShoppingCartItem({
     onUpdate(newShoppingItem);
   };
 
+  function deleteItem() {
+    console.log("remove.");
+    onDelete(shoppingItem);
+  }
+
   return (
     <div className="d-flex justify-content-center align-items-center my-3 gap-1">
       <span>{item.title} </span>
@@ -49,6 +56,10 @@ export default function ShoppingCartItem({
       <span>{shoppingItem.quantity}</span>
       <button onClick={increase} className="btn">
         <BsPlusCircle />
+      </button>
+
+      <button onClick={deleteItem} className="btn">
+        <BsTrash />
       </button>
     </div>
   );

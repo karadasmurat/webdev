@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { sampleTodos } from "./data/todos";
 import { produce } from "immer";
 import "./App.css";
 import ReminderList from "./components/ReminderList";
@@ -25,8 +26,15 @@ import ShoppingItem from "./components/ShoppingCartItem";
 import TodoDetails from "./components/TodoSearch";
 import TodoSearch from "./components/TodoSearch";
 import SimpleShoppingCart from "./components/SimpleShoppingCart";
+import Stopwatch from "./components/Stopwatch";
+import AutoFocusDiv from "./components/AutoFocusDiv";
+import TodoList from "./components/TodoList";
+import SelectFilter from "./components/SelectFilter";
+import TodoForm from "./components/TodoForm";
 
 function App() {
+  const [flashMessage, setFlashMessage] = useState("");
+
   const [bugs, setBugs] = useState<Bug[]>([
     { id: 1, title: "Bug #01", fixed: false },
     { id: 2, title: "Bug #01", fixed: true },
@@ -38,13 +46,23 @@ function App() {
 
   const [todos, setTodos] = useState<Todo[]>([]);
 
+  const [mockTodos, setMockTodos] = useState<Todo[]>(sampleTodos);
+
+  const fetchTodos = () => {
+    axios
+      .get("http://localhost:3000/api/todos")
+      .then((response) => {
+        setTodos(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching todos:", error);
+      });
+  };
+
   // Fetching data with Effects
   // Note that an Effect with empty dependencies doesn’t re-run when any of your component’s props or state change.
   useEffect(() => {
-    axios
-      .get<Todo[]>("https://jsonplaceholder.typicode.com/todos")
-      .then((res) => setTodos(res.data)) // onfulfilled: update state
-      .catch((err) => console.log(err)); // onrejected
+    fetchTodos();
   }, []);
 
   // handler defined by parent, to be passed to child using props.
@@ -84,8 +102,59 @@ function App() {
     );
   };
 
+  function handleDeleteTodo(todo: Todo) {
+    console.log("App - handleDeleteTodo", todo);
+
+    axios
+      .delete<Todo>(`http://127.0.0.1:3000/api/todos/${todo._id}`)
+      // onfulfilled: update state
+      .then(() => {
+        setTodos((prevTodos) => prevTodos.filter((pt) => pt._id !== todo._id));
+        setFlashMessage("Todo deleted successfully");
+      })
+      .catch((err) => console.log(err)); // onrejected
+  }
+
+  // async / await syntax
+  // ####################
+  // const handleDeleteTodo = async (todo: Todo) => {
+  //   try {
+  //     await axios.delete(`http://localhost:3000/api/todos/${todo._id}`);
+  //     setTodos((prevTodos) => prevTodos.filter((pt) => pt._id !== todo._id));
+  //     // Perform any additional actions after successful deletion
+  //   } catch (error) {
+  //     console.error("Error deleting todo:", error);
+  //     // Handle error scenarios
+  //   }
+  // };
+
+  useEffect(() => {
+    let timer: number;
+    if (flashMessage) {
+      timer = setTimeout(() => {
+        setFlashMessage("");
+      }, 3000); // Hide flash message after 3 seconds
+    }
+    return () => clearTimeout(timer);
+  }, [flashMessage]);
+
   return (
     <>
+      {flashMessage && (
+        <div
+          className="container text-center"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            position: "fixed",
+            top: "10px",
+            width: "80%",
+            zIndex: 9999,
+          }}
+        >
+          <div className="alert alert-primary">{flashMessage}</div>
+        </div>
+      )}
       {/* <Greeter name="Potter" location="Hogwarts" /> */}
       {/* props is of type GreeterProps, which has on optional propery */}
       {/* <Greeter name="Baggins" /> */}
@@ -103,10 +172,13 @@ function App() {
       {/* <Form_RHF_ZOD /> */}
       {/* <EffectThen /> */}
       {/* <EffectAsync /> */}
+      <TodoForm onSubmitTodo={fetchTodos} />
+      <TodoList todos={todos} onDeleteTodo={handleDeleteTodo} />
       {/* <TodoList_Axios todos={todos} /> */}
       {/* <TodoSearch /> */}
-
-      <SimpleShoppingCart />
+      {/* <SimpleShoppingCart /> */}
+      {/* <Stopwatch /> */}
+      {/* <AutoFocusDiv /> */}
     </>
   );
 }

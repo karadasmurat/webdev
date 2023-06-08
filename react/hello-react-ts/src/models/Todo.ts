@@ -1,6 +1,10 @@
 export interface Todo {
-  userId: number;
-  id: number;
+  userId?: number;
+  _id?: number;
   title: string;
-  completed: boolean;
+  completed?: boolean;
+  status?: string;
+  category?: string;
+  priority?: string;
+  due?: Date;
 }

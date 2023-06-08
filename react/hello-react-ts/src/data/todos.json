@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "title": "Finish homework",
+    "category": "School",
+    "due": "2023-05-20",
+    "priority": "High",
+    "status": "Pending"
+  },
+  {
+    "id": 2,
+    "title": "Go grocery shopping",
+    "category": "Personal",
+    "due": "2023-05-21",
+    "priority": "Medium",
+    "status": "Pending"
+  },
+  {
+    "id": 3,
+    "title": "Clean the house",
+    "category": "Home",
+    "due": "2023-05-22",
+    "priority": "Low",
+    "status": "Pending"
+  },
+  {
+    "id": 4,
+    "title": "Complete project report",
+    "category": "Work",
+    "due": "2023-05-23",
+    "priority": "High",
+    "status": "Pending"
+  },
+  {
+    "id": 5,
+    "title": "Attend meeting",
+    "category": "Work",
+    "due": "2023-05-24",
+    "priority": "Medium",
+    "status": "Pending"
+  },
+  {
+    "id": 6,
+    "title": "Pay bills",
+    "category": "Finance",
+    "due": "2023-05-25",
+    "priority": "Medium",
+    "status": "Pending"
+  },
+  {
+    "id": 7,
+    "title": "Read a book",
+    "category": "Personal",
+    "due": "2023-05-26",
+    "priority": "Low",
+    "status": "Pending"
+  },
+  {
+    "id": 8,
+    "title": "Plan weekend activities",
+    "category": "Personal",
+    "due": "2023-05-27",
+    "priority": "Low",
+    "status": "Pending"
+  },
+  {
+    "id": 9,
+    "title": "Fix broken faucet",
+    "category": "Home",
+    "due": "2023-05-28",
+    "priority": "High",
+    "status": "Pending"
+  },
+  {
+    "id": 10,
+    "title": "Call a friend",
+    "category": "Personal",
+    "due": "2023-05-29",
+    "priority": "Medium",
+    "status": "Pending"
+  }
+]

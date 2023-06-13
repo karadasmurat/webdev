@@ -24,6 +24,10 @@ import Contact from "./pages/help/Contact";
 import TodoApp from "./components/TodoApp";
 import Parent from "./components/context/Parent";
 import ContextApp from "./components/context/ContextApp";
+import SignupForm from "./components/auth/SignupForm";
+import SigninForm from "./components/auth/SigninForm";
+import { EffectBasics } from "./components/Effect01";
+import HookTest from "./components/HookTest";
 
 // layouts
 
@@ -51,7 +55,7 @@ const browserRouter_layout = createBrowserRouter([
         path: "todos",
         element: <TodoApp />,
       },
-      { path: "portfolio", element: <Portfolio /> },
+      { path: "hooks", element: <HookTest /> },
       {
         path: "help",
         element: <HelpLayout />,
@@ -63,6 +67,8 @@ const browserRouter_layout = createBrowserRouter([
         ],
       },
       { path: "context", element: <ContextApp /> },
+      { path: "signin", element: <SigninForm /> },
+      { path: "signup", element: <SignupForm /> },
       { path: "complex/path/page3", element: <Page3 /> },
       { path: "*", element: <NotFound /> },
     ],

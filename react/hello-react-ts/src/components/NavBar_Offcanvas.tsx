@@ -49,9 +49,9 @@ export default function NavBar_Offcanvas() {
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    Themes
-                  </a>
+                  <NavLink to={`/hooks`} className="nav-link">
+                    Hooks
+                  </NavLink>
                 </li>
                 <li className="nav-item">
                   <a className="nav-link" href="#">

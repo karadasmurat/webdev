@@ -21,7 +21,7 @@ app.use(
       expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
     },
     store: MongoStore.create({
-      mongoUrl: process.env.ATLAS_CONN_STR,
+      mongoUrl: process.env.LOCAL_CONN_STR,
       touchAfter: 24 * 60 * 60, // 24 hours period in seconds
       crypto: {
         secret: process.env.MONGOSTORE_SECRET,
@@ -34,22 +34,11 @@ app.use(
 // const flash = require("connect-flash");
 // app.use(flash());
 
-// custom error
-// const yerr = require("./lib/YelpError");
-// const { YelpError } = require("./lib/YelpError");
-
-// import mongoose Model
-// const { Campground, Review } = require("./model/Campground");
-
 // server-side validation
 // const Joi = require("joi");
 
 // import Model - object desct, like without a module name
 // const { campgroundJoiSchema, reviewJoiSchema } = require("./lib/joi_schemas");
-
-// web forms has method="POST"
-// const methodOverride = require("method-override");
-// app.use(methodOverride("_method"));
 
 // Passport is js library authentication middleware
 // const User = require("./model/User");
@@ -65,20 +54,13 @@ app.use(
 // Mongoose - ODM layer for MongoDB
 const mongoose = require("mongoose");
 
-const EXPRESS_PORT = 3000;
+const EXPRESS_PORT = process.env.EXPRESS_PORT;
 const options = {};
 
 mongoose
-  .connect(process.env.ATLAS_CONN_STR, options)
+  .connect(process.env.LOCAL_CONN_STR, options)
   .then(console.log("Connected to mongodb."))
   .catch((error) => console.log("Cannot connect. " + error));
-
-// Set the "views" directory, relative to this file
-// If you run the express app from another directory, it’s safer to use the absolute path of the directory
-// app.set("views", path.join(__dirname, "/views"));
-
-// Set EJS as the view engine
-// app.set("view engine", "ejs");
 
 // Serving static files: use the express.static built-in middleware function
 // here, we use a directory, at the same level of this script, named "public"
@@ -91,16 +73,6 @@ app.use(express.static(path.join(__dirname, "public")));
 // built-in middleware function in Express. It parses incoming requests with JSON payloads and is based on body-parser.
 app.use(express.json());
 
-// parse form
-// for parsing application/x-www-form-urlencoded
-// body-parser was previously a separate npm package, but starting from Express 4.16.0, it has been integrated into the core express module.
-// const bodyParser = require('body-parser');
-// app.use(bodyParser.urlencoded({
-//     extended: true
-// }));
-
-// body parser
-// for parsing application/x-www-form-urlencoded
 app.use(
   express.urlencoded({
     extended: true,
@@ -109,11 +81,13 @@ app.use(
 
 //enable CORS for all routes in the Express app:
 const cors = require("cors");
-app.use(
-  cors({
-    origin: "http://localhost:3001",
-  })
-);
+app.use(cors());
+
+// app.options("*", cors()); // enable pre-flight request
+// app.use(function (req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+//   next();
+// });
 
 // custom middlewares
 const logger = require("./middlewares/logger");
@@ -125,9 +99,10 @@ app.use(logger);
 // Express Router middlewares
 // const routerDummy = require("./routes/router_dummy");
 // app.use("/items", routerDummy);
-// const routerWorkouts = require("./routes/router_workouts");
 const routerTodos = require("./routes/router_todos");
+const routerAuth = require("./routes/router_auth");
 app.use("/api/todos", routerTodos);
+app.use("/api/auth", routerAuth);
 
 // GET /hello
 app.get("/hello", (req, res) => {
@@ -143,5 +118,5 @@ app.use(function (req, res, next) {
 // bind and listen for connections on the specified host and port.
 // identical to Node’s http.Server.listen()
 app.listen(EXPRESS_PORT, () => {
-  console.log(`mongoose-express app listening on port ${EXPRESS_PORT}`);
+  console.log(`Express app listening on port ${EXPRESS_PORT}`);
 });

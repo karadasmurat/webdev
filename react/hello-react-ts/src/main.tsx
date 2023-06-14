@@ -18,7 +18,7 @@ import Portfolio from "./pages/Portfolio";
 import NotFound from "./pages/NotFound";
 import RootLayout from "./layouts/RootLayout";
 import HelpLayout from "./layouts/HelpLayout";
-import { Page3 } from "./pages/SamplePages";
+import { Page1, Page2, Page3 } from "./pages/SamplePages";
 import Faq from "./pages/help/Faq";
 import Contact from "./pages/help/Contact";
 import TodoApp from "./components/TodoApp";
@@ -28,6 +28,13 @@ import SignupForm from "./components/auth/SignupForm";
 import SigninForm from "./components/auth/SigninForm";
 import { EffectBasics } from "./components/Effect01";
 import HookTest from "./components/HookTest";
+import TodoDetails from "./components/TodoDetails";
+import TodoLayout from "./layouts/TodoLayout";
+import TodoForm from "./components/TodoForm";
+import SampleLayout from "./layouts/SampleLayout";
+import UserContextProvider from "./contexts/UserContext";
+import { TodoContextProvider } from "./contexts/TodoContext";
+import { AuthContextProvider } from "./contexts/AuthContext";
 
 // layouts
 
@@ -51,10 +58,32 @@ const browserRouter_layout = createBrowserRouter([
       // renders parent layout with index element inside parent's Outlet,
       // when parent route matched exactly (/ )
       { index: true, element: <Home /> },
+
+      // sub-layout for todos
+      // i.e. todos/:id, todos/create
+      // {
+      //   path: "todos",
+      //   element: <TodoLayout />,
+      //   children: [
+      //     { index: true, element: <TodoApp /> },
+      //     // route parameters, i.e /todos/12345
+      //     {
+      //       path: ":id",
+      //       element: <TodoDetails />,
+      //     },
+      //   ],
+      // },
+
       {
         path: "todos",
-        element: <TodoApp />,
+        element: (
+          <TodoContextProvider>
+            <TodoApp />
+          </TodoContextProvider>
+        ),
       },
+      { path: "todos/:id", element: <TodoDetails /> },
+
       { path: "hooks", element: <HookTest /> },
       {
         path: "help",
@@ -67,21 +96,22 @@ const browserRouter_layout = createBrowserRouter([
         ],
       },
       { path: "context", element: <ContextApp /> },
-      { path: "signin", element: <SigninForm /> },
-      { path: "signup", element: <SignupForm /> },
       { path: "complex/path/page3", element: <Page3 /> },
+      // { path: "signin", element: <SigninForm /> },
       { path: "*", element: <NotFound /> },
     ],
   },
+  { path: "signin", element: <SigninForm /> },
+  { path: "signup", element: <SignupForm /> },
   // Layout route: A parent route without a path,
   // used exclusively for grouping child routes inside a specific layout.
-  // {
-  //   element: <SampleLayout />,
-  //   children: [
-  //     { path: "/page1", element: <Page1 /> },
-  //     { path: "/page2", element: <Page2 /> },
-  //   ],
-  // },
+  {
+    element: <SampleLayout />,
+    children: [
+      { path: "page1", element: <Page1 /> },
+      { path: "page2", element: <Page2 /> },
+    ],
+  },
 ]);
 
 // The easiest way to quickly update to a v6.4 is to get the help from createRoutesFromElements
@@ -92,6 +122,8 @@ const browserRouter_v0 = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={browserRouter_layout} />
+    <AuthContextProvider>
+      <RouterProvider router={browserRouter_layout} />
+    </AuthContextProvider>
   </React.StrictMode>
 );

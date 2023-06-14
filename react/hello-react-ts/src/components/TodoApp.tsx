@@ -1,37 +1,68 @@
-import { useEffect, useState } from "react";
-import { sampleTodos } from "../data/todos";
+import { useContext, useEffect, useState } from "react";
+// import { sampleTodos } from "../data/todos";
 // import "./App.css";
 import { Todo } from "../models/Todo";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import TodoList from "./TodoList";
 import TodoForm from "./TodoForm";
+import useFetch from "../hooks/useFetch";
+import { TodoContext } from "../contexts/TodoContext";
+import CustomLoader from "./CustomLoader";
+import { AuthContext } from "../contexts/AuthContext";
+
+const URL_GET_ALL_TODOS = "http://localhost:3000/api/todos";
 
 export default function TodoApp() {
+  const [isLoading, setLoading] = useState(true);
+  // const [data, setData] = useState<Todo[]>([]);
+  const [error, setError] = useState(null);
   const [flashMessage, setFlashMessage] = useState("");
 
-  const [fetching, setFetching] = useState(true);
-  const [todos, setTodos] = useState<Todo[]>([]);
+  // AuthContext
+  const { authState, authDispatch } = useContext(AuthContext);
 
-  const [mockTodos, setMockTodos] = useState<Todo[]>(sampleTodos);
+  // version 1 - get todos from context
+  const { state, dispatch } = useContext(TodoContext);
 
-  const fetchTodos = () => {
-    setFetching(true);
+  // version 2 - get todos using a custom useFetch hook
+  // let { isLoading, data, error, fetchData } = useFetch<Todo>(URL_GET_ALL_TODOS);
 
+  // if (data) {
+  //   // dispatch({ type: "todos/set", payload: data });
+  //   console.log("we have data!", data);
+  // }
+
+  const fetchData = () => {
+    setLoading(true);
+    setError(null);
     axios
-      .get("http://localhost:3000/api/todos")
+      .get(URL_GET_ALL_TODOS)
       .then((response) => {
-        setTodos(response.data);
+        // instead of setting data, we dispatch an action to set context.
+        // setData(response.data);
+        dispatch({ type: "todos/set", payload: response.data });
       })
-      .catch((error) => {
-        console.error("Error fetching todos:", error);
+      .catch((err) => {
+        setError(err);
       })
-      .finally(() => setFetching(false));
+      .finally(() => setLoading(false));
   };
 
-  // Fetching data with Effects
-  // Note that an Effect with empty dependencies doesn’t re-run when any of your component’s props or state change.
+  function simulateLoading() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve("done");
+      }, 1000);
+    });
+  }
+
   useEffect(() => {
-    fetchTodos();
+    simulateLoading().then(fetchData);
+    // fetchData();
+
+    // return () => {
+    //   console.log("useFetch: cleanup");
+    // };
   }, []);
 
   function handleDeleteTodo(todo: Todo) {
@@ -41,10 +72,23 @@ export default function TodoApp() {
       .delete<Todo>(`http://localhost:3000/api/todos/${todo._id}`)
       // onfulfilled: update state
       .then(() => {
-        setTodos((prevTodos) => prevTodos.filter((pt) => pt._id !== todo._id));
         setFlashMessage("Todo deleted successfully");
+
+        // REFRESH TODO LIST after a successfull deletion.
+
+        // ver 0 -
+        //setTodos((prevTodos) => prevTodos.filter((pt) => pt._id !== todo._id));
+
+        // ver 1 - dispatch an action to delete from local state, to sync with db after a successfull deletion.
+        dispatch({ type: "todos/delete", payload: todo });
+
+        // ver 2 - use custom hook to fetch data
+        // fetchData();
       })
-      .catch((err) => console.log(err)); // onrejected
+      .catch((err: AxiosError) => {
+        console.log(err);
+        // setFlashMessage(err.message);
+      }); // onrejected
   }
 
   function handleMarkCompleteTodo(todo: Todo) {
@@ -57,58 +101,53 @@ export default function TodoApp() {
       })
       // onfulfilled: update state
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setFlashMessage("Todo updated successfully");
-        // fetchTodos();
+
+        // provided by customHook
+        fetchData();
       })
       .catch((err) => console.log(err)); // onrejected
   }
-
-  // async / await syntax
-  // ####################
-  // const handleDeleteTodo = async (todo: Todo) => {
-  //   try {
-  //     await axios.delete(`http://localhost:3000/api/todos/${todo._id}`);
-  //     setTodos((prevTodos) => prevTodos.filter((pt) => pt._id !== todo._id));
-  //     // Perform any additional actions after successful deletion
-  //   } catch (error) {
-  //     console.error("Error deleting todo:", error);
-  //     // Handle error scenarios
-  //   }
-  // };
-
-  useEffect(() => {
-    let timer: number;
-    if (flashMessage) {
-      timer = setTimeout(() => {
-        setFlashMessage("");
-      }, 3000); // Hide flash message after 3 seconds
-    }
-    return () => clearTimeout(timer);
-  }, [flashMessage]);
 
   return (
     <>
       {flashMessage && (
         <div
-          className="container text-center"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            position: "fixed",
-            top: "10px",
-            width: "80%",
-            zIndex: 9999,
-          }}
+          className="alert alert-danger alert-dismissible fade show"
+          role="alert"
         >
-          <div className="alert alert-primary">{flashMessage}</div>
+          {flashMessage}
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
         </div>
+        // </div>
       )}
 
-      <TodoForm onSubmitTodo={fetchTodos} />
+      {/* user from context */}
+      <div className="container">context: {state.user}</div>
+
+      {/* consume AuthContext */}
+      <div className="container">email: {authState.user?.email}</div>
+
+      {/* <TodoForm onSubmitTodo={fetchTodos} /> */}
+      <TodoForm
+        onSubmitTodo={() => {
+          console.log("Received submit message.");
+
+          // provided by customHook
+          fetchData();
+        }}
+      />
       <TodoList
-        loading={fetching}
-        todos={todos}
+        loading={isLoading}
+        // todos={data}
+        todos={state.todos}
+        error={error}
         onDeleteTodo={handleDeleteTodo}
         onMarkCompleteTodo={handleMarkCompleteTodo}
       />

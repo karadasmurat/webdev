@@ -1,5 +1,5 @@
 import Parent from "./Parent";
-import UserContextProvider from "./UserContextProvider";
+import UserContextProvider from "../../contexts/UserContext";
 
 export default function ContextApp() {
   return (

@@ -11,11 +11,12 @@ const getAllTodos = async (req, res) => {
 
   try {
     const todos = await Todo.find({}).sort({ createdAt: -1 });
+    console.log(todos);
 
     res.status(200).send(todos);
   } catch (err) {
     console.log(err);
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 };
 
@@ -72,12 +73,13 @@ const createTodo = async (req, res) => {
 };
 
 // update a workout
-const updateWorkout = async (req, res) => {
+const patchTodoById = async (req, res) => {
   // Get id from path  - req.params object contains the route parameter
   const { id } = req.params;
 
   // Get properties from the request.body object. (object destructuring)
-  const { title, reps, load } = req.body;
+  const { title, completed, due, status, priority } = req.body;
+  // console.log({ title, completed, due, status, priority });
 
   //check if id is valid bson ObjectId
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -87,16 +89,51 @@ const updateWorkout = async (req, res) => {
   }
 
   try {
-    const workout = await Workout.findOneAndUpdate(
+    const item = await Todo.findOneAndUpdate(
       { _id: id },
-      { title, reps, load } // new object from req.body . compare this with {...req.body}
+      { title, completed, due, status, priority } // new object from req.body . compare this with {...req.body}
     );
 
-    if (!workout) {
-      res.status(404).json({ error: "Not found: " + id });
-      //   res.sendStatus(404);
+    if (!item) {
+      // res.status(404).json({ error: "Not found: " + id });
+      res.sendStatus(404);
     } else {
-      res.status(200).send(workout);
+      res.status(200).send(item);
+    }
+  } catch (err) {
+    console.log(err);
+    // res.status(500).json({ error: "Server error" });
+    res.sendStatus(500);
+  }
+};
+
+// update a workout
+const putTodoById = async (req, res) => {
+  // Get id from path  - req.params object contains the route parameter
+  const { id } = req.params;
+
+  // Get properties from the request.body object. (object destructuring)
+  // const { title, completed, due, status, priority } = req.body;
+  // console.log({ title, completed, due, status, priority });
+
+  //check if id is valid bson ObjectId
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    // Invalid ObjectId
+    // return res.status(400).json({ error: "Invalid argument." });
+    return res.sendStatus(404);
+  }
+
+  try {
+    const item = await Todo.findOneAndUpdate(
+      { _id: id },
+      { ...req.body } // new object from req.body . compare this with {...req.body}
+    );
+
+    if (!item) {
+      // res.status(404).json({ error: "Not found: " + id });
+      res.sendStatus(404);
+    } else {
+      res.status(200).send(item);
     }
   } catch (err) {
     console.log(err);
@@ -145,5 +182,7 @@ module.exports = {
   getAllTodos,
   getTodoById,
   createTodo,
+  patchTodoById,
+  putTodoById,
   deleteById,
 };

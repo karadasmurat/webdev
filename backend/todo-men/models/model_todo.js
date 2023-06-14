@@ -12,6 +12,7 @@ const todoSchema = new mongoose.Schema(
     },
     priority: String,
     status: String,
+    completed: Boolean,
     due: Date,
   },
 

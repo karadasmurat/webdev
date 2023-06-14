@@ -11,6 +11,7 @@ const schema_formdata = z.object({
   title: z.string().refine((s) => s.trim().length >= 2),
   priority: z.string(),
   due: z.coerce.date(),
+  // due: z.string().datetime(),
 });
 
 type FormData = z.infer<typeof schema_formdata>;
@@ -47,7 +48,7 @@ export default function TodoForm({ onSubmitTodo }: TodoFormProps) {
     );
     // console.log(data);
     axios
-      .post("http://localhost:3000/api/todos", data, {
+      .post("http://127.0.0.1:3000/api/todos", data, {
         headers: { "Content-Type": "application/json" },
       })
       .then((response) => {
@@ -66,7 +67,6 @@ export default function TodoForm({ onSubmitTodo }: TodoFormProps) {
 
   return (
     <>
-      {" "}
       <button
         className="btn btn-primary mb-3"
         type="button"
@@ -118,6 +118,8 @@ export default function TodoForm({ onSubmitTodo }: TodoFormProps) {
                 <input
                   type="date"
                   id="due"
+                  // value="2020-01-01T00:00:00Z"
+                  value={new Date().toISOString().split("T")[0]}
                   {...register("due")}
                   className="form-control mb-3"
                 ></input>

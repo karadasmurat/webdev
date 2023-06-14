@@ -5,7 +5,7 @@ export default function NavigationBar() {
     <nav className="navbar">
       <NavLink to={`/`}>Home</NavLink>
       <NavLink to={`/todos`}>Todos</NavLink>
-      <NavLink to={`/portfolio`}>Portfolio</NavLink>
+      <NavLink to={`/hooks`}>Hooks</NavLink>
       <NavLink to={`/help`}>Help</NavLink>
     </nav>
   );

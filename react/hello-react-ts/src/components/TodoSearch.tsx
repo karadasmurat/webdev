@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Todo } from "../models/Todo";
-import TodoDetails from "./TodoDetails";
+import TodoDetails from "./TodoSummary";
 import { BsBoxArrowUpRight } from "react-icons/bs";
 
 export default function TodoSearch() {

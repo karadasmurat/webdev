@@ -78,29 +78,32 @@ main {
   margin: 20px 0;
 }
 
-/* contact form */
-/* form {
-  margin-top: 30px;
+/* TodoSummary.css */
+
+.todo-item {
+  /* Define the default styles for the TodoItem */
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
 }
-form input, form label span, form textarea {
-  display: block;
+
+.fade-in {
+  /* Define the animation effect for the fade-in class */
+  opacity: 0;
 }
-form input, form textarea {
-  margin-bottom: 30px;
-  padding: 8px;
-  border-radius: 4px;
-  border: 0;
-  width: 300px;
-  color: var(--secondary);
+
+
+.custom-loader {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 8px solid;
+  border-color: #f43370 #0000;
+  animation: s1 1s infinite;
 }
-form label span {
-  margin-bottom: 10px;
-} */
-
-/* careers list */
-
-
-/* careers details */
+@keyframes s1 {
+  to {
+    transform: rotate(0.5turn);
+  }
+}
 
 
-/* breadcrumbs */

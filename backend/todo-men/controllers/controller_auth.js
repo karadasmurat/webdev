@@ -113,10 +113,17 @@ const manualsignin = async (req, res) => {
       //   account,
       // });
 
-      // create a token
+      // create a token ?
       const token = createToken(existing_user._id);
 
-      res.status(200).json({ email, token });
+      // session ?
+      // To store or access session data, simply use the request property req.session,
+      req.session.email = email;
+      // req.session.save(); // ??
+      console.log("sessionID:", req.session.sessionID);
+
+      // res.status(200).json({ email, token });
+      res.status(200).send(req.session.sessionID);
     }
   }
 };

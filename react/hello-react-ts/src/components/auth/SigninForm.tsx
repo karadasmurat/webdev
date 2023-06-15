@@ -41,8 +41,9 @@ export default function SigninForm() {
     );
     // console.log(data);
     axios
-      .post("http://127.0.0.1:3000/api/auth/manualsignin", data, {
+      .post("http://localhost:3000/api/auth/manualsignin", data, {
         headers: { "Content-Type": "application/json" },
+        withCredentials: true,
       })
       .then((response) => {
         console.log("response:", response.data);

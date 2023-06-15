@@ -29,7 +29,16 @@ const {
   deleteById,
 } = require("../controllers/controller_todo");
 
-router.get("/", getAllTodos);
+function verifyAuth(req, res, next) {
+  console.log("verify authentication");
+  if (!req.session.email) {
+    res.status(401).json({ error: "Authorization required." });
+  }
+
+  next();
+}
+
+router.get("/", verifyAuth, getAllTodos);
 
 router.get("/:id", getTodoById);
 

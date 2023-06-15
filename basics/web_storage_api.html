@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="./css/bootstrap-5.3.0-alpha3/bootstrap.min.css"
+    />
+    <title>Web Storage API</title>
+  </head>
+  <body>
+    <h3>Web Storage API</h3>
+    <p>
+      The Web Storage API provides mechanisms by which browsers can store
+      key/value pairs.
+    </p>
+    <p>The two mechanisms within Web Storage are as follows:</p>
+    <code>
+      <ul>
+        <li>sessionStorage</li>
+        <li>localStorage</li>
+      </ul>
+    </code>
+    <div class="card mb-3">
+      <div class="card-header">Local Storage</div>
+      <div class="card-body">
+        <h5 class="card-title">luckynumber</h5>
+        <span id="store"></span>
+      </div>
+    </div>
+    <label for="luckynumber">Store Lucky Number</label>
+    <input
+      type="text"
+      id="luckynumber"
+      name="luckynumber"
+      class="form-control"
+    />
+    <button id="btn_luckynumber" class="btn btn-primary">Store</button>
+
+    <script src="./js/web_storage_api.js"></script>
+  </body>
+</html>

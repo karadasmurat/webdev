@@ -5,9 +5,7 @@ import { Todo } from "../models/Todo";
 import axios, { AxiosError } from "axios";
 import TodoList from "./TodoList";
 import TodoForm from "./TodoForm";
-import useFetch from "../hooks/useFetch";
 import { TodoContext } from "../contexts/TodoContext";
-import CustomLoader from "./CustomLoader";
 import { AuthContext } from "../contexts/AuthContext";
 
 const URL_GET_ALL_TODOS = "http://localhost:3000/api/todos";
@@ -36,7 +34,7 @@ export default function TodoApp() {
     setLoading(true);
     setError(null);
     axios
-      .get(URL_GET_ALL_TODOS)
+      .get(URL_GET_ALL_TODOS, { withCredentials: true })
       .then((response) => {
         // instead of setting data, we dispatch an action to set context.
         // setData(response.data);

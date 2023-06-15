@@ -11,21 +11,35 @@ const path = require("path");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 
+// app.use(
+//   session({
+//     secret: process.env.SESSION_SECRET,
+//     name: "session",
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {
+//       secure: false,
+//     },
+//   })
+// );
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
-    saveUninitialized: false, // don't create session until something stored
-    resave: false, //don't save session if unmodified
+    resave: false,
+    saveUninitialized: true,
     cookie: {
-      httpOnly: true,
-      expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      // sameSite: "None",
+      // httpOnly: false, // Remove HttpOnly attribute temporarily
+      secure: false, // require https-enabled website
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     },
     store: MongoStore.create({
       mongoUrl: process.env.LOCAL_CONN_STR,
       touchAfter: 24 * 60 * 60, // 24 hours period in seconds
-      crypto: {
-        secret: process.env.MONGOSTORE_SECRET,
-      },
+      // crypto: {
+      //   secret: process.env.MONGOSTORE_SECRET,
+      // },
     }),
   })
 );
@@ -81,7 +95,11 @@ app.use(
 
 //enable CORS for all routes in the Express app:
 const cors = require("cors");
-app.use(cors());
+const corsOptions = {
+  // origin: "http://localhost:5173/",
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 // app.options("*", cors()); // enable pre-flight request
 // app.use(function (req, res, next) {
@@ -107,6 +125,18 @@ app.use("/api/auth", routerAuth);
 // GET /hello
 app.get("/hello", (req, res) => {
   res.send("Hello, there!");
+});
+
+app.get("/setcookies", (req, res) => {
+  res.cookie("school", "Hogwarts School of Witchcraft and Wizardry");
+
+  // setting cookie attribute: expires in 60 seconds:
+  res.cookie("rememberme", true, {
+    // expires: new Date(Date.now() + 60 * 1000)
+    maxAge: 60 * 1000, // Convenient option for setting the expiry time
+  });
+
+  res.send("Say hi to your newest cookie :)");
 });
 
 // last middlewares, 404 and error handler

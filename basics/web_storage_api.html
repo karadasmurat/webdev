@@ -10,33 +10,59 @@
     <title>Web Storage API</title>
   </head>
   <body>
-    <h3>Web Storage API</h3>
-    <p>
-      The Web Storage API provides mechanisms by which browsers can store
-      key/value pairs.
-    </p>
-    <p>The two mechanisms within Web Storage are as follows:</p>
-    <code>
-      <ul>
-        <li>sessionStorage</li>
-        <li>localStorage</li>
-      </ul>
-    </code>
-    <div class="card mb-3">
-      <div class="card-header">Local Storage</div>
-      <div class="card-body">
-        <h5 class="card-title">luckynumber</h5>
-        <span id="store"></span>
+    <div class="container">
+      <h3>Web Storage API</h3>
+      <p>
+        The Web Storage API provides mechanisms by which browsers can store
+        key/value pairs.
+      </p>
+      <p>The two mechanisms within Web Storage are as follows:</p>
+      <code>
+        <ul>
+          <li>sessionStorage</li>
+          <li>localStorage</li>
+        </ul>
+      </code>
+
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <label for="luckynumber">Store a primitive</label>
+        </div>
+        <div class="col-md-6">
+          <input
+            type="text"
+            id="luckynumber"
+            name="luckynumber"
+            class="form-control"
+          />
+        </div>
+        <div class="col-md-3">
+          <button id="btn_luckynumber" class="btn btn-primary">Store</button>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-sm-3">
+          <label for="luckynumber">Store an object</label>
+        </div>
+        <div class="col-sm-3">
+          <input type="text" id="name" name="name" class="form-control" />
+        </div>
+        <div class="col-sm-3">
+          <input type="text" id="house" name="house" class="form-control" />
+        </div>
+        <div class="col-sm-3">
+          <button id="btn_obj" class="btn btn-primary">Store object</button>
+        </div>
+      </div>
+
+      <div class="card text-bg-dark sm-3">
+        <div class="card-header">Local Storage</div>
+        <div class="card-body">
+          <span id="store"></span>
+        </div>
       </div>
     </div>
-    <label for="luckynumber">Store Lucky Number</label>
-    <input
-      type="text"
-      id="luckynumber"
-      name="luckynumber"
-      class="form-control"
-    />
-    <button id="btn_luckynumber" class="btn btn-primary">Store</button>
 
     <script src="./js/web_storage_api.js"></script>
   </body>

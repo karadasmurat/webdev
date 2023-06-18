@@ -1,169 +1,262 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <title>Display Property Example</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-size: 12px;
-        }
+      body {
+        margin: 0;
+        padding: 0;
+        /* font-size: 12px; */
+      }
 
-        article {
-            line-height: 1.5;
-            font-size: 16px;
-        }
+      article {
+        line-height: 1.5;
+        font-size: 16px;
+      }
+      code {
+        color: deeppink;
+      }
 
-        /* .boxContainer {
+      /* .boxContainer {
             display: flex;
             justify-content: center;
         } */
 
-        .box {
-            width: 100px;
-            height: 100px;
-            display: inline-block;
-            margin: 10px;
-            padding: 10px;
-            border: 2px solid black;
-            border-radius: 5px;
-        }
+      .box {
+        width: 100px;
+        height: 100px;
 
-        .relative {
-            position: relative;
-            background-color: #DAF5FF8A;
-            /* 8A Alpha channel*/
-        }
+        font-size: 0.7rem;
 
-        .absRightTop {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #DBE4C6;
+        /* The vertical-align CSS property sets vertical alignment of an inline, inline-block or table-cell box. */
+        display: inline-block;
+        vertical-align: top;
 
-        }
+        margin: 10px;
+        padding: 5px;
+        border: 2px solid black;
+        border-radius: 5px;
 
-        .box1 {
-            width: 200px;
-            height: 100px;
-            background-color: darkorange;
-            padding: 5px;
-            margin: 10px;
-        }
+        transition: all 0.5s ease-out;
+      }
 
-        .footer {
-            width: 100%;
-            color: white;
-            background-color: coral;
-            padding: 1rem;
-            text-align: center;
-            position: fixed;
-            bottom: 0;
-        }
+      .relative {
+        position: relative;
+        top: 0px;
+        left: 0px;
+        background-color: #daf5ff8a;
+        /* 8A Alpha channel*/
+      }
+
+      .absRightTop {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #dbe4c6;
+      }
+
+      .box1 {
+        width: 200px;
+        height: 100px;
+        background-color: darkorange;
+        padding: 5px;
+        margin: 10px;
+      }
+
+      .footer {
+        width: 100%;
+        color: white;
+        background-color: coral;
+        padding: 1rem;
+        text-align: center;
+        position: fixed;
+        bottom: 0;
+      }
+
+      nav {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      a {
+        flex: 1;
+        background-color: #333;
+        color: #fff;
+        border: 1px solid;
+        padding: 0.5rem;
+        text-align: center;
+        text-decoration: none;
+        transition: all 0.5s ease-out;
+      }
+
+      a:hover,
+      a:focus {
+        background-color: #fff;
+        color: #333;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-    <p>Change page width, and scroll to see the difference between display properties
-
-        <ul>
-            <li>display: static</li>
-            <li>display: relative</li>
-            <li>display: fixed</li>
-            <li>display: absolute</li>
-        </ul>
+  <body>
+    <h1>The <code>position</code> Property</h1>
+    <p>
+      The position property specifies the type of positioning method used for an
+      element.
     </p>
-    <div>
-        <div class="box">no position</div>
-        <div id="middleBox" class="box relative"> position: relative;</div>
-        <div id="rightBox" class="box absRightTop"> position: absolute;<br>
-            right: 10px;<br>
-            top: 10px;</div>
+    <ul>
+      <li>display: static</li>
+      <li>display: relative</li>
+      <li>display: fixed</li>
+      <li>display: absolute</li>
+    </ul>
+    <p>
+      Elements are positioned using the <code>top</code> , <code>bottom</code>,
+      <code>left</code>, and <code>right</code> properties. However, these
+      properties will not work unless the <code>position</code> property is set
+      first.
+    </p>
+    <p>
+      Change page width, and scroll to see the difference between display
+      properties
+    </p>
+    <div style="background-color: lightsteelblue">
+      <div class="box"></div>
+      <div id="middleBox" class="box relative">
+        <p>display:</p>
+        <!-- all the radio buttons have the same name size but different values.  -->
+        <input type="radio" name="radio-display" id="block" value="block" />
+        <label for="block">block</label><br />
+        <input
+          type="radio"
+          name="radio-display"
+          id="inline-block"
+          value="inline-block"
+        />
+        <label for="inline-block">inline-block</label><br /><br />position:
+        relative;
+      </div>
+      <div id="rightBox" class="box absRightTop">
+        position: absolute;<br />
+        right: 10px;<br />
+        top: 10px;
+      </div>
     </div>
-    <br>
+    <br />
 
     <label for="sliderRelative">Use slider to set relative position</label>
-    <input id="sliderRelative" type="range" min="-100" max="100" value="0" step="10">
-    <span id="topValue"> 0 </span>px
+    <input
+      id="sliderRelative"
+      type="range"
+      min="-100"
+      max="100"
+      value="0"
+      step="10"
+    />
+    <code>left: </code><span id="topValue"> 0 </span>px
 
     <div id="footerBox" class="box1">
-        <input type="checkbox" name="isFooter" id="isFooter">
-        <label for="isFooter">a fixed footer. </label>
+      <input type="checkbox" name="isFooter" id="isFooter" />
+      <label for="isFooter">a fixed footer. </label>
     </div>
 
     <article>
-        <header>
-            <h2>Article #1</h2>
-        </header>
-        <section>
-            <h3>Section 1</h3>
-            <p>Content of section 1 goes here</p>
-        </section>
-        <section>
-            <h3>Section 2</h3>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rem nam, quos voluptate nesciunt repudiandae
-                saepe vero esse sequi illo quia, animi, est fugiat quae optio facilis sed architecto. Minus, fuga?</p>
-            <p><span>Lorem ipsum dolor sit amet consectetur adipisicing elit. At possimus nisi explicabo maiores a quae,
-                    asperiores error minima ipsa eaque sint aspernatur et nemo dicta laboriosam sequi, blanditiis vero
-                    dolorum.</span><span>Eaque distinctio eligendi eos maxime deserunt, beatae, deleniti harum
-                    dignissimos atque impedit illo excepturi similique vero ipsum molestias necessitatibus totam vel hic
-                    aperiam adipisci! Ducimus facilis atque placeat velit voluptate.</span></p>
-        </section>
-        <footer>
-            <p>Article footer goes here</p>
-        </footer>
+      <header>
+        <h2>Article #1</h2>
+      </header>
+      <section>
+        <h3>Section 1</h3>
+        <p>Content of section 1 goes here</p>
+      </section>
+      <section>
+        <h3>Section 2</h3>
+        <p>
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rem nam,
+          quos voluptate nesciunt repudiandae saepe vero esse sequi illo quia,
+          animi, est fugiat quae optio facilis sed architecto. Minus, fuga?
+        </p>
+        <p>
+          <span
+            >Lorem ipsum dolor sit amet consectetur adipisicing elit. At
+            possimus nisi explicabo maiores a quae, asperiores error minima ipsa
+            eaque sint aspernatur et nemo dicta laboriosam sequi, blanditiis
+            vero dolorum.</span
+          ><span
+            >Eaque distinctio eligendi eos maxime deserunt, beatae, deleniti
+            harum dignissimos atque impedit illo excepturi similique vero ipsum
+            molestias necessitatibus totam vel hic aperiam adipisci! Ducimus
+            facilis atque placeat velit voluptate.</span
+          >
+        </p>
+      </section>
+      <footer>
+        <p>Article footer goes here</p>
+      </footer>
     </article>
 
     <article>
-        <header>
-            <h2>Article #2</h2>
-        </header>
-        <section>
-            <h3>Section 1</h3>
-            <p>Content of section 1 goes here</p>
-        </section>
-        <section>
-            <h3>Section 2</h3>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rem nam, quos voluptate nesciunt
-                repudiandae
-                saepe vero esse sequi illo quia, animi, est fugiat quae optio facilis sed architecto. Minus, fuga?
-            </p>
-            <p><span>Lorem ipsum dolor sit amet consectetur adipisicing elit. At possimus nisi explicabo maiores a
-                    quae,
-                    asperiores error minima ipsa eaque sint aspernatur et nemo dicta laboriosam sequi, blanditiis
-                    vero
-                    dolorum.</span><span>Eaque distinctio eligendi eos maxime deserunt, beatae, deleniti harum
-                    dignissimos atque impedit illo excepturi similique vero ipsum molestias necessitatibus totam vel
-                    hic
-                    aperiam adipisci! Ducimus facilis atque placeat velit voluptate.</span></p>
-        </section>
-        <footer>
-            <p>Article footer goes here</p>
-        </footer>
+      <header>
+        <h2>Article #2</h2>
+      </header>
+      <section>
+        <h3>Section 1</h3>
+        <p>Content of section 1 goes here</p>
+      </section>
+      <section>
+        <h3>Section 2</h3>
+        <p>
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rem nam,
+          quos voluptate nesciunt repudiandae saepe vero esse sequi illo quia,
+          animi, est fugiat quae optio facilis sed architecto. Minus, fuga?
+        </p>
+        <p>
+          <span
+            >Lorem ipsum dolor sit amet consectetur adipisicing elit. At
+            possimus nisi explicabo maiores a quae, asperiores error minima ipsa
+            eaque sint aspernatur et nemo dicta laboriosam sequi, blanditiis
+            vero dolorum.</span
+          ><span
+            >Eaque distinctio eligendi eos maxime deserunt, beatae, deleniti
+            harum dignissimos atque impedit illo excepturi similique vero ipsum
+            molestias necessitatibus totam vel hic aperiam adipisci! Ducimus
+            facilis atque placeat velit voluptate.</span
+          >
+        </p>
+      </section>
+      <footer>
+        <p>Article footer goes here</p>
+      </footer>
     </article>
 
     <script>
-        const middleBox = document.getElementById("middleBox");
-        const footerBox = document.getElementById("footerBox")
-        const topLabel = document.getElementById("topLabel");
-        const slider = document.getElementById("sliderRelative");
-        const isFooter = document.getElementById("isFooter")
+      const middleBox = document.getElementById("middleBox");
+      const footerBox = document.getElementById("footerBox");
+      const topLabel = document.getElementById("topLabel");
+      const slider = document.getElementById("sliderRelative");
+      const isFooter = document.getElementById("isFooter");
 
-        slider.addEventListener("input", function () {
-            topValue.innerHTML = this.value;
-            middleBox.className = "box relative"
-            middleBox.style.left = this.value + "px";
+      // add an event listener to all radios, same name
+      const radioButtons = document.querySelectorAll(
+        'input[name="radio-display"]'
+      );
+      for (const radioButton of radioButtons) {
+        radioButton.addEventListener("change", (event) => {
+          middleBox.style.display = event.target.value;
         });
+      }
 
-        isFooter.addEventListener("change", function () {
-            if (this.checked) {
-                footerBox.className = "footer"
-            } else {
-                footerBox.className = "box1"
-            }
-        });
+      slider.addEventListener("input", function () {
+        topValue.innerHTML = this.value;
+        // middleBox.className = "box relative";
+        middleBox.style.left = this.value + "px";
+      });
+
+      isFooter.addEventListener("change", function () {
+        if (this.checked) {
+          footerBox.className = "footer";
+        } else {
+          footerBox.className = "box1";
+        }
+      });
     </script>
-</body>
-
+  </body>
 </html>

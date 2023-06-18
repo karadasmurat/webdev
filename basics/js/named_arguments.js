@@ -1,4 +1,5 @@
-// we provide default values for all, arguments and the object as well, in case called with no params
+// we provide default values for all arguments (now object properties)
+// and the empty object as well - in case called with no params
 function argPrinter({ first = 1, second = 2 } = {}) {
   console.log("first:", first, "second:", second);
 }

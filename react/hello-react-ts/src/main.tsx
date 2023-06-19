@@ -22,19 +22,17 @@ import { Page1, Page2, Page3 } from "./pages/SamplePages";
 import Faq from "./pages/help/Faq";
 import Contact from "./pages/help/Contact";
 import TodoApp from "./components/TodoApp";
-import Parent from "./components/context/Parent";
 import ContextApp from "./components/context/ContextApp";
 import SignupForm from "./components/auth/SignupForm";
 import SigninForm from "./components/auth/SigninForm";
-import { EffectBasics } from "./components/Effect01";
 import HookTest from "./components/HookTest";
 import TodoDetails from "./components/TodoDetails";
-import TodoLayout from "./layouts/TodoLayout";
-import TodoForm from "./components/TodoForm";
 import SampleLayout from "./layouts/SampleLayout";
-import UserContextProvider from "./contexts/UserContext";
 import { TodoContextProvider } from "./contexts/TodoContext";
 import { AuthContextProvider } from "./contexts/AuthContext";
+import AuthLayout from "./layouts/AuthLayout";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import SessionValidator from "./components/auth/SessionValidator";
 
 // layouts
 
@@ -77,9 +75,11 @@ const browserRouter_layout = createBrowserRouter([
       {
         path: "todos",
         element: (
-          <TodoContextProvider>
-            <TodoApp />
-          </TodoContextProvider>
+          <ProtectedRoute>
+            <TodoContextProvider>
+              <TodoApp />
+            </TodoContextProvider>
+          </ProtectedRoute>
         ),
       },
       { path: "todos/:id", element: <TodoDetails /> },
@@ -101,15 +101,23 @@ const browserRouter_layout = createBrowserRouter([
       { path: "*", element: <NotFound /> },
     ],
   },
-  { path: "signin", element: <SigninForm /> },
-  { path: "signup", element: <SignupForm /> },
+
+  {
+    path: "page1",
+    element: (
+      <ProtectedRoute>
+        <Page1 />
+      </ProtectedRoute>
+    ),
+  },
+  { path: "page2", element: <Page2 /> },
   // Layout route: A parent route without a path,
   // used exclusively for grouping child routes inside a specific layout.
   {
-    element: <SampleLayout />,
+    element: <AuthLayout />,
     children: [
-      { path: "page1", element: <Page1 /> },
-      { path: "page2", element: <Page2 /> },
+      { path: "signin", element: <SigninForm /> },
+      { path: "signup", element: <SignupForm /> },
     ],
   },
 ]);
@@ -123,6 +131,7 @@ const browserRouter_v0 = createBrowserRouter(
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <AuthContextProvider>
+      <SessionValidator />
       <RouterProvider router={browserRouter_layout} />
     </AuthContextProvider>
   </React.StrictMode>

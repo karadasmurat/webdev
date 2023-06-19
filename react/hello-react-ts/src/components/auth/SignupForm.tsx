@@ -50,73 +50,74 @@ export default function SignupForm() {
       });
   };
   return (
-    <div
-      className="row justify-content-center align-items-center"
-      style={{ height: "100vh" }}
-    >
-      <div className="col-md-6" style={{ maxWidth: "500px" }}>
-        <h1 className=" text-center mb-5">Create your account</h1>
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <div className="form-floating mb-3">
-            <input
-              type="email"
-              id="email"
-              {...register("email")}
-              placeholder="email"
-              className="form-control"
-            />
-            <label htmlFor="email">
-              <BsEnvelope /> Email
-            </label>
+    // <div
+    //   className="row justify-content-center align-items-center"
+    //   style={{ height: "100vh" }}
+    // >
+    //   <div className="col-md-6" style={{ maxWidth: "500px" }}>
 
-            <div className="invalid-feedback">Please provide an email.</div>
-            {/* errors will return with the path when field validation fails  */}
-            <div className="text-danger small">{errors.email?.message}</div>
-          </div>
+    <>
+      <h1 className=" text-center mb-5">Create your account</h1>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="form-floating mb-3">
+          <input
+            type="email"
+            id="email"
+            {...register("email")}
+            placeholder="email"
+            className="form-control"
+          />
+          <label htmlFor="email">
+            <BsEnvelope /> Email
+          </label>
 
-          <div className="form-floating mb-3">
-            <input
-              type="password"
-              id="password"
-              {...register("password")}
-              placeholder="password"
-              className="form-control"
-            />
-            <label htmlFor="password">
-              <BsLock /> Password
-            </label>
-            <div className="invalid-feedback">Please provide a password.</div>
-            {/* errors will return with the path when field validation fails  */}
-            <div className="text-danger small">{errors.password?.message}</div>
-          </div>
-
-          <div className="form-check">
-            <input
-              type="checkbox"
-              value=""
-              id="conditions"
-              className="form-check-input"
-            />
-            <label htmlFor="conditions" className="form-check-label ms-auto">
-              I agree to the terms and conditions.
-            </label>
-            <div className="invalid-feedback">
-              You must agree before submitting.
-            </div>
-          </div>
-
-          <div className="container text-center my-4">
-            <button type="submit" className="btn btn-success my-3">
-              Create Account
-            </button>
-          </div>
-        </form>
-
-        <div className="container text-center text-muted my-3">
-          Already have an account?
-          <NavLink to="/signin">Sign In</NavLink>
+          <div className="invalid-feedback">Please provide an email.</div>
+          {/* errors will return with the path when field validation fails  */}
+          <div className="text-danger small">{errors.email?.message}</div>
         </div>
+
+        <div className="form-floating mb-3">
+          <input
+            type="password"
+            id="password"
+            {...register("password")}
+            placeholder="password"
+            className="form-control"
+          />
+          <label htmlFor="password">
+            <BsLock /> Password
+          </label>
+          <div className="invalid-feedback">Please provide a password.</div>
+          {/* errors will return with the path when field validation fails  */}
+          <div className="text-danger small">{errors.password?.message}</div>
+        </div>
+
+        <div className="form-check">
+          <input
+            type="checkbox"
+            value=""
+            id="conditions"
+            className="form-check-input"
+          />
+          <label htmlFor="conditions" className="form-check-label ms-auto">
+            I agree to the terms and conditions.
+          </label>
+          <div className="invalid-feedback">
+            You must agree before submitting.
+          </div>
+        </div>
+
+        <div className="container text-center my-4">
+          <button type="submit" className="btn btn-success my-3">
+            Create Account
+          </button>
+        </div>
+      </form>
+
+      <div className="container text-center text-muted my-3">
+        <hr />
+        Already have an account? <NavLink to="/signin">Sign In</NavLink>
       </div>
-    </div>
+    </>
   );
 }

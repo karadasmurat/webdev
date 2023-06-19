@@ -96,7 +96,7 @@ app.use(
 //enable CORS for all routes in the Express app:
 const cors = require("cors");
 const corsOptions = {
-  // origin: "http://localhost:5173/",
+  origin: "http://localhost:5173",
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -104,6 +104,8 @@ app.use(cors(corsOptions));
 // app.options("*", cors()); // enable pre-flight request
 // app.use(function (req, res, next) {
 //   res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+//   res.header("Access-Control-Allow-Credentials", true);
+//   res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
 //   next();
 // });
 

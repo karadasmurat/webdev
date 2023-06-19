@@ -8,15 +8,19 @@ const router = express.Router();
 
 // import controller
 const {
+  validateSession,
   signIn,
   manualsignin,
   signUp,
   manualsignup,
+  signout,
 } = require("../controllers/controller_auth");
 
+router.get("/validate-session", validateSession);
 router.post("/signin", signIn);
 router.post("/manualsignin", manualsignin);
 router.post("/signup", signUp);
 router.post("/manualsignup", manualsignup);
+router.post("/signout", signout);
 
 module.exports = router;

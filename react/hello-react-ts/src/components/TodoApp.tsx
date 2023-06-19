@@ -8,7 +8,7 @@ import TodoForm from "./TodoForm";
 import { TodoContext } from "../contexts/TodoContext";
 import { AuthContext } from "../contexts/AuthContext";
 
-const URL_GET_ALL_TODOS = "http://localhost:3000/api/todos";
+const URL_GET_ALL_TODOS = "/api/todos";
 
 export default function TodoApp() {
   const [isLoading, setLoading] = useState(true);
@@ -67,7 +67,7 @@ export default function TodoApp() {
     console.log("App - handleDeleteTodo", todo);
 
     axios
-      .delete<Todo>(`http://localhost:3000/api/todos/${todo._id}`)
+      .delete<Todo>(`api/todos/${todo._id}`)
       // onfulfilled: update state
       .then(() => {
         setFlashMessage("Todo deleted successfully");
@@ -93,7 +93,7 @@ export default function TodoApp() {
     console.log("App - handleMarkCompleteTodo", todo);
 
     axios
-      .put<Todo>(`http://localhost:3000/api/todos/${todo._id}`, {
+      .put<Todo>(`api/todos/${todo._id}`, {
         ...todo,
         completed: true,
       })

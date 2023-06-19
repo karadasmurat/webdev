@@ -15,6 +15,21 @@ const mongoose = require("mongoose");
 // mongoose Model
 const User = require("../models/model_user");
 
+// verify session
+// GET /validate-session
+const validateSession = (req, res) => {
+  console.log("validate session");
+  if (!req.session.email) {
+    return res.status(401).json({ error: "Authorization required." });
+  }
+
+  res.status(200).json({
+    email: req.session.email,
+    session: req.session,
+    sessionID: req.sessionID,
+  });
+};
+
 // signin
 // POST /signin
 const signIn = async (req, res) => {
@@ -123,15 +138,24 @@ const manualsignin = async (req, res) => {
       console.log("sessionID:", req.session.sessionID);
 
       // res.status(200).json({ email, token });
-      res.status(200).send(req.session.sessionID);
+      // res.status(200).send(req.session.sessionID);
+      res.status(200).json({ email, session: req.session.sessionID });
     }
   }
 };
 
+const signout = async (req, res, next) => {
+  const sid = req.sessionID;
+  req.session.destroy();
+  res.status(200).json({ sid, msg: "Session destroyed." });
+};
+
 // export functions
 module.exports = {
+  validateSession,
   signIn,
   signUp,
   manualsignup,
   manualsignin,
+  signout,
 };

@@ -12,11 +12,6 @@ type StateType = {
   todos: Todo[];
 };
 
-type ContextType = {
-  state: StateType;
-  dispatch: React.Dispatch<ActionType>;
-};
-
 // type definition for actions, that will be managed by reducer:
 // discriminated union type
 type ActionType =
@@ -24,6 +19,11 @@ type ActionType =
   | { type: "todos/create"; payload: Todo }
   | { type: "todos/delete"; payload: Todo }
   | { type: "failure"; error: string };
+
+type ContextType = {
+  state: StateType;
+  dispatch: React.Dispatch<ActionType>;
+};
 
 // initial state, with an empy array:
 const INITIAL_STATE: StateType = {

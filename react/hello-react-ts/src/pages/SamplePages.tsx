@@ -1,5 +1,12 @@
+import { NavLink } from "react-router-dom";
+
 export function Page1() {
-  return <h1>Page 1.</h1>;
+  return (
+    <>
+      <h1>Page 1.</h1>
+      <NavLink to="/">Home</NavLink>
+    </>
+  );
 }
 
 export function Page2() {

@@ -1,8 +1,30 @@
 import { NavLink } from "react-router-dom";
 import image1 from "../assets/images/mk.webp";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { Bs0Circle, BsPower, BsThreeDotsVertical } from "react-icons/bs";
+import axios from "axios";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function NavBar_Offcanvas() {
+  const { authState, authDispatch } = useContext(AuthContext);
+
+  function handleSignout() {
+    console.log("Handle signout.");
+
+    axios
+      .post<{ sid: string; msg: string }>("/api/auth/signout", {
+        withCredentials: true,
+      })
+      .then((response) => {
+        // instead of setting data, we dispatch an action to set context.
+        // setData(response.data);
+        authDispatch({ type: "auth/logout" });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   return (
     <>
       {/* .navbar-expand{-sm | -md | -lg | -xl | -xxl} for responsive collapsing */}
@@ -54,9 +76,9 @@ export default function NavBar_Offcanvas() {
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    Blog
-                  </a>
+                  <NavLink to={`/page1`} className="nav-link">
+                    Protected
+                  </NavLink>
                 </li>
               </ul>
             </div>
@@ -104,11 +126,15 @@ export default function NavBar_Offcanvas() {
               </li>
               <li>
                 <span className="dropdown-item p-0">
-                  <form action="/signout" method="POST">
+                  {/* <form action="/api/auth/signout" method="POST">
                     <button className="btn" type="submit">
                       <i className="bi bi-box-arrow-in-right"></i> Sign out
                     </button>
-                  </form>
+                  </form> */}
+
+                  <button className="btn" onClick={handleSignout}>
+                    <BsPower /> Sign out
+                  </button>
                 </span>
               </li>
             </ul>

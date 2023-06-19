@@ -6,16 +6,6 @@
 const express = require("express");
 const router = express.Router();
 
-//enable CORS for all routes in the Express app:
-// const cors = require("cors");
-// router.use(
-//   cors({
-//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-//     preflightContinue: true,
-//   })
-// );
-// router.options("*", cors()); // enable pre-flight request
-
 // import mongoose Model
 const { Todo } = require("../models/model_todo");
 

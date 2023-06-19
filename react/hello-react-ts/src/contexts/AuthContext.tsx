@@ -1,3 +1,4 @@
+import axios from "axios";
 import { ReactNode, createContext, useContext, useReducer } from "react";
 
 // nullable type
@@ -6,11 +7,11 @@ type UserProfile = {
 } | null;
 
 type StateType = {
-  user: UserProfile;
+  user: { email: string | undefined } | null;
 };
 
 type ActionType =
-  | { type: "auth/login"; payload: UserProfile }
+  | { type: "auth/login"; payload: StateType }
   | { type: "auth/logout" };
 
 type ContextType = {
@@ -18,7 +19,8 @@ type ContextType = {
   authDispatch: React.Dispatch<ActionType>;
 };
 
-const INITIAL_STATE: StateType = { user: { email: "anon@mail.com" } };
+// const INITIAL_STATE: StateType = { user: { email: "anon@mail.com" } };
+const INITIAL_STATE: StateType = { user: null };
 const INITIAL_CONTEXT: ContextType = {
   authState: INITIAL_STATE,
   authDispatch: () => {},
@@ -27,12 +29,14 @@ const INITIAL_CONTEXT: ContextType = {
 export const AuthContext = createContext<ContextType>(INITIAL_CONTEXT);
 
 export function authReducer(state: StateType, action: ActionType): StateType {
-  console.log("authReducer");
+  console.log("BEGIN authReducer", action.type);
 
   switch (action.type) {
     case "auth/login":
       console.log("auth/login");
-      return { ...state, user: action.payload };
+      const loggedInUser = { ...state, ...action.payload };
+      console.log(loggedInUser);
+      return loggedInUser;
     case "auth/logout":
       return { ...state, user: null };
 
@@ -45,7 +49,7 @@ export function authReducer(state: StateType, action: ActionType): StateType {
 export function AuthContextProvider({ children }: { children: ReactNode }) {
   const [authState, authDispatch] = useReducer(authReducer, INITIAL_STATE);
 
-  console.log("AutContext:", authState);
+  console.log("AuthContextProvider > authState:", authState);
 
   return (
     <AuthContext.Provider value={{ authState, authDispatch }}>

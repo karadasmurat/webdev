@@ -1,13 +1,14 @@
-import axios from "axios";
-import { ReactNode, createContext, useContext, useReducer } from "react";
+import { ReactNode, createContext, useReducer } from "react";
 
-// nullable type
 type UserProfile = {
-  email: string | undefined;
-} | null;
+  email: string;
+  userId?: string;
+  role?: string;
+};
 
 type StateType = {
-  user: { email: string | undefined } | null;
+  // nullable property
+  user: UserProfile | null;
 };
 
 type ActionType =

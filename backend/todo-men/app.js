@@ -26,11 +26,15 @@ const MongoStore = require("connect-mongo");
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
+    // The name of the session ID cookie to set in the response (and read from in the request).
+    // The default value is 'connect.sid'.
+    name: "mk.sid",
+    // Forces the session to be saved back to the session store, even if the session was never modified during the request
     resave: false,
     saveUninitialized: true,
     cookie: {
       // sameSite: "None",
-      // httpOnly: false, // Remove HttpOnly attribute temporarily
+      httpOnly: true,
       secure: false, // require https-enabled website
       maxAge: 7 * 24 * 60 * 60 * 1000,
     },

@@ -5,6 +5,23 @@ const SALTROUNDS = 10;
 // JSON Web Token
 const jwt = require("jsonwebtoken");
 
+const attachUser = (req, res, next) => {
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({ message: "Authentication invalid" });
+  }
+
+  const decodedToken = jwtDecode(token.slice(7));
+  if (!decodedToken) {
+    return res
+      .status(401)
+      .json({ message: "There was a problem authorizing the request" });
+  } else {
+    req.user = decodedToken;
+    next();
+  }
+};
+
 function createToken(_id) {
   return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 }
@@ -93,55 +110,46 @@ const manualsignin = async (req, res) => {
 
   // get payload data from the request body
   const { email, password } = req.body;
-  console.log(email);
+  // console.log(email);
 
   const existing_user = await User.findOne({ email });
 
   if (!existing_user) {
-    console.log("user not found");
-    return res.sendStatus(404); // 401 Unauthorized
-    //res.status(404).send("User not found.");
+    // console.log("user not found");
 
     // stop execution, and handle error to next middleware: (return next with an error)
     // return next(new AuthError("User not found", 403));
-  } else {
-    // compare plain password with hash from db.
-    const pass_match = await bcrypt.compare(password, existing_user.password);
-    if (!pass_match) {
-      return res.sendStatus(404); // 401 Unauthorized
-      // res.status(404).send("Incorrect Password.");
 
-      // stop execution, and handle error to next middleware: (return next with an error)
-      // return next(new AuthError("Incorrect Password", 403));
-    } else {
-      // Successfully signed in.
-      // Store a session variable:
-      // since we use express-session, there is a cookie "connect.sid"
-      // const account = {
-      //   id: existing_user._id,
-      //   username: existing_user.username,
-      // };
-      // req.session.account = account;
-      // console.log("Session set. redirecting to secret resource.");
-      // pass session object to ejs
-      // res.render("secret.ejs", {
-      //   account,
-      // });
-
-      // create a token ?
-      const token = createToken(existing_user._id);
-
-      // session ?
-      // To store or access session data, simply use the request property req.session,
-      req.session.email = email;
-      // req.session.save(); // ??
-      console.log("sessionID:", req.session.sessionID);
-
-      // res.status(200).json({ email, token });
-      // res.status(200).send(req.session.sessionID);
-      res.status(200).json({ email, session: req.session.sessionID });
-    }
+    // 401 response indicates that authorization has been refused for those credentials
+    return res.status(401).json({ message: "Unauthorized" });
   }
+
+  // verify password: compare plain password with hash from db.
+  const pass_match = await bcrypt.compare(password, existing_user.password);
+  if (!pass_match) {
+    // stop execution, and handle error to next middleware: (return next with an error)
+    // return next(new AuthError("Incorrect Password", 403));
+    // 401 response indicates that authorization has been refused for those credentials
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  // Successfully signed in.
+
+  // Option A. create a token ?
+  // const token = createToken(existing_user._id);
+
+  // Option B ?
+  // Store a session variable:
+  // since we use express-session, there is a cookie "connect.sid"
+  // To store or access session data, simply use the request property req.session:
+  req.session.email = email;
+  // req.session.save(); // ??
+  // console.log("sessionID:", req.session.sessionID);
+
+  // res.status(200).json({ email, token });
+  res
+    .status(200)
+    .json({ email, session: req.session, sessionID: req.sessionID });
 };
 
 const signout = async (req, res, next) => {

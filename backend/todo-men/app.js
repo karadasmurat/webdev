@@ -1,27 +1,24 @@
-require("dotenv").config();
-
 // The app object conventionally denotes the Express application.
 const express = require("express");
 const app = express();
 
+// Access to variables in .env file via process.env.VAR_NAME
+require("dotenv").config();
+
 // The Path module provides a way of working with directories and file paths.
 const path = require("path");
 
-//express-session with connect-mongo
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * *    Mongoose - ODM layer for MongoDB   * * * * *
+ */
+const connect = require("./config/db-config");
+connect();
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * *   express-session with connect-mongo    * * * * *
+ */
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
-
-// app.use(
-//   session({
-//     secret: process.env.SESSION_SECRET,
-//     name: "session",
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: {
-//       secure: false,
-//     },
-//   })
-// );
 
 app.use(
   session({
@@ -58,27 +55,15 @@ app.use(
 // import Model - object desct, like without a module name
 // const { campgroundJoiSchema, reviewJoiSchema } = require("./lib/joi_schemas");
 
-// Passport is js library authentication middleware
-// const User = require("./model/User");
+const User = require("./models/model_user_passport");
 
-// const passport = require("passport");
-// const LocalStrategy = require("passport-local");
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * *    Passport Authentication    * * * * * * *
+ */
+require("./config/passport-config");
+
 // app.use(passport.initialize());
 // app.use(passport.session());
-// passport.use(new LocalStrategy(User.authenticate()));
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
-
-// Mongoose - ODM layer for MongoDB
-const mongoose = require("mongoose");
-
-const EXPRESS_PORT = process.env.EXPRESS_PORT;
-const options = {};
-
-mongoose
-  .connect(process.env.LOCAL_CONN_STR, options)
-  .then(console.log("Connected to mongodb."))
-  .catch((error) => console.log("Cannot connect. " + error));
 
 // Serving static files: use the express.static built-in middleware function
 // here, we use a directory, at the same level of this script, named "public"
@@ -114,15 +99,15 @@ app.use(cors(corsOptions));
 // });
 
 // custom middlewares
-const logger = require("./middlewares/logger");
-app.use(logger);
+// const logger = require("./middlewares/logger");
+// app.use(logger);
 
 // const ejsLocals = require("./middlewares/ejs-locals");
 // app.use(ejsLocals);
 
-// Express Router middlewares
-// const routerDummy = require("./routes/router_dummy");
-// app.use("/items", routerDummy);
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * *    Express Router middlewares   * * * * * * *
+ */
 const routerTodos = require("./routes/router_todos");
 const routerAuth = require("./routes/router_auth");
 app.use("/api/todos", routerTodos);
@@ -153,6 +138,8 @@ app.use(function (req, res, next) {
 
 // bind and listen for connections on the specified host and port.
 // identical to Node’s http.Server.listen()
+const EXPRESS_PORT = process.env.EXPRESS_PORT;
+
 app.listen(EXPRESS_PORT, () => {
   console.log(`Express app listening on port ${EXPRESS_PORT}`);
 });

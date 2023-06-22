@@ -30,7 +30,8 @@ function createToken(_id) {
 const mongoose = require("mongoose");
 
 // mongoose Model
-const User = require("../models/model_user");
+// const User = require("../models/model_user");
+const User = require("../models/model_user_passport");
 
 // verify session
 // GET /validate-session
@@ -45,12 +46,6 @@ const validateSession = (req, res) => {
     session: req.session,
     sessionID: req.sessionID,
   });
-};
-
-// signin
-// POST /signin
-const signIn = async (req, res) => {
-  res.json({ msg: "Sign In" });
 };
 
 // manual register: hash password and save user (better after validating.)
@@ -94,9 +89,68 @@ const manualsignup = async (req, res, next) => {
   // res.redirect("/auth/signin");
 };
 
-// POST /register
-const signUp = async (req, res) => {
-  res.json({ msg: "Register" });
+// model statics
+const signup_model = async (req, res, next) => {
+  console.log("signup_model");
+
+  // get payload data from the request body
+  const { email, password } = req.body;
+
+  // create a model instance with the email:
+  // note that we configured passport with usernameField: "email",
+  const user = new User({ email });
+
+  try {
+    // passport-local-mongoose adds register
+    // use an instance of Model, and plain-text password
+    await User.register(user, password);
+
+    // custom static method to signup, replacing register
+    // await User.signup(email, password);
+
+    // 201 Created
+    res.status(201).json({ message: "User created." });
+  } catch (err) {
+    // catch the error, stop executing, create a custom error and give this error to the next:
+    console.log(err);
+  }
+};
+
+// TODO testing purposes
+const signin_model = async (req, res) => {
+  // get payload data from the request body
+  const { email, password } = req.body;
+
+  const existing_user = await User.signin(email, password);
+
+  if (!existing_user) {
+    // 401 response indicates that authorization has been refused for those credentials
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  console.log("Sign in successfull");
+
+  // Store a session variable:
+  // since we use express-session, there is a cookie "connect.sid"
+  // To store or access session data, simply use the request property req.session:
+  req.session.email = email;
+
+  res
+    .status(200)
+    .json({ email, session: req.session, sessionID: req.sessionID });
+};
+
+const setup_session = async (req, res) => {
+  // Store a session variable:
+  // since we use express-session, there is a cookie "connect.sid"
+  // To store or access session data, simply use the request property req.session:
+  //req.session.email = "DEFAULT@TEST.COM";
+
+  res.status(200).json({
+    email: req.session.email,
+    session: req.session,
+    sessionID: req.sessionID,
+  });
 };
 
 // 1. manual signin
@@ -161,9 +215,10 @@ const signout = async (req, res, next) => {
 // export functions
 module.exports = {
   validateSession,
-  signIn,
-  signUp,
   manualsignup,
+  signup_model,
   manualsignin,
+  setup_session,
+  signin_model,
   signout,
 };

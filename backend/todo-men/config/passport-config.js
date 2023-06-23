@@ -1,65 +1,89 @@
-const bcrypt = require("bcrypt");
-const SALTROUNDS = 10;
+const pwdUtils = require("../lib/password_utils");
 
 const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
 
 const User = require("../models/model_user_passport");
 
-// passport.use(new LocalStrategy(User.authenticate()));
-// passport.use(new LocalStrategy(User.signin));
+const LocalStrategy = require("passport-local").Strategy;
 
-// customize property names
-// LocalStrategy expects exactly "username" and "password" fields.
-const opts = {
-  usernameField: "email",
-  //   passwordField: "pwd"
-};
+passport.use(
+  new LocalStrategy(
+    // options
+    {
+      usernameField: "email",
+      //   passwordField: "pwd"
+    },
+    // verify callback
+    function (email, password, done) {
+      console.log("LocalStrategy verify - with given email and password:");
+      console.log(email, password);
 
-const verifyCallback = async (email, password, done) => {
-  try {
-    const existing_user = await User.findOne({ email });
-
-    if (!existing_user) {
-      //   return done(null, false); // 401
-      return done(new Error("User not found."));
+      User.signin(email, password, done);
     }
+  )
+);
 
-    // verify password: compare plain password with hash from db.
-    const pass_match = await bcrypt.compare(password, existing_user.password);
-    if (!pass_match) {
-      console.log("Invalid password.");
-      // return res.status(401).json({ message: "Unauthorized" });
+var GoogleStrategy = require("passport-google-oauth20").Strategy;
 
-      //   return done(null, false); // 401
-      return done(new Error("Unauthorized."));
+passport.use(
+  new GoogleStrategy(
+    // options
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "/api/auth/google/redirect",
+    },
+    // verify callback
+    function (accessToken, refreshToken, profile, cb) {
+      console.log("GoogleStrategy verify - with given profile:");
+      console.log(profile);
+
+      User.findOrCreate(profile, function (err, user) {
+        return cb(err, user);
+      });
     }
+  )
+);
 
-    return done(null, existing_user);
-  } catch (err) {
-    return done(err);
-  }
-};
-const strategy = new LocalStrategy(opts, verifyCallback);
-
-passport.use(strategy);
-
-// serialize user object into the session
-// ie, using user._id or user.email:
+// serialize authenticated user into the session: req.session.passport.user
+// ie, using user._id or user.email, or any property of user:
 // "session": {
 //     "cookie": { ... },
+//     "passport": {
+//        "user": {
+//            "id": "649590b7c0d898f1facea992",
+//            "email": "test114@passport-local-mongoose"
+//        }
+
 //     "passport": { "user": "64944eae233a5d6fc6fb629b" }
 //     "passport": { "user": "test105@passport-local-mongoose" }
 // }
-passport.serializeUser((user, done) => {
-  done(null, user._id);
-  //   done(null, user.email);
+passport.serializeUser((userModelInstance, done) => {
+  console.log("********* serializeUser");
+  done(null, { id: userModelInstance._id, email: userModelInstance.email });
+  // done(null, user._id);
+  // done(null, user.email);
 });
 
-passport.deserializeUser((arg, done) => {
-  User.findById(arg).then((user) => done(null, user));
-  //   User.findOne({ arg }).then((user) => done(null, user));
+// Deserialize - Db query.
+// deserializeUser will fetch the User stored in the session from the database, i.e
+//     "passport": {
+//        "user": {
+//            "id": "649590b7c0d898f1facea992",
+//            "email": "test114@passport-local-mongoose"
+//        }
+//     }
+passport.deserializeUser((session_passport_user, done) => {
+  console.log("********* deserializeUser");
+  User.findById(session_passport_user.id).then((user) => done(null, user));
+  // User.findOne({ arg }).then((user) => done(null, user));
 });
+
+// passport.deserializeUser(function (user, cb) {
+//   process.nextTick(function () {
+//     return cb(null, user);
+//   });
+// });
 
 //passport-local-mongoose implementation of serializeUser
 // passport.serializeUser(User.serializeUser());
@@ -67,3 +91,7 @@ passport.deserializeUser((arg, done) => {
 
 // app.use(passport.initialize());
 // app.use(passport.session());
+
+function extractSessionInfo(userModelInstance) {
+  return { id: userModelInstance._id, email: userModelInstance.email };
+}

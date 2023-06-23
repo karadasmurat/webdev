@@ -18,6 +18,7 @@ const {
   signin_model,
 
   signout,
+  authFailure,
 } = require("../controllers/controller_auth");
 
 router.get("/validate-session", validateSession);
@@ -32,11 +33,30 @@ router.post(
 
   // intercept by passport middleware
   // passport.authenticate("local", { failureRedirect: "/auth-failure" }),
-  passport.authenticate("local"),
+  passport.authenticate("local", { failureRedirect: "/api/auth/auth-failure" }),
 
   setup_session
 );
 
+// 3a. Sign in with Google
+router.get(
+  "/signin/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
+);
+
+// 3b. Sign in with Google - Redirect URL
+router.get(
+  "/google/redirect",
+  passport.authenticate("google", {
+    successRedirect: "/",
+    failureRedirect: "/api/auth/auth-failure",
+  })
+);
+
 router.post("/signout", signout);
+
+router.get("/auth-failure", authFailure);
 
 module.exports = router;

@@ -8,11 +8,11 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const options = {};
 
-const connection = () => {
+const connect = () => {
   mongoose
     .connect(process.env.LOCAL_CONN_STR, options)
     .then(console.log("Connected to mongodb.", process.env.LOCAL_CONN_STR))
     .catch((error) => console.log("Cannot connect. " + error));
 };
 
-module.exports = connection;
+module.exports = connect;

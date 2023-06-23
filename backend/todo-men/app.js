@@ -60,10 +60,10 @@ const User = require("./models/model_user_passport");
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * *    Passport Authentication    * * * * * * *
  */
+const passport = require("passport");
 require("./config/passport-config");
-
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Serving static files: use the express.static built-in middleware function
 // here, we use a directory, at the same level of this script, named "public"

@@ -20,10 +20,11 @@ const {
 } = require("../controllers/controller_todo");
 
 // look for user on session
+// By default, when passport.js authentication succeeds, "req.user" property is set to the authenticated user
 function requireAuth(req, res, next) {
   console.log("verify authentication");
-  if (!req.session.email) {
-    res.status(401).json({ error: "Authorization required." });
+  if (!req.user) {
+    return res.status(401).json({ error: "Authorization required." });
   }
 
   next();

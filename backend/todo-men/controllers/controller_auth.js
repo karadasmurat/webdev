@@ -103,10 +103,10 @@ const signup_model = async (req, res, next) => {
   try {
     // passport-local-mongoose adds register
     // use an instance of Model, and plain-text password
-    await User.register(user, password);
+    // await User.register(user, password);
 
     // custom static method to signup, replacing register
-    // await User.signup(email, password);
+    await User.signup(email, password);
 
     // 201 Created
     res.status(201).json({ message: "User created." });
@@ -147,9 +147,8 @@ const setup_session = async (req, res) => {
   //req.session.email = "DEFAULT@TEST.COM";
 
   res.status(200).json({
-    email: req.session.email,
     session: req.session,
-    sessionID: req.sessionID,
+    user: req.user,
   });
 };
 
@@ -207,10 +206,26 @@ const manualsignin = async (req, res) => {
 };
 
 const signout = async (req, res, next) => {
-  const sid = req.sessionID;
-  req.session.destroy();
-  res.status(200).json({ sid, msg: "Session destroyed." });
+  // conventional way - destroy session
+  // const sid = req.sessionID;
+  // req.session.destroy();
+  // res.status(200).json({ sid, msg: "Session destroyed." });
+
+  // passport api
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.status(200).json({ msg: "Signed out." });
+  });
 };
+
+// just testing to see failed authentications messages
+function authFailure(req, res) {
+  res
+    .status(401)
+    .json({ err: "Unauthorized", failureMessage: req.session.failureMessage });
+}
 
 // export functions
 module.exports = {
@@ -221,4 +236,5 @@ module.exports = {
   setup_session,
   signin_model,
   signout,
+  authFailure,
 };

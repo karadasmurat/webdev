@@ -733,6 +733,17 @@ function arrayBasics() {
   // Arrays consist of square brackets and items that are separated by commas.
   let items = [1, 2, 3];
 
+  // version 2: create "new" Array object
+  const cars = new Array("Saab", "Volvo", "BMW");
+
+  // A Common Error - these are not the same!
+  const pts_1 = [40]; // an array with one element
+  const pts_2 = new Array(40); // an array with 40 undefined elements
+
+  // In JavaScript, arrays always use numbered indexes. (objects use named indexes.)
+  // Array indexes are zero-based, which means the first element is [0]
+  console.log(cars[0]); // "Saab"
+
   // Unlike C arrays, JavaScript arrays can dynamically grow or shrink in size, and their elements can have different data types.
   // push() method adds the specified elements to the end of an array and returns the new length of the array.
   const animals = ["pigs", "goats", "sheep"];
@@ -773,6 +784,12 @@ function arrayBasics() {
   // It's important to note that trying to access an index that is out of bounds for a string
   // (i.e., less than 0 or greater than or equal to the string's length) will return undefined.
   console.log(animals[999]); // undefined
+
+  // The slice() method: access part of an array without modifying
+  // returns a shallow copy of a portion of an array into a NEW array object selected from start to end (end not included)
+  const farm = ["ant", "bison", "camel", "duck", "elephant"];
+  console.log(farm.slice(2)); // ["camel", "duck", "elephant"]
+  console.log(farm.slice(2, 4)); // ["camel", "duck"]
 
   // Accessing every item
   // To iterate over the elements of the items array,

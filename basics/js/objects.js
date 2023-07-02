@@ -91,11 +91,17 @@ function isEmptyObject(obj) {
 function iterateOverProperties(obj) {
   console.log("Iterate over Properties of", obj);
 
+  // v1 - for...in
+  console.log("**** Using for...in loop");
+  for (const k in obj) {
+    console.log(k, ":", obj[k]);
+  }
+
   // list of keys: Object.keys()
   // returns an array of property names (keys)
-
+  console.log("**** Using Object.keys()");
   for (let key of Object.keys(obj)) {
-    console.log(" *", key, obj[key], obj.key); // IMPORTANT - .k results in undefined - use [k] first evaluates to string, then access
+    console.log(key, ":", obj[key], obj.key); // IMPORTANT - .k results in undefined - use [k] first evaluates to string, then access
   }
 }
 

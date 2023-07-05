@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Both React and ReactDOM are available over a CDN. -->
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+
+    <!-- Babel is a build tool - it should be only a part of your build process. 
+        Most commonly, you would use a bundler like webpack or browserify, which can use babel to transpile your code from ES6 to ES5 (or other target version). -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <title>Hello React</title>
+  </head>
+  <body>
+    <div id="container"></div>
+    <div id="root"></div>
+
+    <!-- make sure to include your source file after the content of your document. -->
+    <script src="js/hello-react.js" type="text/babel" />
+  </body>
+</html>

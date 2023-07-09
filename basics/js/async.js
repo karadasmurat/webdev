@@ -238,14 +238,14 @@ promise1.then((value) => {
 });
 
 // Scenario 2 - a function returning a Promise
-// roll a dice. If not 1, return face value.
+// to simulate an error, use face value 1. Else, return face value.
 function rollDiceService() {
   return new Promise((resolve, reject) => {
     // Simulate the producing code which takes time
     setTimeout(() => {
       n = roll();
       if (n != 1) {
-        // finally, callback resolve with the result - to give the caller.
+        // resolve with the result - to be handled by then()
         resolve(n);
       } else {
         const reason = "Rejected due to lack of Luck!";

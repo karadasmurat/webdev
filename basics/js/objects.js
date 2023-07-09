@@ -211,6 +211,9 @@ function objectBasics() {
     inStock: true,
     price: 1.99,
     flavors: ["grape", "apple", "cherry"],
+    describe: function () {
+      console.log(this.name + ", " + this.price);
+    },
   };
 
   // access the object's properties:
@@ -219,6 +222,27 @@ function objectBasics() {
 
   // Option 2 - Dot notation
   console.log(product.price);
+
+  // Note that square bracket notation [ ] provide a way
+  // to obtain the property name as the "result of any expression"
+  console.log(
+    "[] allows expressions",
+    product[Math.random() >= 0.5 ? "name" : "price"]
+  );
+
+  // The undefined value is produced if an attempt is made to retrieve a nonexistent member:
+  console.log("attempt to retrieve a nonexistent member", product.noObject); // undefined
+
+  // Attempting to retrieve values from undefined will throw a TypeError exception:
+  // const val_0 = product.noObject.noProperty; // ERR
+  const val_1 = product.noObject && product.noObject.noProperty; // undefined
+  const val_2 = product.noObject ?? "default_value"; // default_value
+
+  console.log("Check if undefined &&", val_1); // undefined
+  console.log("Nullish coalescing ??", val_2); // default_value
+
+  // call method
+  product.describe();
 
   // Set the value of an existing property:
   product.name = "New Gummy Bears";
@@ -334,7 +358,42 @@ function propertyValueShorthand() {
   console.log(user2.name, user2.username); // Potter TheWizardingWhiz
 }
 
+/*
+Functions are not bound to any specific object. 
+On the other hand, methods are functions bound to an object. 
+In other words, methods are defined inside an object, which differentiates them from normal functions. 
+*/
+function methodBasics() {
+  // Method definition in object literals
+  // v1 - use PropertyName directly
+  // propertyName() { }
+  const greeter = {
+    sayHi() {
+      console.log("hello, there!");
+    },
+  };
+
+  greeter.sayHi();
+
+  // v2 - function defined on object through function expressions:
+  const circle = {
+    radius: 10,
+    // Since functions are objects, they can be used like any other value.
+    // If a value is a function, it is called a 'method'.
+    // propertyName: function() {}
+    area: function () {
+      return Math.PI * this.radius ** 2;
+    },
+
+    // Method definition in object literals
+    perimeter() {},
+  };
+
+  console.log("circle.radius", circle.radius, "circle.area()", circle.area());
+}
+
 objectBasics();
 // objectIdentity();
 // propertyValueShorthand();
 // checkIfPropertyExists();
+// methodBasics();

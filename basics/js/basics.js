@@ -294,49 +294,14 @@ Syntax:
 
 */
 
-printBasics();
-
-// Camel Case
-let myVariableName = "Harry";
-// Pascal Case
-let MyVariableName = "Hermione";
-// Snake Case
-let my_variable_name = "Ron";
-
-// An undefined variable is a variable that has been declared but has not been initialized with a value.
-let message;
-console.log(message); // undefined
-
-// Create a variable named score and assign the value 50 to it.
-let score = 50;
-
-// The numeric separator fixes this readability issue as follows:
-// const budget = 1_000_000_000;
-
-// You can declare many variables in one statement.
-// compare to python: x, y, z = "Orange", "Banana", "Cherry"
-let person = "John Doe",
-  carName = "Volvo",
-  price = 200;
-
-let x = 10;
-let y = 5;
-
-console.log(x * y);
-
-// adding a string and a number
-let year = "1998";
-console.log(year + 1); // 19981
-
-// The global NaN property is a value representing Not-A-Number.
-console.log(200 + 0 / 0); // NaN
-
+// printBasics();
+variableBasics();
 // input_basics();
 // operatorBasics();
 // booleanBasics();
 // stringBasics();
 // arrayBasics();
-array_higherOrder();
+// array_higherOrder();
 // objectBasics(); // moved to objects.js
 // conditionalExprBasics();
 // loopBasics();
@@ -344,7 +309,84 @@ array_higherOrder();
 // console.log(`isEven(8): ${isEven(8)}`);
 
 // randomBasics();
-errorBasics();
+// errorBasics();
+
+function variableBasics() {
+  /**
+Identifiers
+An identifier is a name you choose for variables, parameters, functions, classes, etc.
+An identifier name starts with a letter (a - z, or A - Z), an underscore (_), or a dollar sign($) and  is followed by a sequence of characters including (a - z, A - Z), numbers(0 - 9), underscores(_), and dollar signs($).
+
+The JavaScript syntax defines two types of values:
+	- Fixed values    : Literals
+  - Variable values : Variables
+
+
+JavaScript uses 3 keywords to declare variables:
+	• var (1995 to 2015)
+	• let (If you think the value of the variable can change, use let.)
+	• const (If you want a general rule: always declare variables with const.)
+ 
+ 
+ The let and const keywords was introduced in ES6 (2015). 
+ C﻿onsider if/else statements. If you’re coming from other languages, you might assume that these blocks would also block variable scope. 
+ This was not the case until "let" came along. It’ s a good practice to use the "let" keyword to declare variables, instead of "var", to protect the scope.
+
+The keyword "const" is a little misleading - It does not define a constant value. 
+It defines a constant reference to a value. Because of this you
+	• CAN NOT Reassign a constant value
+	• CAN NOT Reassign a constant array
+	• CAN NOT Reassign a constant object
+
+But you:
+	• CAN Change the elements of constant array
+	• CAN Change the properties of constant object
+
+A const variable cannot be reassigned - Always declare a variable with const when you know that the value should not be changed.
+
+JavaScript const declerations must be initialized:
+  const abc; //ERR
+*/
+
+  // Camel Case
+  let myVariableName = "Harry";
+  // Pascal Case
+  let MyVariableName = "Hermione";
+  // Snake Case
+  let my_variable_name = "Ron";
+
+  // JavaScript is a dynamic language with dynamic types.
+  // Variables in JavaScript are not directly associated with any particular value type, and
+  // any variable can be assigned (and re-assigned) values of all types:
+  let foo = 42; // foo is now a number
+  foo = "bar"; // foo is now a string
+  foo = true; // foo is now a boolean
+
+  // The typeof operator returns a string indicating the type of the operand's value.
+  console.log(typeof 42); // "number"
+  console.log(typeof "blubber"); // "string"
+  console.log(typeof true); // "boolean"
+  console.log(typeof undeclaredVariable); // "undefined"
+
+  // An undefined variable is a variable that has been declared but has not been initialized with a value.
+  let message;
+  console.log(message); // undefined
+
+  // Create a variable named score and assign the value 50 to it.
+  let score = 50;
+
+  // The numeric separator fixes this readability issue as follows:
+  // const budget = 1_000_000_000;
+
+  // You can declare many variables in one statement.
+  // compare to python: x, y, z = "Orange", "Banana", "Cherry"
+  let person = "John Doe",
+    carName = "Volvo",
+    price = 200;
+
+  // The global NaN property is a value representing Not-A-Number.
+  console.log(200 + 0 / 0); // NaN
+}
 
 function errorBasics() {
   console.log("Error Basics");
@@ -663,6 +705,10 @@ If the next line is indented, the extra spaces will also be present in the strin
     console.log(c);
   }
 
+  // adding a string and a number
+  let year = "1998";
+  console.log(year + 1); // 19981
+
   // String methods:
   // toUpperCase() & upper()# The.lower method returns a copy of the string converted to lowercase.
   console.log("  MK  ".toUpperCase());
@@ -823,6 +869,14 @@ function arrayBasics() {
   // The default sort order is ascending, built upon converting the elements into STRINGS!
   animals.sort();
   console.log(animals);
+
+  // Array.prototype.reverse()
+  // The reverse() method reverses an array "in place" and returns the reference to the same array,
+  // the first array element now becoming the last, and the last array element becoming the first.
+  console.log("Array.prototype.reverse()");
+  const array1 = ["one", "two", "three", "four"];
+  array1.reverse(); // ['four', 'three', 'two', 'one']
+  console.log("reversed:", array1);
 
   // In this example, people is an array containing four objects,
   // where each object represents a person and has three properties: name, age, and occupation.

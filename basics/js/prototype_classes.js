@@ -144,60 +144,56 @@ This is known as the Liskov substitution principle. (SOLID Principles)
 */
 
 class Box {
+  // Constructor
+  constructor(capacity) {
+    this.capacity = capacity;
+    this.size = 0;
+  }
 
-    // Constructor
-    constructor(capacity) {
-        this.capacity = capacity;
-        this.size = 0;
-    }
+  // Methods are created on Box.prototype
+  getCapacity() {
+    return this.capacity;
+  }
 
-    // Methods are created on Box.prototype
-    getCapacity() {
-        return this.capacity;
+  load(amount) {
+    if (this.size + amount >= this.capacity) {
+      console.log("Sorry, the capacity limit has been reached.", amount);
+    } else {
+      console.log("Loading", amount);
+      this.size += amount;
     }
-
-    load(amount) {
-        if (this.size + amount >= this.capacity) {
-            console.log("Sorry, the capacity limit has been reached.", amount);
-        } else {
-            console.log("Loading", amount);
-            this.size += amount
-        }
-    }
+  }
 }
-
 
 // INHERITANCE
 // Superclass - Pet
 class Pet {
-    constructor(name, age) {
-        this.name = name;
-        this.age = age;
-    }
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
 
-    eat() {
-        console.log(`Pet ${this.name} is eating.`);
-    }
+  eat() {
+    console.log(`Pet ${this.name} is eating.`);
+  }
 }
 
 // Subclass - Cat
 class Cat extends Pet {
-    constructor(name, age, breed) {
-        super(name, age);
-        this.breed = breed;
-    }
+  constructor(name, age, breed) {
+    super(name, age);
+    this.breed = breed;
+  }
 
-    // specialize
-    meow() {
-        console.log(`Cat ${this.name} says meow.`);
-    }
+  // specialize
+  meow() {
+    console.log(`Cat ${this.name} says meow.`);
+  }
 }
 
-
-
 let user = {
-    name: "John",
-    age: 30
+  name: "John",
+  age: 30,
 };
 
 console.log(user); // { name: 'John', age: 30 }
@@ -214,12 +210,10 @@ console.log(user.isAdmin); // true
 
 // Property existence test, “in” operator
 if ("age" in user) {
-    console.log("age is IN user.");
+  console.log("age is IN user.");
 } else {
-    console.log("age is NOT in user.");
+  console.log("age is NOT in user.");
 }
-
-
 
 let a = {};
 let b = a; // copy the reference
@@ -227,23 +221,22 @@ let b = a; // copy the reference
 console.log(a == b); // true, both variables reference the same object
 console.log(a === b); // true
 
-
-// In JavaScript, any function can be added to an object in the form of a property. 
+// In JavaScript, any function can be added to an object in the form of a property.
 // version 1 - fname: function(){}
 const student = {
-    name: "MK",
-    greet: function () {
-        console.log(`Hi, this is ` + this.name);
-    }
-}
+  name: "MK",
+  greet: function () {
+    console.log(`Hi, this is ` + this.name);
+  },
+};
 
 // version 2 - fname(){}
-// an object with one data property, city, and one method, greet(). 
+// an object with one data property, city, and one method, greet().
 const myCity = {
-    city: "Madrid",
-    greet() {
-        console.log(`Greetings from ${this.city}`);
-    },
+  city: "Madrid",
+  greet() {
+    console.log(`Greetings from ${this.city}`);
+  },
 };
 
 student.greet();
@@ -255,112 +248,102 @@ propertiesThatHoldFunctionValues();
 // inheritanceBasics();
 
 function propertiesThatHoldFunctionValues() {
-    // Methods are nothing more than properties that hold function values:
+  // Methods are nothing more than properties that hold function values:
 
-    let rabbit = {};
-    rabbit.speak = function (line) {
-        console.log(`The rabbit says '${line}'`);
-    };
+  let rabbit = {};
+  rabbit.speak = function (line) {
+    console.log(`The rabbit says '${line}'`);
+  };
 
-    rabbit.speak("Hello, there!"); // → The rabbit says 'Hello, there!'
+  rabbit.speak("Hello, there!"); // → The rabbit says 'Hello, there!'
 }
 
 function inheritanceBasics() {
-    console.log("Inheritance Basics");
-    console.log("------------------");
+  console.log("Inheritance Basics");
+  console.log("------------------");
 
-    const fluffy = new Cat('Fluffy', 2, 'Persian');
-    fluffy.eat(); // Pet Fluffy is eating.
-    fluffy.meow(); // Cat Fluffy says meow.
+  const fluffy = new Cat("Fluffy", 2, "Persian");
+  fluffy.eat(); // Pet Fluffy is eating.
+  fluffy.meow(); // Cat Fluffy says meow.
 }
 
 function prototypeBasics() {
-    /*
+  /*
     Prototype-based programming is a style of object-oriented programming in which behaviour reuse (known as inheritance) is performed 
     via a process of reusing existing objects that serve as prototypes.
     */
 
-    console.log("Prototype-based programming");
-    console.log("---------------------------");
+  console.log("Prototype-based programming");
+  console.log("---------------------------");
 
-    // Example of true prototypal inheritance style in JavaScript.
+  // Example of true prototypal inheritance style in JavaScript.
 
-    // object creation using the literal object notation {}.
-    const base = {
-        name: "base",
-        one: 1,
-        two: 2
-    };
+  // object creation using the literal object notation {}.
+  const base = {
+    name: "base",
+    one: 1,
+    two: 2,
+  };
 
-    // Another object.
-    const text = {
-        two: "two",
-        three: "three"
-    };
+  // Another object.
+  const text = {
+    two: "two",
+    three: "three",
+  };
 
-    // Object.setPrototypeOf() is a method introduced in ECMAScript 2015.
-    Object.setPrototypeOf(text, base); // foo is now the prototype of bar.
+  // Object.setPrototypeOf() is a method introduced in ECMAScript 2015.
+  Object.setPrototypeOf(text, base); // foo is now the prototype of bar.
 
-    // If we try to access base's properties from text from now on, we'll succeed. 
-    console.log(text.name); // "base"
-    console.log(base.name); // "base"
+  // If we try to access base's properties from text from now on, we'll succeed.
+  console.log(text.name); // "base"
+  console.log(base.name); // "base"
 
-    // The child object's properties are accessible.
-    console.log(text.three); // "three".
+  // The child object's properties are accessible.
+  console.log(text.three); // "three".
 
-    // Own properties shadow prototype properties
-    console.log(text.two); // "two"
-
-
-
-
-
-
-
-
+  // Own properties shadow prototype properties
+  console.log(text.two); // "two"
 }
 
 function constructorFunctions() {
-    /*
+  /*
     Note that this constructor function can be rewritten in classes.
     However, classes are syntax sugar over constructor functions, which means you can still manipulate Box.prototype to change the behavior of all instances.
     */
 
-    console.log("Constructor Functions");
-    console.log("---------------------");
+  console.log("Constructor Functions");
+  console.log("---------------------");
 
-    // A constructor function
-    function Box(value) {
-        this.value = value;
-    }
+  // A constructor function
+  function Box(value) {
+    this.value = value;
+  }
 
-    // Properties all boxes created from the Box() constructor will have
-    // note: try arrow function to get "undefined" using "this"
-    Box.prototype.getValue = function () {
-        return this.value;
-    };
+  // Properties all boxes created from the Box() constructor will have
+  // note: try arrow function to get "undefined" using "this"
+  Box.prototype.getValue = function () {
+    return this.value;
+  };
 
-    // We say that new Box(1) is an instance created from the Box constructor function.
-    const boxes = [new Box(1), new Box(2), new Box(3)];
-    for (const box of boxes) {
-        console.log(box.getValue());
-    }
+  // We say that new Box(1) is an instance created from the Box constructor function.
+  const boxes = [new Box(1), new Box(2), new Box(3)];
+  for (const box of boxes) {
+    console.log(box.getValue());
+  }
 }
 
-
 function classBasics() {
-    /*
+  /*
     Note that classes are syntax sugar over constructor functions, which means you can still manipulate Box.prototype to change the behavior of all instances.
     */
 
-    console.log("Class Basics");
-    console.log("------------");
+  console.log("Class Basics");
+  console.log("------------");
 
-    const box = new Box(11);
-    console.log(box); // Box { capacity: 11, size: 0 }
+  const box = new Box(11);
+  console.log(box); // Box { capacity: 11, size: 0 }
 
-    box.load(5); // Loading 5
-    box.load(10);
-    console.log(box); // Box { capacity: 11, size: 5 }
-
+  box.load(5); // Loading 5
+  box.load(10);
+  console.log(box); // Box { capacity: 11, size: 5 }
 }

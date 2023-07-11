@@ -6,12 +6,15 @@ import MealsApp from "./components/context/MealsApp.tsx";
 import VideoDemo from "./components/VideoDemo.tsx";
 import ReducerDemo from "./components/ReducerDemo.tsx";
 import FetchDemo from "./components/FetchDemo.tsx";
+import Rating from "./components/Rating.tsx";
+import RatingDemo from "./components/Rating.tsx";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
+    <RatingDemo />
     {/* <MealsApp /> */}
     {/* <VideoDemo /> */}
-    <FetchDemo />
+    {/* <FetchDemo /> */}
     {/* <ReducerDemo /> */}
   </React.StrictMode>
 );

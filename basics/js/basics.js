@@ -294,23 +294,6 @@ Syntax:
 
 */
 
-// printBasics();
-variableBasics();
-// input_basics();
-// operatorBasics();
-// booleanBasics();
-// stringBasics();
-// arrayBasics();
-// array_higherOrder();
-// objectBasics(); // moved to objects.js
-// conditionalExprBasics();
-// loopBasics();
-// friendlyDivider(10, 6);
-// console.log(`isEven(8): ${isEven(8)}`);
-
-// randomBasics();
-// errorBasics();
-
 function variableBasics() {
   /**
 Identifiers
@@ -412,9 +395,14 @@ function loopBasics() {
   console.log("Loop Basics");
   console.log("------------");
 
-  // for loop
+  /*
+  The parentheses after a for keyword must contain two semicolons. 
+  The part before the first semicolon initializes the loop, usually by defining a binding. 
+  The second part is the expression that checks whether the loop must continue. 
+  The final part updates the state of the loop after every iteration. 
+  */
   for (let i = 0; i < 5; i++) {
-    //console.log(`For counter: ${i}`);
+    console.log(`For counter: ${i}`);
   }
 
   // looping over arrays
@@ -536,32 +524,92 @@ function conversionBasics() {
   }
 }
 
+function logicalOperators() {
+  /*
+  Logical operators are typically used with Boolean (logical) values; when they are, they return a Boolean value.
+  However, the && and || operators actually return the value of one of the specified operands, so if these operators are used with non-Boolean values, they may return a non-Boolean value. 
+  
+  Short-circuit evaluation
+  As logical expressions are evaluated left to right, they are tested for possible "short-circuit" evaluation using the following rules:
+	  
+      false && anything    : short-circuit evaluated to false.
+      true || anything     : short-circuit evaluated to true.
+
+  Note that for the second case, in modern code you can use the Nullish coalescing operator (??) that works like ||, 
+  but it only returns the second expression, when the first one is "nullish", i.e. null or undefined. 
+  It is thus the better alternative to provide defaults, when values like '' or 0 (empty string or zero) are valid values for the first expression, too.
+
+  */
+  console.log("Logical Operators");
+  console.log("--------------------");
+
+  x = 55;
+
+  // Logical Operators: and, or, not
+  if (!(5 < x && x < 10)) {
+    console.log("Not Between 5-10.");
+  } else {
+    print("Between 5-10.");
+  }
+}
+
 function comparisonOperators() {
   /* 
     Notice == vs === 
     === compareequal value and equal type  
+
+    When comparing values of the same type using ==, the outcome is easy to predict. you should get true when both values are the same, (except in the case of NaN.) 
+    But when the types differ, JavaScript uses a complicated and confusing set of rules to determine what to do. 
+    In most cases, it just tries to convert one of the values to the other value’s type.
     */
 
   console.log("Comparison Operators");
   console.log("--------------------");
 
-  console.log(`1 == '1'  : ${1 == "1"}`); //true !!
+  // comparing string vs number
+  console.log(`1 == '1'  : ${1 == "1"}`); //true, type conversion !!
   console.log(`1 === '1' : ${1 === "1"}`); //false
+
+  // comparing number vs boolean
+  console.log(`0 == false  : ${0 == false}`); // true, type conversion !!
+  console.log(`0 === false  : ${0 === false}`); // false
+
+  // When we have two numbers, 1 and 1, we can consider them precisely the same number,
+  // whether or not they refer to the same physical bits. With objects, there is a difference !
+  const firstNum = 1;
+  const secondNum = 1;
+  console.log(`firstNum == secondNum : ${firstNum == secondNum}`); // -> true
+  console.log(`firstNum === secondNum : ${firstNum === secondNum}`); // -> true
+
+  // reference types
+  // reference type - referencing a mutable object, through a variable name.
+  const obj1 = { name: "John" };
+  const obj2 = { name: "John" };
+
+  // copy the reference - a new reference to an existing memory
+  const obj_copy = obj1;
+
+  console.log("comparison: ");
+  console.log("==", obj1 == obj2); // IMPORTANT! false
+  console.log("===", obj1 === obj2); // false
+
+  console.log(obj1 == obj_copy); // true
+  console.log(obj1 === obj_copy); // true
 }
 
 function operatorBasics() {
   console.info("Operator Basics");
   console.info("--------------");
 
-  // Mathematical Operators: + - * / / / ** %
+  // Mathematical Operators: + - * / % **
   let x = 10;
   let y = 3;
   let z = 2.0;
-  console.log(`${x}, ${y}, ${z}`); // 10, 3, 2
-  console.log(`${x + z}`); // 12
-  console.log(`${x / y}`); // 3.3333333333333335
-  console.log(`${x % y}`); // 1 Modulus(returns the remainder of the division)
-  console.log(`${x ** y}`); // 1000 Exponentiation
+  console.log(x, y, z); // 10, 3, 2
+  console.log(x + z); // 12
+  console.log(x / y); // 3.3333333333333335
+  console.log(x % y); // 1  (Modulus returns the remainder of the division)
+  console.log(x ** y); // 1000 Exponentiation
 
   // Assignment Operators
   x = 55;
@@ -575,13 +623,7 @@ function operatorBasics() {
   console.log(`Increment operator results: a:${a}, b:${b}, c:${c}`); // a:5, b:4, c:4
 
   comparisonOperators();
-
-  // Logical Operators: and, or, not
-  if (!(5 < x && x < 10)) {
-    console.log("Not Between 5-10.");
-  } else {
-    print("Between 5-10.");
-  }
+  logicalOperators();
 }
 
 function friendlyDivider(a, b) {
@@ -922,10 +964,35 @@ function arrayBasics() {
   // Array destructuring
   // Basic variable assignment
   // on the left-hand side of the assignment to define what values to unpack from the sourced variable.
-  const x = [1, 2, 3, 4, 5];
-  const [y, z] = x;
-  console.log(y); // 1
-  console.log(z); // 2
+
+  const vehicles = ["mustang", "O-304", "expedition", "tesla"];
+  console.log(vehicles);
+
+  // old way
+  const car0 = vehicles[0];
+  const bus0 = vehicles[1];
+
+  // extract elements
+  const [car1, bus1] = vehicles;
+  console.log(car1, bus1); // mustang O-304
+
+  // extract some elements from the beginning
+  const [car2, bus2, ...others] = vehicles;
+  console.log(
+    "Type:",
+    typeof others,
+    "isArray:",
+    Array.isArray(others),
+    others
+  ); // Type: object isArray: true [ 'expedition', 'tesla' ]
+
+  const students = "Harry,Ron,Hermione,Draco";
+  const [first, ...remaining] = students.split(",");
+  console.log("The first student is", first);
+
+  // v2 conventional index
+  const std = students.split(",");
+  console.log("The first student is", std[0]);
 }
 
 function array_higherOrder() {
@@ -1017,3 +1084,23 @@ function getMaxValue(a, b) {
   // Return the maximum value between a and b
   return a > b ? a : b;
 }
+
+/******* CALLS *******/
+/*********************/
+
+// printBasics();
+// variableBasics();
+// input_basics();
+operatorBasics();
+// booleanBasics();
+// stringBasics();
+// arrayBasics();
+// array_higherOrder();
+// objectBasics(); // moved to objects.js
+// conditionalExprBasics();
+// loopBasics();
+// friendlyDivider(10, 6);
+// console.log(`isEven(8): ${isEven(8)}`);
+
+// randomBasics();
+// errorBasics();

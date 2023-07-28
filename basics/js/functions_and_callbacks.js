@@ -199,26 +199,11 @@ When it comes to processing data with a functional style, there are at least thr
 
 */
 
-// scopeBasics();
-// parameterBasics();
-
-// functionExpressions();
-// firstClassFunctions();
-
-fpstyle();
-
-spreadBasics();
-restBasics();
-
-const mycar = {
-  make: "Kia",
-  model: "Sorento",
-  year: 2007,
-};
-const scores = [70, 80, 90];
-mutator(mycar, scores);
-console.log(mycar);
-console.log(scores);
+function mutator(car, arr) {
+  // When you pass an object or array as a parameter, if the function changes the object's properties or array's values, that change is visible outside the function
+  car.make = "Volkswagen";
+  arr[0] = 0;
+}
 
 function sum_rest(...theArgs) {
   // The rest parameter syntax allows a function to accept an indefinite number of arguments as an array
@@ -229,11 +214,14 @@ function sum_rest(...theArgs) {
   return total;
 }
 
-function restBasics() {
+function restParametersBasics() {
   // The rest parameter syntax allows a function to accept an indefinite number of arguments as an array:
   console.log("sum_rest(1)            : " + sum_rest(1));
-  console.log("sum_rest(1, 2)         : " + sum_rest(1, 2));
   console.log("sum_rest(1, 2, 3, 4, 5): " + sum_rest(1, 2, 3, 4, 5));
+
+  // To send an array to a function accepting a rest parameter, we can use the spread operator
+  const prices = [10, 20, 30];
+  console.log("sum_rest(...prices)    :" + sum_rest(...prices));
 }
 
 function averageOfThreeNumbers(x, y, z) {
@@ -425,7 +413,7 @@ function fpstyle() {
   // Calls the specified callback function for all the elements in an array.
   // The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 
-  // Example 1 - calculate the sum of array items:
+  // Example 1 - calculate the sum of all elements in the array:
   const array1 = [1, 2, 3, 4];
 
   const sum = array1.reduce(
@@ -491,12 +479,6 @@ function scopeBasics() {
 function handleAnimal() {
   let deadlyAnimal = "Scorpionfish"; // there is a global version as well
   console.log(deadlyAnimal);
-}
-
-function mutator(car, arr) {
-  // When you pass an object or array as a parameter, if the function changes the object's properties or array's values, that change is visible outside the function
-  car.make = "Volkswagen";
-  arr[0] = 0;
 }
 
 function minus(a, b) {
@@ -618,10 +600,6 @@ function executeMeWhenReady() {
   console.log("I see that you are done. Thanks for your hard work.");
 }
 
-// this is the actual function call
-// caller provides callback implementation - flexibility and customization
-completeSomeTasks_thenFollowProvidedCommands(executeMeWhenReady);
-
 // Example 1.b
 // callback where the actual api accepts no paramters, but out implementation of callback has a parameter.
 // so, we wrap our function with an anonymous function
@@ -631,9 +609,6 @@ function doubleTheValue(number) {
   const value = number * 2;
   console.log("Did somebody call me? Here are the results: ", value);
 }
-
-// this is the actual function call
-completeSomeTasks_thenFollowProvidedCommands(() => doubleTheValue(11)); // 22
 
 // Example 2 - callback with arguments
 
@@ -661,9 +636,6 @@ function processResult(result) {
   console.log("The result is handled to me:", result);
 }
 
-// Call the function and provide the callback
-performOperation(10, 20, processResult);
-
 // Higher-order functions allow us to abstract over actions, not just values.
 // We can even write functions that provide new types of control flow
 function unless(test, then) {
@@ -674,4 +646,57 @@ const check = (n) => {
   unless(n % 2 == 0, () => console.log(n + " is odd."));
 };
 
-check(11);
+function createMultiplier(factor) {
+  return (number) => number * factor;
+}
+
+function returningAFunction() {
+  const twoTimes = createMultiplier(2);
+  console.log(twoTimes(5));
+
+  const tenTimes = createMultiplier(10);
+  console.log(tenTimes(5));
+}
+
+function passByRef() {
+  const mycar = {
+    make: "Kia",
+    model: "Sorento",
+    year: 2007,
+  };
+  const scores = [70, 80, 90];
+
+  mutator(mycar, scores);
+
+  console.log(mycar);
+  console.log(scores);
+}
+
+function callbackBasics() {
+  // this is the actual function call
+  // caller provides callback implementation - flexibility and customization
+  completeSomeTasks_thenFollowProvidedCommands(executeMeWhenReady);
+
+  // Call the function and provide the callback
+  performOperation(10, 20, processResult);
+
+  // this is the actual function call
+  completeSomeTasks_thenFollowProvidedCommands(() => doubleTheValue(11)); // 22
+}
+
+// scopeBasics();
+// parameterBasics();
+
+// functionExpressions();
+// firstClassFunctions();
+
+// callbackBasics();
+
+// fpstyle();
+
+// spreadBasics();
+restParametersBasics();
+// check(11);
+// passByRef();
+
+// returningAFunction();

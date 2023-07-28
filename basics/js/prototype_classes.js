@@ -191,61 +191,57 @@ class Cat extends Pet {
   }
 }
 
-let user = {
-  name: "John",
-  age: 30,
-};
+function objectLiterals() {
+  let user = {
+    name: "John",
+    age: 30,
+  };
 
-console.log(user); // { name: 'John', age: 30 }
+  console.log(user); // { name: 'John', age: 30 }
 
-// JavaScript objects are dynamic "bags" of properties (referred to as own properties).
-// add a property
-user.isAdmin = true;
+  // JavaScript objects are dynamic "bags" of properties (referred to as own properties).
+  // add a property
+  user.isAdmin = true;
 
-// delete a property
-delete user.age;
+  // delete a property
+  delete user.age;
 
-// Property values are accessible using the dot notation:
-console.log(user.isAdmin); // true
+  // Property values are accessible using the dot notation:
+  console.log(user.isAdmin); // true
 
-// Property existence test, “in” operator
-if ("age" in user) {
-  console.log("age is IN user.");
-} else {
-  console.log("age is NOT in user.");
+  // Property existence test, “in” operator
+  if ("age" in user) {
+    console.log("age is IN user.");
+  } else {
+    console.log("age is NOT in user.");
+  }
+
+  let a = {};
+  let b = a; // copy the reference
+
+  console.log(a == b); // true, both variables reference the same object
+  console.log(a === b); // true
+
+  // In JavaScript, any function can be added to an object in the form of a property.
+  // version 1 - fname: function(){}
+  const student = {
+    name: "MK",
+    greet: function () {
+      console.log(`Hi, this is ` + this.name);
+    },
+  };
+
+  // version 2 - fname(){}
+  // an object with one data property, city, and one method, greet().
+  const myCity = {
+    city: "Madrid",
+    greet() {
+      console.log(`Greetings from ${this.city}`);
+    },
+  };
+
+  student.greet();
 }
-
-let a = {};
-let b = a; // copy the reference
-
-console.log(a == b); // true, both variables reference the same object
-console.log(a === b); // true
-
-// In JavaScript, any function can be added to an object in the form of a property.
-// version 1 - fname: function(){}
-const student = {
-  name: "MK",
-  greet: function () {
-    console.log(`Hi, this is ` + this.name);
-  },
-};
-
-// version 2 - fname(){}
-// an object with one data property, city, and one method, greet().
-const myCity = {
-  city: "Madrid",
-  greet() {
-    console.log(`Greetings from ${this.city}`);
-  },
-};
-
-student.greet();
-
-propertiesThatHoldFunctionValues();
-// prototypeBasics();
-// constructorFunctions();
-// classBasics();
-// inheritanceBasics();
 
 function propertiesThatHoldFunctionValues() {
   // Methods are nothing more than properties that hold function values:
@@ -261,6 +257,13 @@ function propertiesThatHoldFunctionValues() {
 function inheritanceBasics() {
   console.log("Inheritance Basics");
   console.log("------------------");
+
+  const myPet = new Pet("rocky", 3);
+  myPet.eat();
+
+  // As JavaScript uses duck-typing, you can achieve polymorphism by just having different objects implement the same methods
+  // Since weakly-typed, no classical polymorphism
+  // Pet myPet = new Cat();
 
   const fluffy = new Cat("Fluffy", 2, "Persian");
   fluffy.eat(); // Pet Fluffy is eating.
@@ -286,23 +289,28 @@ function prototypeBasics() {
   };
 
   // Another object.
-  const text = {
+  const sub = {
     two: "two",
     three: "three",
   };
 
   // Object.setPrototypeOf() is a method introduced in ECMAScript 2015.
-  Object.setPrototypeOf(text, base); // foo is now the prototype of bar.
+  Object.setPrototypeOf(sub, base); // foo is now the prototype of bar.
 
   // If we try to access base's properties from text from now on, we'll succeed.
-  console.log(text.name); // "base"
+  console.log(sub.name); // "base"
   console.log(base.name); // "base"
 
   // The child object's properties are accessible.
-  console.log(text.three); // "three".
+  console.log(sub.three); // "three".
 
   // Own properties shadow prototype properties
-  console.log(text.two); // "two"
+  console.log(sub.two); // "two"
+
+  // Note. if you are concerned about performance, you should avoid setting the [[Prototype]] of an object.
+  // Instead, create a new object with the desired [[Prototype]] using Object.create().
+  const sub2 = Object.create(base);
+  console.log(sub2.name); // "base"
 }
 
 function constructorFunctions() {
@@ -325,7 +333,8 @@ function constructorFunctions() {
     return this.value;
   };
 
-  // We say that new Box(1) is an instance created from the Box constructor function.
+  // the constructor function allows us to create multiple similar objects.
+  // To create a new instance of the Box, use the "new" operator:
   const boxes = [new Box(1), new Box(2), new Box(3)];
   for (const box of boxes) {
     console.log(box.getValue());
@@ -347,3 +356,11 @@ function classBasics() {
   box.load(10);
   console.log(box); // Box { capacity: 11, size: 5 }
 }
+
+/************ calls ***************/
+// objectLiterals();
+// propertiesThatHoldFunctionValues();
+// prototypeBasics();
+// constructorFunctions();
+// classBasics();
+inheritanceBasics();

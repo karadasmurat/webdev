@@ -1,3 +1,5 @@
+const axios = require("axios");
+
 rollDice(); // does NOT block the next line after its invocation!
 console.log("DONE rollDice()");
 
@@ -61,3 +63,24 @@ function rollDiceService() {
   });
 }
 /** END SERVICE DEFINITION */
+
+const getFakePerson = async () => {
+  console.log("Start");
+  try {
+    let results = await axios.get(
+      "https://api.randomuser.me/?nat=US&results=1"
+    );
+    console.log(results.data);
+  } catch (error) {
+    console.error(error);
+  }
+  console.log("Done.");
+};
+
+function simulateNonBlocking() {
+  console.log("PRE - getFakePerson");
+  getFakePerson();
+  console.log("POST - getFakePerson");
+}
+
+simulateNonBlocking();

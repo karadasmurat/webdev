@@ -171,9 +171,12 @@ function objectIdentity() {
   // copy the reference - a new reference to an existing memory
   const obj_copy = obj1;
 
-  console.log("testing  === on references: ");
-  console.log(obj1 === obj2); // IMPORTANT! Output: false !
-  console.log(obj1 === obj_copy); // Output: true
+  console.log("comparison: ");
+  console.log("==", obj1 == obj2); // IMPORTANT! false
+  console.log("===", obj1 === obj2); // false
+
+  console.log(obj1 == obj_copy); // true
+  console.log(obj1 === obj_copy); // true
 
   // mutate through the copied reference:
   obj_copy.name = "Johnny";
@@ -342,6 +345,38 @@ function createUserObject_v1(name, username) {
 function createUserObject_v2(name, username) {
   return { name, username };
 }
+
+/*
+Returning objects
+﻿wrap the object you’re returning with parentheses - missing parentheses are source of countless bugs!
+*/
+const getAWiz = (house, firstName, lastName) => ({
+  house,
+  firstName,
+  lastName,
+});
+
+/*
+When you pass an object as an argument to a function, 
+the function receives a reference to the original object in memory, not a copy of the object. 
+As a result, any changes made to the object within the function will directly affect the original object outside the function.
+*/
+const modifyObject = (obj) => {
+  obj.isModified = true;
+};
+
+function passByRef() {
+  const wizard = { name: "Potter" };
+  modifyObject(wizard);
+  console.log(wizard); // { name: 'Potter', isModified: true }
+}
+// copy, modify, return - without modifying argument:
+// wrap the object you’re returning with parentheses - missing parentheses are source of countless bugs!
+const returnAModifiedCopy = (person) => ({
+  ...person,
+  isModified: true,
+});
+
 function propertyValueShorthand() {
   // In real code, we often use existing variables as values for properties.
   // and the name of the property is often the name of the variable.
@@ -356,6 +391,13 @@ function propertyValueShorthand() {
 
   console.log(user1.name, user1.username); // Potter TheWizardingWhiz
   console.log(user2.name, user2.username); // Potter TheWizardingWhiz
+
+  // object destructuring
+  const std = getAWiz("Slytherin", "Draco", "Malfoy");
+  console.log("typeof(std):", typeof std, "std:", std);
+
+  const { house, ...details } = getAWiz("Gryffindor", "Harry", "Potter");
+  console.log("Type:", typeof details, details);
 }
 
 /*
@@ -392,8 +434,9 @@ function methodBasics() {
   console.log("circle.radius", circle.radius, "circle.area()", circle.area());
 }
 
-objectBasics();
-// objectIdentity();
+// objectBasics();
+objectIdentity();
 // propertyValueShorthand();
 // checkIfPropertyExists();
 // methodBasics();
+// passByRef();

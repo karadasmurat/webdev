@@ -1,5 +1,8 @@
 import Phaser from "./lib/phaser.js";
+import KickScene from "./scenes/KickScene.js";
 import MainScene from "./scenes/MainScene.js";
+import SpaceScene from "./scenes/SpaceScene.js";
+import HelloWorld from "./scenes/HelloWorld.js";
 
 /*
 The type property can be either Phaser.CANVAS, Phaser.WEBGL, or Phaser.AUTO. 
@@ -13,14 +16,14 @@ const config = {
   type: Phaser.AUTO,
   width: 640,
   height: 480,
-  scene: MainScene,
+  scene: [HelloWorld, KickScene],
   physics: {
     default: "arcade",
     arcade: {
-      gravity: {
-        y: 200,
-      },
+      gravity: false, //{ y: 200 }
       debug: true,
+      // fps: 60, // Physics update rate (frames per second)
+      // fpsTarget: 60, // Frame rate target (frames per second)
     },
   },
 };

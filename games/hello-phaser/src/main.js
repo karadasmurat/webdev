@@ -1,8 +1,15 @@
-import Phaser from "./lib/phaser.js";
 import KickScene from "./scenes/KickScene.js";
 import MainScene from "./scenes/MainScene.js";
 import SpaceScene from "./scenes/SpaceScene.js";
 import HelloWorld from "./scenes/HelloWorld.js";
+import Parallax from "./scenes/Parallax.js";
+import Player from "./scenes/Player.js";
+import ScrollingWorldFollow from "./scenes/ScrollingWorld.js";
+import TilespriteBackground from "./scenes/TilespriteBackground.js";
+import TransformDemo from "./scenes/TransformDemo.js";
+import LoadingDemo from "./scenes/LoadingDemo.js";
+import CustomGameObject from "./scenes/CustomGameObject.js";
+import EventsDemo from "./scenes/EventsDemo.js";
 
 /*
 The type property can be either Phaser.CANVAS, Phaser.WEBGL, or Phaser.AUTO. 
@@ -14,16 +21,17 @@ The width and height properties set the size of the canvas element that Phaser w
 */
 const config = {
   type: Phaser.AUTO,
-  width: 640,
-  height: 480,
-  scene: [HelloWorld, KickScene],
+  scale: {
+    parent: "gamediv",
+    width: 400,
+    height: 600,
+  },
+  scene: LoadingDemo, // [HelloWorld, LoadingDemo, CustomGameObject, EventsDemo, TransformDemo, MainScene, Parallax, Player, ScrollingWorldFollow, TilespriteBackground],
   physics: {
     default: "arcade",
     arcade: {
-      gravity: false, //{ y: 200 }
+      gravity: { y: 300 }, // false
       debug: true,
-      // fps: 60, // Physics update rate (frames per second)
-      // fpsTarget: 60, // Frame rate target (frames per second)
     },
   },
 };

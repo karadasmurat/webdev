@@ -61,49 +61,37 @@ export default class MainScene extends Phaser.Scene {
       .sprite(240, 320, "bunny-stand")
       .setScale(0.5);
 
-    // In preload function, you'll see that 'dude' was loaded as a sprite sheet, not an image.
-    this.player_dude = this.physics.add.sprite(300, 300, "dude");
-    // when it lands after jumping it will bounce ever so slightly
-    this.player_dude.setBounce(0.2);
-    // The bounds, by default, are on the outside of the game dimensions.
-    // It will stop the player from being able to run off the edges of the screen or jump through the top.
-    this.player_dude.setCollideWorldBounds(true);
+    this.addPlayer();
 
     // To allow the player to collide with the platforms we can create a Collider object:
     this.physics.add.collider(this.player_dude, this.platforms);
     this.physics.add.collider(this.bunny_stand, this.platforms);
-
-    this.anims.create({
-      key: "move_left",
-      frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "turn",
-      frames: [{ key: "dude", frame: 4 }],
-      frameRate: 20,
-    });
-
-    this.anims.create({
-      key: "move_right",
-      frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
-      frameRate: 10,
-      repeat: -1,
-    });
 
     // A Text Game Object, as an attribute (initialized at the constructor.)
     this.scoreText = this.add.text(16, 16, "score: 0", {
       fontSize: "32px",
       fill: "salmon", //"#000",
     });
+
+    this.createAnimations();
   }
 
   update() {
     // lets see update freq on the screen
     // note that update() gets called automatically by the game engine on every frame
     // this.updateScore(1);
+
+    this.checkKeysAndMovePlayer();
+  }
+
+  checkKeysAndMovePlayer() {
+    // BASILI TUTARSAK? bu adim bosuna gibi oluyor, yani her frame once sifira alip sonra tekrar +-160
+    // o halde en asagiya, tus basmalarının else'ine tasiyorum.
+
+    console.log("Runs at each frame, whether or not a key is pressed.");
+    // this.player_dude.setVelocityX(0);
+
+    // console.log("updating.");
 
     // left and right input logic
     if (this.cursors.left.isDown) {
@@ -115,15 +103,57 @@ export default class MainScene extends Phaser.Scene {
       this.player_dude.anims.play("move_right", true);
       this.updateScore(1);
     } else {
+      console.log("Runs only when selected keys are NOT pressed at this frame");
+      this.player_dude.anims.play("stand_still");
       this.player_dude.setVelocityX(0);
 
-      this.player_dude.anims.play("turn");
+      // this.player_dude.anims.stop(); // stop current animation
     }
+  }
+
+  addPlayer() {
+    // In preload function, you'll see that 'dude' was loaded as a sprite sheet, not an image.
+    // notice the optional frame number that sprite is rendering with
+    this.player_dude = this.physics.add.sprite(300, 300, "dude", 4);
+
+    // when it lands after jumping it will bounce ever so slightly
+    this.player_dude.setBounce(0.2);
+
+    // The bounds, by default, are on the outside of the game dimensions.
+    // It will stop the player from being able to run off the edges of the screen or jump through the top.
+    this.player_dude.setCollideWorldBounds(true);
   }
 
   // Method to update and display the score
   updateScore(points) {
     this.score += points;
     this.scoreText.setText("Score: " + this.score);
+  }
+
+  createAnimations() {
+    /* 
+    We have a character with three different animations: moving left, standing still, and moving right. 
+    We want to play the appropriate animation based on whether the left or right keys are pressed, 
+    and when neither key is pressed, play the "still" animation.  
+    */
+    this.anims.create({
+      key: "move_left",
+      frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "stand_still",
+      frames: [{ key: "dude", frame: 4 }],
+      frameRate: 1,
+    });
+
+    this.anims.create({
+      key: "move_right",
+      frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
+      frameRate: 10,
+      repeat: -1,
+    });
   }
 }

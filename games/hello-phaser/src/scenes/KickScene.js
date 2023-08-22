@@ -56,7 +56,9 @@ export default class KickScene extends Phaser.Scene {
   }
 
   checkKeysAndMovePlayer() {
-    // Put this in so that the player stays still if no key is being pressed
+    // At each frame, stop the player first.
+    // Default behaviour is the player staying still.
+    // We will change this below, checking if special key(s) are being pressed
     this.player.body.setVelocity(0, 0);
 
     if (this.cursors.left.isDown) {

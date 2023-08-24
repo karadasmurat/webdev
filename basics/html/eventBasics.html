@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events</title>
+</head>
+
+<body>
+    <p>click icon to change background color!</p>
+    <img id="img_1" src="https://cdn.iconscout.com/icon/free/png-256/free-paint-roll-brush-painting-wall-26775.png"
+        alt="change bg color" />
+    <hr>
+    <p>Place your mouse pointer over icon to change background color!</p>
+    <img id="img_2" src="https://icon-library.com/images/mouse-hover-icon/mouse-hover-icon-5.jpg"
+        alt="change bg color" />
+    <hr>
+    <h3>Simulate click event</h3>
+    <p>Double click on the Image will trigger a click on checkbox. <br />How? We create a MouseEvent of type 'click',
+        and
+        dispatch it to checkbox! </p>
+    <img id="img_3" src="https://trustedmats.co.uk/wp-content/uploads/2022/10/contract.png" />
+    <input type="checkbox" id="confirm" />
+    <label for="confirm"> I am fully aware that terms & conditions are so exciting</label>
+
+    <script type="text/javascript">
+        function random(number) {
+            return Math.floor(Math.random() * (number + 1));
+        }
+
+        function changeBgColor(e) {
+            const rndCol = `rgb(${random(255)}, ${random(255)}, ${random(255)})`;
+            document.body.style.backgroundColor = rndCol;
+        }
+
+        const btn1 = document.getElementById("img_1")
+        const btn2 = document.getElementById("img_2")
+        const btn3 = document.getElementById("img_3")
+
+        btn1.addEventListener("click", changeBgColor);
+        btn2.addEventListener("mouseover", changeBgColor);
+        btn3.addEventListener("dblclick", simulateConfirmation);
+
+        // create an Event (MouseEvent of type 'click'), and dispatch it to checkbox
+        function simulateConfirmation(e) {
+            console.log(e.target.id);
+            const cb = document.getElementById("confirm")
+
+            // cb.click();
+
+            // Create a custom event using the MouseEvent constructor, 
+            // providing the event type as a string and additional options using an object.
+            const customClickEvent = new MouseEvent("click", {
+                bubbles: true,
+            });
+
+            // Dispatch the custom event on an checkbox
+            // this indeed works like cb.receiveEvent(event)
+            cb.dispatchEvent(customClickEvent);
+
+        }
+
+
+    </script>
+
+</body>
+
+</html>

@@ -127,6 +127,49 @@ function flatten(arr) {
   }, []);
 }
 
+/*
+
+    *    
+   ***
+  *****
+ *******   
+********* 
+
+
+
+*/
+
+function drawTriangle(h) {
+  let lastRow = 2 * h - 1;
+  let e = Math.floor(lastRow / 2);
+  let f = 1;
+  for (let level = 0; level < h; level++) {
+    let rowStr = "";
+
+    let partial = "";
+    for (let i = 0; i < e; i++) {
+      partial += " ";
+    }
+    rowStr += partial;
+
+    partial = "";
+    for (let i = 0; i < f; i++) {
+      partial += "*";
+    }
+    rowStr += partial;
+
+    partial = "";
+    for (let i = 0; i < e; i++) {
+      partial += " ";
+    }
+    rowStr += partial;
+
+    console.log(rowStr);
+    --e;
+    f += 2;
+  }
+}
+
 /******* CALLS *******/
 /*********************/
 
@@ -141,5 +184,7 @@ function flatten(arr) {
 // reverseArrayInPlace(evens);
 // console.log(evens);
 
-let arrays = [[1, 2, 3], [4, 5], [6]];
-console.log(flatten(arrays));
+// let arrays = [[1, 2, 3], [4, 5], [6]];
+// console.log(flatten(arrays));
+
+drawTriangle(10);

@@ -165,6 +165,36 @@ class Box {
   }
 }
 
+// constructor default values
+// v1 - empty object as a default value in the constructor
+class Appliance {
+  constructor(code, options = {}) {
+    this.code = code;
+    this.title = options.title || "Appliance";
+    this.age = options.age || 0;
+  }
+}
+
+// constructor default values
+// v2 - empty object as a default value, with object destructuring with default values.
+class User {
+  // set default values for the config object directly in the parameter list
+  // using destructuring with default values.
+  constructor(name, email, { theme = "light", notifications = true } = {}) {
+    this.name = name;
+    this.email = email;
+    this.config = { theme, notifications };
+  }
+
+  getUserInfo() {
+    return `Name: ${this.name}, Email: ${this.email}`;
+  }
+
+  getUserSettings() {
+    return `Theme: ${this.config.theme}, Notifications: ${this.config.notifications}`;
+  }
+}
+
 // INHERITANCE
 // Superclass - Pet
 class Pet {
@@ -355,6 +385,26 @@ function classBasics() {
   box.load(5); // Loading 5
   box.load(10);
   console.log(box); // Box { capacity: 11, size: 5 }
+
+  constructorBasics();
+}
+
+function constructorBasics() {
+  console.log("constructor Basics");
+  console.log("------------------");
+
+  // Creating an instance of User class
+  const newUser = new User("Alice", "alice@example.com", {
+    theme: "dark", // Custom theme for Alice
+  });
+
+  console.log(newUser); // User { name: 'Alice', email: 'alice@example.com', config: { theme: 'dark', notifications: true } }
+
+  const appliance1 = new Appliance("APP01"); // Appliance { code: 'APP01', title: 'Appliance', age: 0 }
+  const appliance2 = new Appliance("APP02", { age: 7, dummy: "not expected" });
+
+  console.log(appliance1);
+  console.log(appliance2);
 }
 
 /************ calls ***************/
@@ -362,5 +412,5 @@ function classBasics() {
 // propertiesThatHoldFunctionValues();
 // prototypeBasics();
 // constructorFunctions();
-// classBasics();
-inheritanceBasics();
+classBasics();
+// inheritanceBasics();

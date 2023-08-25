@@ -16,7 +16,7 @@ export default class LoadingDemo extends Phaser.Scene {
     this.addProgressIndicator();
 
     // Create an instance of the ProgressBar class
-    this.progressBar_load = new ProgressBar(this, 10, 150, 200, 50);
+    this.progressBar_load = new ProgressBar(this, 50, 150, 200, 10);
   }
 
   addProgressIndicator() {
@@ -62,7 +62,7 @@ export default class LoadingDemo extends Phaser.Scene {
     this.cntDown_timeOver = false;
 
     // Create an instance of the ProgressBar class
-    this.progressBar = new ProgressBar(this, 10, 300, 100, 10);
+    this.progressBar = new ProgressBar(this, 10, 300, 100, 20);
   }
 
   update() {
@@ -96,12 +96,16 @@ export default class LoadingDemo extends Phaser.Scene {
 
     // When the progress  event is emitted, you will also receive a value between 0 and 1
     this.load.on("progress", (val) => {
-      console.log(val);
+      // console.log(val);
 
       // inline, OLD
       this.updateProgressIndicator(val);
 
-      this.progressBar_load.setProgress(val); // calculate new progress value
+      if (val) {
+        this.progressBar_load.setProgress(val); // calculate new progress value
+      } else {
+        console.log("ZERO PROGRESS");
+      }
     });
 
     this.load.on("fileprogress", function (file) {

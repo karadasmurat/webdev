@@ -11,7 +11,7 @@ export default class TweenDemo extends Phaser.Scene {
 
   create() {
     this.carrot0 = this.add.image(50, 50, "carrot");
-    this.console = this.add.text(10, this.cameras.main.height - 50);
+    this.consoleTxt = this.add.text(10, this.cameras.main.height - 50);
 
     this.ship = this.add.image(
       this.cameras.main.width / 2,
@@ -33,7 +33,7 @@ export default class TweenDemo extends Phaser.Scene {
       // A function to call when the tween completes
       onComplete: () => {
         console.log("tween completed.");
-        this.console.setText("Tween completed.");
+        this.consoleTxt.setText("Tween completed.");
       },
 
       // <yoyo>

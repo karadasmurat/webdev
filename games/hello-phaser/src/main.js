@@ -21,6 +21,9 @@ import SpriteDemo from "./scenes/SpriteDemo.js";
 import PhysicsDemo from "./scenes/PhysicsDemo.js";
 import GroupDemo from "./scenes/GroupDemo.js";
 import BodyDemo from "./scenes/BodyDemo.js";
+import Tmp from "./scenes/Tmp.js";
+import DraggableDemo from "./scenes/DraggableDemo.js";
+
 /*
 The type property can be either Phaser.CANVAS, Phaser.WEBGL, or Phaser.AUTO. 
 This is the rendering context that you want to use for your game. 
@@ -36,7 +39,7 @@ const config = {
     width: 400,
     height: 600,
   },
-  scene: BodyDemo, // [HelloWorld, BodyDemo,PhysicsDemo, SpriteDemo, ComponentsDemo, GraphicsDemo, ImageDemo, AtlasDemo,TweenDemo, GroupDemo, LoadingDemo, AnimationDemo, CustomGameObject, EventsDemo, TransformDemo, MainScene, Parallax, Player, ScrollingWorldFollow, TilespriteBackground],
+  scene: DraggableDemo, // [HelloWorld, DraggableDemo,Tmp, BodyDemo,PhysicsDemo, SpriteDemo, ComponentsDemo, GraphicsDemo, ImageDemo, AtlasDemo,TweenDemo, GroupDemo, LoadingDemo, AnimationDemo, CustomGameObject, EventsDemo, TransformDemo, MainScene, Parallax, Player, ScrollingWorldFollow, TilespriteBackground],
   physics: {
     default: "arcade",
     arcade: {

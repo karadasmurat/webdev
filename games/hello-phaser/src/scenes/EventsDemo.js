@@ -7,6 +7,8 @@ export default class EventsDemo extends Phaser.Scene {
     // Load Images for Timer Bar
     this.load.image("green-bar", "assets/img/health-green.png");
     this.load.image("red-bar", "assets/img/health-red.png");
+
+    this.load.image("gold", "assets/img/gold_1.png");
   }
 
   create() {
@@ -28,6 +30,9 @@ export default class EventsDemo extends Phaser.Scene {
     this.countDownText = this.add.text(16, 300);
 
     this.addListeners();
+
+    this.addInputEnabledSprite();
+    this.addDraggableSprite();
   }
 
   update() {
@@ -40,6 +45,32 @@ export default class EventsDemo extends Phaser.Scene {
     if (!this.cntDown_timeOver) {
       this.countDown();
     }
+  }
+
+  addInputEnabledSprite() {
+    this.item = this.add.sprite(200, 200, "gold");
+
+    // Game Objects can be enabled for input by calling their setInteractive method
+    // allowing it to respond to various pointer events, such as mouse clicks and touch inputs.
+    // With this setup, you can now listen for and respond to events like
+    this.item.setInteractive();
+
+    this.item.on("pointerdown", () => console.log("click on gold!"));
+  }
+
+  addDraggableSprite() {
+    this.item2 = this.add.sprite(200, 300, "gold");
+
+    // Game Objects can be enabled for input by calling their setInteractive method
+    // allowing it to respond to various pointer events, such as mouse clicks and touch inputs.
+    // With this setup, you can now listen for and respond to events like
+    this.item2.setInteractive({ draggable: true, cursor: "pointer" });
+
+    this.item2.on("drag", (pointer, dragX, dragY) => {
+      console.log(`dragging! (${dragX}, ${dragY})`);
+      // this.item2.x = dragX;
+      this.item2.setPosition(dragX, dragY);
+    });
   }
 
   addListeners() {

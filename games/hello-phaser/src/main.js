@@ -11,10 +11,16 @@ import LoadingDemo from "./scenes/LoadingDemo.js";
 import CustomGameObject from "./scenes/CustomGameObject.js";
 import EventsDemo from "./scenes/EventsDemo.js";
 import AnimationDemo from "./scenes/AnimationDemo.js";
-import GroupsDemo from "./scenes/GroupsDemo.js";
+
 import TweenDemo from "./scenes/TweenDemo.js";
 import AtlasDemo from "./scenes/AtlasDemo.js";
 import GraphicsDemo from "./scenes/GraphicsDemo.js";
+import ImageDemo from "./scenes/ImageDemo.js";
+import ComponentsDemo from "./scenes/ComponentsDemo.js";
+import SpriteDemo from "./scenes/SpriteDemo.js";
+import PhysicsDemo from "./scenes/PhysicsDemo.js";
+import GroupDemo from "./scenes/GroupDemo.js";
+import BodyDemo from "./scenes/BodyDemo.js";
 /*
 The type property can be either Phaser.CANVAS, Phaser.WEBGL, or Phaser.AUTO. 
 This is the rendering context that you want to use for your game. 
@@ -30,11 +36,11 @@ const config = {
     width: 400,
     height: 600,
   },
-  scene: GraphicsDemo, // [HelloWorld, GraphicsDemo, AtlasDemo,TweenDemo, GroupsDemo, LoadingDemo, AnimationDemo, CustomGameObject, EventsDemo, TransformDemo, MainScene, Parallax, Player, ScrollingWorldFollow, TilespriteBackground],
+  scene: BodyDemo, // [HelloWorld, BodyDemo,PhysicsDemo, SpriteDemo, ComponentsDemo, GraphicsDemo, ImageDemo, AtlasDemo,TweenDemo, GroupDemo, LoadingDemo, AnimationDemo, CustomGameObject, EventsDemo, TransformDemo, MainScene, Parallax, Player, ScrollingWorldFollow, TilespriteBackground],
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { y: 200 }, // false
+      gravity: { y: 200 }, // false, //{ y: 200 },
       debug: true,
     },
   },

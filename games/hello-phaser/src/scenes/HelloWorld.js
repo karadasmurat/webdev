@@ -1,6 +1,6 @@
 export default class HelloWorld extends Phaser.Scene {
   constructor() {
-    super({ key: "boot" });
+    super({ key: "helloworld" });
   }
 
   preload() {

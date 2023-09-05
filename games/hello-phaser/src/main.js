@@ -23,6 +23,8 @@ import GroupDemo from "./scenes/GroupDemo.js";
 import BodyDemo from "./scenes/BodyDemo.js";
 import Tmp from "./scenes/Tmp.js";
 import DraggableDemo from "./scenes/DraggableDemo.js";
+import SplashSceneDemo from "./scenes/SplashSceneDemo.js";
+import TimerDemo from "./scenes/TimerDemo.js";
 
 /*
 The type property can be either Phaser.CANVAS, Phaser.WEBGL, or Phaser.AUTO. 
@@ -34,12 +36,17 @@ The width and height properties set the size of the canvas element that Phaser w
 */
 const config = {
   type: Phaser.AUTO,
+  backgroundColor: "0xADC4CE",
   scale: {
+    // FIT: scale while maintaining the aspect ratio
+    // Phaser will scale everything on the canvas proportionally
+    mode: Phaser.Scale.FIT,
+    autocenter: Phaser.Scale.CENTER_BOTH,
     parent: "gamediv",
     width: 400,
     height: 600,
   },
-  scene: DraggableDemo, // [HelloWorld, DraggableDemo,Tmp, BodyDemo,PhysicsDemo, SpriteDemo, ComponentsDemo, GraphicsDemo, ImageDemo, AtlasDemo,TweenDemo, GroupDemo, LoadingDemo, AnimationDemo, CustomGameObject, EventsDemo, TransformDemo, MainScene, Parallax, Player, ScrollingWorldFollow, TilespriteBackground],
+  scene: [TimerDemo], // [HelloWorld, TimerDemo, SplashSceneDemo, DraggableDemo,Tmp, BodyDemo,PhysicsDemo, SpriteDemo, ComponentsDemo, GraphicsDemo, ImageDemo, AtlasDemo,TweenDemo, GroupDemo, LoadingDemo, AnimationDemo, CustomGameObject, EventsDemo, TransformDemo, MainScene, Parallax, Player, ScrollingWorldFollow, TilespriteBackground],
   physics: {
     default: "arcade",
     arcade: {

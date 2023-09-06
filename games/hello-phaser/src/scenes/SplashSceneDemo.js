@@ -13,7 +13,8 @@ export default class SplashSceneDemo extends Phaser.Scene {
     this.tweenLogo();
 
     // Set a timer to automatically transition to the main game scene after a delay
-    this.time.delayedCall(2500, this.startGame, [], this);
+    // we could check "time" in update as well.
+    this.time.delayedCall(3000, this.startGame, [], this);
   }
 
   addSplashLogo() {
@@ -38,7 +39,13 @@ export default class SplashSceneDemo extends Phaser.Scene {
     console.log("scaleFactor:", scaleFactor);
   }
 
-  update() {}
+  update(time, delta) {
+    // we check time for delay effect.
+    // we could also use a delayedCall (or addEvent)
+    // if (time > 3000) {
+    //   this.startGame();
+    // }
+  }
 
   startGame() {
     // Start your main game scene

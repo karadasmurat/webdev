@@ -3,16 +3,18 @@ export default class HelloWorld extends Phaser.Scene {
     super({ key: "helloworld" });
   }
 
+  init(data) {
+    // Change Background to Random Color
+    const color = new Phaser.Display.Color();
+    this.cameras.main.setBackgroundColor(color.random());
+  }
+
   preload() {
     console.log("Loading assets for the scene.");
     this.load.image("gold", "assets/img/gold_1.png");
   }
   create() {
     console.log("Play scene created.");
-
-    // Change Background to Random Color
-    const color = new Phaser.Display.Color();
-    this.cameras.main.setBackgroundColor(color.random());
 
     // Calculate the center of the camera
     const centerX = this.cameras.main.width / 2;

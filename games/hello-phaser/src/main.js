@@ -25,6 +25,7 @@ import Tmp from "./scenes/Tmp.js";
 import DraggableDemo from "./scenes/DraggableDemo.js";
 import SplashSceneDemo from "./scenes/SplashSceneDemo.js";
 import TimerDemo from "./scenes/TimerDemo.js";
+import ButtonDemo from "./scenes/ButtonDemo.js";
 
 /*
 The type property can be either Phaser.CANVAS, Phaser.WEBGL, or Phaser.AUTO. 
@@ -40,13 +41,13 @@ const config = {
   scale: {
     // FIT: scale while maintaining the aspect ratio
     // Phaser will scale everything on the canvas proportionally
-    mode: Phaser.Scale.FIT,
-    autocenter: Phaser.Scale.CENTER_BOTH,
+    // mode: Phaser.Scale.FIT,
+    // autocenter: Phaser.Scale.CENTER_BOTH,
     parent: "gamediv",
     width: 400,
     height: 600,
   },
-  scene: [TimerDemo], // [HelloWorld, TimerDemo, SplashSceneDemo, DraggableDemo,Tmp, BodyDemo,PhysicsDemo, SpriteDemo, ComponentsDemo, GraphicsDemo, ImageDemo, AtlasDemo,TweenDemo, GroupDemo, LoadingDemo, AnimationDemo, CustomGameObject, EventsDemo, TransformDemo, MainScene, Parallax, Player, ScrollingWorldFollow, TilespriteBackground],
+  scene: [ButtonDemo, HelloWorld], // [HelloWorld, ButtonDemo, TimerDemo, SplashSceneDemo, DraggableDemo,Tmp, BodyDemo,PhysicsDemo, SpriteDemo, ComponentsDemo, GraphicsDemo, ImageDemo, AtlasDemo,TweenDemo, GroupDemo, LoadingDemo, AnimationDemo, CustomGameObject, EventsDemo, TransformDemo, MainScene, Parallax, Player, ScrollingWorldFollow, TilespriteBackground],
   physics: {
     default: "arcade",
     arcade: {

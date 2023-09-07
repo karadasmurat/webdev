@@ -26,6 +26,8 @@ import DraggableDemo from "./scenes/DraggableDemo.js";
 import SplashSceneDemo from "./scenes/SplashSceneDemo.js";
 import TimerDemo from "./scenes/TimerDemo.js";
 import ButtonDemo from "./scenes/ButtonDemo.js";
+import SoundDemo from "./scenes/SoundDemo.js";
+import ColliderDemo from "./scenes/ColliderDemo.js";
 
 /*
 The type property can be either Phaser.CANVAS, Phaser.WEBGL, or Phaser.AUTO. 
@@ -47,11 +49,11 @@ const config = {
     width: 400,
     height: 600,
   },
-  scene: [ButtonDemo, HelloWorld], // [HelloWorld, ButtonDemo, TimerDemo, SplashSceneDemo, DraggableDemo,Tmp, BodyDemo,PhysicsDemo, SpriteDemo, ComponentsDemo, GraphicsDemo, ImageDemo, AtlasDemo,TweenDemo, GroupDemo, LoadingDemo, AnimationDemo, CustomGameObject, EventsDemo, TransformDemo, MainScene, Parallax, Player, ScrollingWorldFollow, TilespriteBackground],
+  scene: [AnimationDemo, HelloWorld], // [HelloWorld, AnimationDemo, ColliderDemo, SoundDemo, ButtonDemo, TimerDemo, SplashSceneDemo, DraggableDemo,Tmp, BodyDemo,PhysicsDemo, SpriteDemo, ComponentsDemo, GraphicsDemo, ImageDemo, AtlasDemo,TweenDemo, GroupDemo, LoadingDemo, AnimationDemo, CustomGameObject, EventsDemo, TransformDemo, MainScene, Parallax, Player, ScrollingWorldFollow, TilespriteBackground],
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { y: 200 }, // false, //{ y: 200 },
+      gravity: false, // false, // { y: 200 },
       debug: true,
     },
   },

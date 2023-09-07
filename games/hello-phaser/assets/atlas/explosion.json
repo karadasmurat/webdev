@@ -1,0 +1,75 @@
+{
+  "frames": [
+    {
+      "filename": "explode06",
+      "frame": { "x": 2394, "y": 4, "w": 166, "h": 179 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 166, "h": 179 },
+      "sourceSize": { "w": 166, "h": 179 }
+    },
+    {
+      "filename": "explode04",
+      "frame": { "x": 1608, "y": 7, "w": 143, "h": 171 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 143, "h": 171 },
+      "sourceSize": { "w": 143, "h": 171 }
+    },
+    {
+      "filename": "explode05",
+      "frame": { "x": 1997, "y": 8, "w": 158, "h": 171 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 158, "h": 171 },
+      "sourceSize": { "w": 158, "h": 171 }
+    },
+    {
+      "filename": "explode03",
+      "frame": { "x": 1199, "y": 13, "w": 164, "h": 176 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 164, "h": 176 },
+      "sourceSize": { "w": 164, "h": 176 }
+    },
+    {
+      "filename": "explode01",
+      "frame": { "x": 386, "y": 22, "w": 188, "h": 186 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 188, "h": 186 },
+      "sourceSize": { "w": 188, "h": 186 }
+    },
+    {
+      "filename": "explode02",
+      "frame": { "x": 800, "y": 24, "w": 156, "h": 155 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 156, "h": 155 },
+      "sourceSize": { "w": 156, "h": 155 }
+    },
+    {
+      "filename": "explode00",
+      "frame": { "x": 1, "y": 62, "w": 132, "h": 115 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 132, "h": 115 },
+      "sourceSize": { "w": 132, "h": 115 }
+    },
+    {
+      "filename": "explode07",
+      "frame": { "x": 2794, "y": 1, "w": 170, "h": 188 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 170, "h": 188 },
+      "sourceSize": { "w": 170, "h": 188 }
+    }
+  ],
+  "meta": {
+    "app": "https://www.leshylabs.com/apps/sstool/",
+    "version": "Leshy SpriteSheet Tool v0.8.4",
+    "image": "explosion.png",
+    "size": { "w": 2964, "h": 208 },
+    "scale": 1
+  }
+}

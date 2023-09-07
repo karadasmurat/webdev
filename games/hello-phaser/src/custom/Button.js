@@ -5,13 +5,14 @@
  *  onClick callback
  */
 export default class Button extends Phaser.GameObjects.GameObject {
-  constructor(scene, x = 0, y = 0, texture, onClick) {
+  constructor(scene, x = 0, y = 0, texture, onClick, width = 50) {
     super(scene, "custombutton"); // GameObject
     // this.scene = scene;
     this.x = x;
     this.y = y;
     this.texture = texture;
     this.handleClick = onClick;
+    this.width = width;
 
     // note that onClick is defined in Scene, and "this", means "current scene" in that contex.
     // When we pass it as a parameter, the context (this reference) inside the Button indeed changes.
@@ -28,7 +29,8 @@ export default class Button extends Phaser.GameObjects.GameObject {
 
     // set the scale of btn image, using a "scaleFactor"
     // 1. Calculate the desired size for the logo (e.g., 80% of the screen width)
-    const desiredWidth = this.scene.cameras.main.width * 0.5;
+    // const desiredWidth = this.scene.cameras.main.width * 0.5;
+    const desiredWidth = this.width;
     // 2. Calculate the scale factor to achieve the desired width
     const scaleFactor = desiredWidth / this.btn_image.width;
     // 3. setScale using scaleFactor

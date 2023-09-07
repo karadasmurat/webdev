@@ -28,6 +28,10 @@ import TimerDemo from "./scenes/TimerDemo.js";
 import ButtonDemo from "./scenes/ButtonDemo.js";
 import SoundDemo from "./scenes/SoundDemo.js";
 import ColliderDemo from "./scenes/ColliderDemo.js";
+import InputDemo from "./scenes/InputDemo.js";
+import SceneUpdateDemo from "./scenes/SceneUpdateDemo.js";
+import ProgressDemo from "./scenes/ProgressDemo.js";
+import CameraDemo from "./scenes/CameraDemo.js";
 
 /*
 The type property can be either Phaser.CANVAS, Phaser.WEBGL, or Phaser.AUTO. 
@@ -38,8 +42,12 @@ but if the browser or device doesn't support it it'll fall back to Canvas.
 The width and height properties set the size of the canvas element that Phaser will create. 
 */
 const config = {
+  // The title of the game. Shown in the browser console.
+  title: "MK Games",
   type: Phaser.AUTO,
+  // The background color of the game canvas. The default is black.
   backgroundColor: "0xADC4CE",
+  // The Scale Manager configuration.
   scale: {
     // FIT: scale while maintaining the aspect ratio
     // Phaser will scale everything on the canvas proportionally
@@ -49,7 +57,7 @@ const config = {
     width: 400,
     height: 600,
   },
-  scene: [AnimationDemo, HelloWorld], // [HelloWorld, AnimationDemo, ColliderDemo, SoundDemo, ButtonDemo, TimerDemo, SplashSceneDemo, DraggableDemo,Tmp, BodyDemo,PhysicsDemo, SpriteDemo, ComponentsDemo, GraphicsDemo, ImageDemo, AtlasDemo,TweenDemo, GroupDemo, LoadingDemo, AnimationDemo, CustomGameObject, EventsDemo, TransformDemo, MainScene, Parallax, Player, ScrollingWorldFollow, TilespriteBackground],
+  scene: [CameraDemo, HelloWorld], // [HelloWorld,ProgressDemo, SceneUpdateDemo,InputDemo, AnimationDemo, ColliderDemo, SoundDemo, ButtonDemo, TimerDemo, SplashSceneDemo, DraggableDemo,Tmp, BodyDemo,PhysicsDemo, SpriteDemo, ComponentsDemo, GraphicsDemo, ImageDemo, AtlasDemo,TweenDemo, GroupDemo, LoadingDemo, AnimationDemo, CustomGameObject, EventsDemo, TransformDemo, MainScene, Parallax, Player, ScrollingWorldFollow, TilespriteBackground],
   physics: {
     default: "arcade",
     arcade: {

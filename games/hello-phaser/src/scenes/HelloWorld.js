@@ -7,6 +7,9 @@ export default class HelloWorld extends Phaser.Scene {
     // Change Background to Random Color
     const color = new Phaser.Display.Color();
     this.cameras.main.setBackgroundColor(color.random());
+
+    // data: Any data passed via ScenePlugin.add() or ScenePlugin.start()
+    console.log("data: ", data);
   }
 
   preload() {

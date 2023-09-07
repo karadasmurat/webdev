@@ -75,9 +75,24 @@ export default class ColliderDemo extends Phaser.Scene {
   }
 
   update() {
-    // for (const hippo of this.hippos.getChildren()) {
-    //   hippo.x += 1;
-    // }
+    this.repositionItems();
+  }
+
+  repositionItems() {
+    for (const hippo of this.hippos.getChildren()) {
+      if (hippo.x > this.cameras.main.width) {
+        hippo.setPosition(0, Phaser.Math.Between(0, this.cameras.main.height));
+      }
+    }
+
+    for (const snake of this.snakes.getChildren()) {
+      if (snake.x < 0) {
+        snake.setPosition(
+          this.cameras.main.width,
+          Phaser.Math.Between(0, this.cameras.main.height)
+        );
+      }
+    }
   }
 
   createAnims() {

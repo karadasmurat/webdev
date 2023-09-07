@@ -4,7 +4,7 @@
  * and this is where a preloader really makes a difference.
  */
 
-import ProgressBar from "../custom/ProgressIndicator.js";
+import ProgressBar from "../custom/ProgressBar.js";
 
 export default class LoadingDemo extends Phaser.Scene {
   constructor() {
@@ -16,7 +16,7 @@ export default class LoadingDemo extends Phaser.Scene {
     this.addProgressIndicator();
 
     // Create an instance of the ProgressBar class
-    this.progressBar_load = new ProgressBar(this, 50, 150, 200, 10);
+    this.progressBar_load = new ProgressBar(this, 0, 50, 150, 200, 10);
   }
 
   addProgressIndicator() {
@@ -62,7 +62,7 @@ export default class LoadingDemo extends Phaser.Scene {
     this.cntDown_timeOver = false;
 
     // Create an instance of the ProgressBar class
-    this.progressBar = new ProgressBar(this, 10, 300, 100, 20);
+    this.progressBar = new ProgressBar(this, 0, 10, 300, 100, 20);
   }
 
   update() {
@@ -84,7 +84,7 @@ export default class LoadingDemo extends Phaser.Scene {
 
     // Calculate the time passed as a value between 0 and 1
     const passedTimeRatio = elapsedSeconds / this.cntDown_timeLimit;
-    this.progressBar.setProgress(passedTimeRatio); // calculate new progress value
+    this.progressBar.setValue(passedTimeRatio); // calculate new progress value
   }
 
   //add events
@@ -97,15 +97,10 @@ export default class LoadingDemo extends Phaser.Scene {
     // When the progress  event is emitted, you will also receive a value between 0 and 1
     this.load.on("progress", (val) => {
       // console.log(val);
-
       // inline, OLD
       this.updateProgressIndicator(val);
 
-      if (val) {
-        this.progressBar_load.setProgress(val); // calculate new progress value
-      } else {
-        console.log("ZERO PROGRESS");
-      }
+      this.progressBar_load.setValue(val);
     });
 
     this.load.on("fileprogress", function (file) {

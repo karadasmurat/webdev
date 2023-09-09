@@ -14,6 +14,11 @@ export default class AnimationDemo extends Phaser.Scene {
       frameHeight: 48,
     });
 
+    this.load.spritesheet("coin", "assets/img/coin.png", {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
+
     // load atlas
     this.load.atlas(
       "explosion_atlas",
@@ -37,6 +42,9 @@ export default class AnimationDemo extends Phaser.Scene {
 
     // add sprite to play animation
     this.add.sprite(100, 300).play("anim_explosion");
+
+    // add sprite to play animation
+    this.add.sprite(50, 400).play("anim_coin");
 
     // what does the helper function return?
     console.log(
@@ -70,17 +78,29 @@ export default class AnimationDemo extends Phaser.Scene {
       repeat: -1, // -1 for infinity
     });
 
-    // helper function to generate frames array:
+    // spritesheet, helper function to generate frames array:
     this.anims.create({
       key: "punch",
       frames: this.anims.generateFrameNumbers("brawler", {
-        frames: [15, 16, 17, 18, 17, 15],
+        frames: [15, 16, 17, 18, 17, 15], // frames may not be sequential, else use start/end properties.
       }),
       frameRate: 8,
       repeat: -1,
       repeatDelay: 2000,
     });
 
+    // spritesheet, helper function to generate frames array:
+    this.anims.create({
+      key: "anim_coin",
+      frames: this.anims.generateFrameNumbers("coin", {
+        start: 0,
+        end: 5,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+
+    // atlas, helper function to generate frames array:
     this.anims.create({
       key: "anim_explosion",
       // use helper method, using frame names from atlas json

@@ -49,7 +49,7 @@ export default class SplashSceneDemo extends Phaser.Scene {
 
   startGame() {
     // Start your main game scene
-    this.scene.start("helloworld"); // key
+    this.scene.start("helloworld", { author: "MK" }); // key of Scene, data
   }
 
   tweenLogo() {

@@ -32,6 +32,10 @@ import InputDemo from "./scenes/InputDemo.js";
 import SceneUpdateDemo from "./scenes/SceneUpdateDemo.js";
 import ProgressDemo from "./scenes/ProgressDemo.js";
 import CameraDemo from "./scenes/CameraDemo.js";
+import DataDemo from "./scenes/DataDemo.js";
+import GroupCollisionDemo from "./scenes/GroupCollisionDemo.js";
+import GameOverDemo from "./scenes/GameOverDemo.js";
+import OverlayDemo from "./scenes/OverlayDemo.js";
 
 /*
 The type property can be either Phaser.CANVAS, Phaser.WEBGL, or Phaser.AUTO. 
@@ -57,11 +61,11 @@ const config = {
     width: 400,
     height: 600,
   },
-  scene: [CameraDemo, HelloWorld], // [HelloWorld,ProgressDemo, SceneUpdateDemo,InputDemo, AnimationDemo, ColliderDemo, SoundDemo, ButtonDemo, TimerDemo, SplashSceneDemo, DraggableDemo,Tmp, BodyDemo,PhysicsDemo, SpriteDemo, ComponentsDemo, GraphicsDemo, ImageDemo, AtlasDemo,TweenDemo, GroupDemo, LoadingDemo, AnimationDemo, CustomGameObject, EventsDemo, TransformDemo, MainScene, Parallax, Player, ScrollingWorldFollow, TilespriteBackground],
+  scene: [GameOverDemo, OverlayDemo, HelloWorld], // [HelloWorld, GameOverDemo, GroupCollisionDemo, DataDemo, ProgressDemo, SceneUpdateDemo,InputDemo, AnimationDemo, ColliderDemo, SoundDemo, ButtonDemo, TimerDemo, SplashSceneDemo, DraggableDemo,Tmp, BodyDemo,PhysicsDemo, SpriteDemo, ComponentsDemo, GraphicsDemo, ImageDemo, AtlasDemo,TweenDemo, GroupDemo, LoadingDemo, AnimationDemo, CustomGameObject, EventsDemo, TransformDemo, MainScene, Parallax, Player, ScrollingWorldFollow, TilespriteBackground],
   physics: {
     default: "arcade",
     arcade: {
-      gravity: false, // false, // { y: 200 },
+      gravity: { y: 300 }, // false, // { y: 200 },
       debug: true,
     },
   },

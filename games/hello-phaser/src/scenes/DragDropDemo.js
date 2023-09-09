@@ -1,4 +1,4 @@
-export default class DraggableDemo extends Phaser.Scene {
+export default class DragDropDemo extends Phaser.Scene {
   constructor() {
     super({ key: "draggable" });
   }
@@ -22,6 +22,38 @@ export default class DraggableDemo extends Phaser.Scene {
 
     // this.item2.setData("dropZone", this.dZone);
 
+    this.listenOver();
+    this.listenDrag();
+  }
+
+  listenOver() {
+    this.input.on(
+      Phaser.Input.Events.GAMEOBJECT_OVER,
+      (pointer, gameObject, event) => {
+        // Option 1 - Tint single color
+        // one color value, in which case the whole Game Object will be tinted in that color
+        gameObject.setTint(0xfa8072); // Salmon
+
+        // // Option 2 - Tint 4 corners
+        // // Define tint colors for each corner
+        // const topLeftTint = 0xff0000; // Red for top-left
+        // const topRightTint = 0xffffff; // Default, white
+        // const bottomLeftTint = 0xffffff; // Default, white
+        // const bottomRightTint = 0x00ff00; // Green for bottom-right
+
+        // // Apply the custom tint to a sprite or image
+        // gameObject.setTint(
+        //   topLeftTint,
+        //   topRightTint,
+        //   bottomLeftTint,
+        //   bottomRightTint
+        // );
+      }
+    );
+  }
+
+  listenDrag() {
+    // This event is dispatched by the Input Plugin belonging to a Scene if a pointer moves while dragging a Game Object.
     this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
       //   console.log(`dragging! (${dragX}, ${dragY})`);
       // this.item2.x = dragX;

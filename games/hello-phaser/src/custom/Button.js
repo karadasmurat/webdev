@@ -5,7 +5,7 @@
  *  onClick callback
  */
 export default class Button extends Phaser.GameObjects.GameObject {
-  constructor(scene, x = 0, y = 0, texture, onClick, width = 50) {
+  constructor(scene, x = 0, y = 0, texture, width = 50, onClick = () => {}) {
     super(scene, "custombutton"); // GameObject
     // this.scene = scene;
     this.x = x;

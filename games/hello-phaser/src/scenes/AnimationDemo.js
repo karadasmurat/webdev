@@ -1,9 +1,28 @@
+import Button from "../custom/Button.js";
+
+/**
+ *
+ * This Scene itself does not create any animations,
+ * However it can still play animations through "this.anims", which is the GLOBAL Animation Manager.
+ */
+export class AnimationConsumer extends Phaser.Scene {
+  constructor() {
+    super({ key: "animationConsumer" });
+  }
+  preload() {}
+  create() {
+    this.add.sprite(100, 100).play("anim_coin");
+  }
+}
+
 export default class AnimationDemo extends Phaser.Scene {
   constructor() {
     super({ key: "animate" });
   }
 
   preload() {
+    this.load.image("arrow_right", "assets/img/right-48x48.png");
+
     this.load.spritesheet("dude", "assets/img/dude.png", {
       frameWidth: 32,
       frameHeight: 48,
@@ -25,10 +44,21 @@ export default class AnimationDemo extends Phaser.Scene {
       "assets/atlas/explosion.png",
       "assets/atlas/explosion.json"
     );
+
+    // load atlas
+    this.load.atlas(
+      "heart_atlas",
+      "assets/atlas/heart_atlas.png",
+      "assets/atlas/heart_atlas.json"
+    );
   }
 
   create() {
     this.createAnimations();
+
+    this.btn = new Button(this, 300, 500, "arrow_right", 48, () => {
+      this.scene.start("animationConsumer");
+    });
 
     this.addPlayer();
 
@@ -45,6 +75,15 @@ export default class AnimationDemo extends Phaser.Scene {
 
     // add sprite to play animation
     this.add.sprite(50, 400).play("anim_coin");
+
+    // add sprite from atlas
+    this.heart = this.add
+      .sprite(50, 500, "heart_atlas", "sprite14")
+      .setScale(0.5);
+    this.input.keyboard.on("keydown-K", () => {
+      console.log("kill");
+      this.heart.play("anim_heart_1");
+    });
 
     // what does the helper function return?
     console.log(
@@ -111,6 +150,21 @@ export default class AnimationDemo extends Phaser.Scene {
       frameRate: 10,
       repeat: 2,
       hideOnComplete: true, // Should sprite.visible = false when the animation finishes?
+    });
+
+    // atlas, helper function to generate frames array:
+    this.anims.create({
+      key: "anim_heart_1",
+      // use helper method, using frame names from atlas json
+      frames: this.anims.generateFrameNames("heart_atlas", {
+        prefix: "sprite",
+        start: 1,
+        end: 9,
+      }),
+      yoyo: true,
+      // frameRate: 24,
+      // repeat: 1,
+      // hideOnComplete: true, // Should sprite.visible = false when the animation finishes?
     });
   }
 }

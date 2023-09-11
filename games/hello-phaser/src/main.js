@@ -40,6 +40,7 @@ import OverlayDemo from "./scenes/OverlayDemo.js";
 import InputEventsDemo from "./scenes/InputEventsDemo.js";
 import DomElementDemo from "./scenes/DomElementDemo.js";
 import HealthBarDemo from "./scenes/HealtBarDemo.js";
+import PersistenceDemo from "./scenes/PersistenceDemo.js";
 
 /*
 The type property can be either Phaser.CANVAS, Phaser.WEBGL, or Phaser.AUTO. 
@@ -70,7 +71,7 @@ const config = {
   dom: {
     createContainer: true,
   },
-  scene: [HealthBarDemo, AnimationConsumer, OverlayDemo], // [HelloWorld, InputEventsDemo, GameOverDemo, GroupCollisionDemo, DataDemo, ProgressDemo, SceneUpdateDemo,InputDemo, AnimationDemo, ColliderDemo, SoundDemo, ButtonDemo, TimerDemo, SplashSceneDemo, DraggableDemo,Tmp, BodyDemo,PhysicsDemo, SpriteDemo, ComponentsDemo, GraphicsDemo, ImageDemo, AtlasDemo,TweenDemo, GroupDemo, LoadingDemo, AnimationDemo, CustomGameObject, EventsDemo, TransformDemo, MainScene, Parallax, Player, ScrollingWorldFollow, TilespriteBackground],
+  scene: [SpriteDemo, PersistenceDemo, AnimationConsumer, OverlayDemo], // [HelloWorld, InputEventsDemo, GameOverDemo, GroupCollisionDemo, DataDemo, ProgressDemo, SceneUpdateDemo,InputDemo, AnimationDemo, ColliderDemo, SoundDemo, ButtonDemo, TimerDemo, SplashSceneDemo, DraggableDemo,Tmp, BodyDemo,PhysicsDemo, SpriteDemo, ComponentsDemo, GraphicsDemo, ImageDemo, AtlasDemo,TweenDemo, GroupDemo, LoadingDemo, AnimationDemo, CustomGameObject, EventsDemo, TransformDemo, MainScene, Parallax, Player, ScrollingWorldFollow, TilespriteBackground],
   physics: {
     default: "arcade",
     arcade: {

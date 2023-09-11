@@ -1,3 +1,5 @@
+import Card from "../components/Card.js";
+
 export default class QuizScene extends Phaser.Scene {
   constructor() {
     super({ key: "QuizScene" });
@@ -34,6 +36,8 @@ export default class QuizScene extends Phaser.Scene {
 
     this.currentQuestionIndex = 0;
     this.score = 0;
+
+    this.createOptionsContainer();
 
     // Remaining time in seconds for each question
     this.remainingTime = 5;
@@ -94,6 +98,11 @@ export default class QuizScene extends Phaser.Scene {
     const currentQuestion = this.questions[this.currentQuestionIndex];
     this.currentQuestionContainer = this.add.container(10, 100);
 
+    if (this.optionsContainer) {
+      this.optionsContainer.destroy(); // Remove previous question container
+    }
+    this.createOptionsContainer();
+
     const questionText = this.add.text(0, -50, currentQuestion.question, {
       fontSize: "24px",
       fill: "#fff",
@@ -102,13 +111,44 @@ export default class QuizScene extends Phaser.Scene {
 
     currentQuestion.options.forEach((option, index) => {
       const button = this.add
-        .text(0, index * 50, option, { fontSize: "18px", fill: "#fff" })
-        .setInteractive()
-        .on("pointerdown", () => {
-          this.checkAnswer(index);
+        .text(50, index * 50, option, { fontSize: "18px", fill: "#fff" })
+        .setInteractive();
+      button.on(
+        "pointerdown",
+        () => {
+          this.checkAnswer(index); //here "this" refers to scene
+        },
+        this
+      );
+      button.on("pointerover", () => {
+        console.log("pointerover option");
+        button.setStyle({
+          color: "#ffffff",
+          backgroundColor: "#ff00ff",
         });
+      });
+      button.on("pointerout", () => {
+        console.log("pointerover option");
+        button.setStyle({
+          color: "#ffffff",
+          backgroundColor: "#000000",
+        });
+      });
       this.currentQuestionContainer.add(button);
+
+      //Card
+      const card = new Card(this, 100, 110 * (index + 1), option);
+      this.addCardToOptionsContainer(card);
     });
+  }
+
+  createOptionsContainer() {
+    this.optionsContainer = this.add.container(300, 0);
+  }
+
+  addCardToOptionsContainer(card) {
+    console.log("adding to optionsContainer ");
+    this.optionsContainer.add(card);
   }
 
   checkAnswer(selectedIndex) {

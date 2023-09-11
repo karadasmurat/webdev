@@ -9,12 +9,12 @@ export default class HealthBarDemo extends Phaser.Scene {
     console.log("HealthBarDemo");
   }
   preload() {
-    this.load.image("heart", "assets/img/heart-64x64.png");
+    this.load.image("heart", "assets/img/heart-128x128.png");
   }
 
   create() {
     // create a health bar instance
-    this.healthBar = new HealthBar(this, 275, 10);
+    this.healthBar = new HealthBar(this, 260, 32, 5);
     console.log(this.healthBar);
 
     this.healthBar.on(events.NO_HEALTH, () => {

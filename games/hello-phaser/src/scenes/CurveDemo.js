@@ -1,4 +1,4 @@
-import Card from "../custom/Card.js";
+import Card from "../components/Card.js";
 
 export default class CurveDemo extends Phaser.Scene {
   constructor() {

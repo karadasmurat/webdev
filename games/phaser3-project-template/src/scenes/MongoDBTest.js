@@ -12,9 +12,6 @@ export default class MongoDBTest extends Phaser.Scene {
   create() {}
 
   async initMongoClient() {
-    const uri =
-      "mongodb+srv://mkdb:<password>@dev-cluster.ct6sszv.mongodb.net/?retryWrites=true&w=majority";
-
     // Create a MongoClient with a MongoClientOptions object to set the Stable API version
     // this.client = new MongoClient(uri, {
     //   serverApi: {

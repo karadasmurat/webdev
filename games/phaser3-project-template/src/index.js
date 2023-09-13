@@ -2,29 +2,7 @@ import Phaser from "phaser";
 import logoImg from "./assets/logo.png";
 import Helloworld from "./scenes/HelloWorld";
 import SpriteDemo from "./scenes/SpriteDemo";
-
-class MyGame extends Phaser.Scene {
-  constructor() {
-    super();
-  }
-
-  preload() {
-    this.load.image("logo", logoImg);
-  }
-
-  create() {
-    const logo = this.add.image(400, 150, "logo");
-
-    this.tweens.add({
-      targets: logo,
-      y: 450,
-      duration: 2000,
-      ease: "Power2",
-      yoyo: true,
-      loop: -1,
-    });
-  }
-}
+import MongoDBTest from "./scenes/MongoDBTest";
 
 const config = {
   // The title of the game. Shown in the browser console.
@@ -55,7 +33,7 @@ const config = {
       debug: true,
     },
   },
-  scene: [SpriteDemo, Helloworld, MyGame],
+  scene: [SpriteDemo, Helloworld], //MongoDBTest,
 };
 
 const game = new Phaser.Game(config);

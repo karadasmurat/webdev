@@ -8,31 +8,35 @@
 export default class ProgressBar extends Phaser.GameObjects.GameObject {
   constructor(
     scene,
-    value,
     x,
     y,
+    value,
+    max = 1,
     width = 100,
-    height = 20,
+    height = 30,
+
+    // Optional style configuration
     {
       border = 1,
       borderRadius = 3,
-      colorBackground = 0x3f72af,
-      colorCompleted = 0xdbe2ef,
+      backgroundColor = 0xff0000, //0x3f72af,
+      color = 0x00ff00, //0xdbe2ef,
     } = {}
   ) {
     // super(scene, x, y);
     super(scene, "progress");
 
     this.scene = scene;
+    this.max = max;
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
-    this.style = { border, borderRadius, colorBackground, colorCompleted };
+    this.style = { border, borderRadius, backgroundColor, color };
 
-    // The progressBox is background rectangle, representing 100%
+    // The progressBox is background rectangle, representing max
     this.progressBox = this.scene.add.graphics();
-    this.progressBox.fillStyle(colorBackground, 1);
+    this.progressBox.fillStyle(backgroundColor, 0.8);
     this.progressBox.fillRoundedRect(
       x, //x - border,
       y, // y - border,
@@ -41,29 +45,33 @@ export default class ProgressBar extends Phaser.GameObjects.GameObject {
       borderRadius
     );
 
-    // The progressBar representing actual status
+    // The progressBar representing value
     this.progressBar = this.scene.add.graphics();
     this.setValue(value);
 
     scene.add.existing(this);
   }
 
-  // setter, value is normalized [0-1]
+  // ensure that the value property >= 0
   setValue(val) {
-    this.value = Phaser.Math.Clamp(val, 0, 1);
-    this.drawProgress();
+    this.value = val < 0 ? 0 : val;
+    this.drawValue();
   }
 
-  drawProgress() {
+  drawValue() {
+    // console.log("progress: ", this.value / this.max);
+
+    // Clear the command buffer and reset the fill style and line style to their defaults.
     this.progressBar.clear();
-    this.progressBox.fillStyle(this.style.colorCompleted, 1);
+
+    this.progressBox.fillStyle(this.style.color, 1);
 
     this.progressBar.fillRoundedRect(
       this.x + this.style.border,
       this.y + this.style.border,
-      (this.width - 2 * this.style.border) * this.value,
+      (this.width - 2 * this.style.border) * (this.value / this.max),
       this.height - 2 * this.style.border,
-      this.style.borderRadius // { tl: radius, tr: 0, bl: radius, br: 0 }
+      this.value != 0 ? this.style.borderRadius : 0 // { tl: radius, tr: 0, bl: radius, br: 0 }
     );
   }
 }

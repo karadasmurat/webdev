@@ -10,6 +10,7 @@ The width and height properties set the size of the canvas element that Phaser w
 import MainMenuScene from "./scenes/MainMenuScene.js";
 import QuizScene from "./scenes/QuizScene.js";
 import ResultsScene from "./scenes/ResultsScene.js";
+import Test from "./scenes/Test.js";
 
 const config = {
   type: Phaser.AUTO,
@@ -18,7 +19,7 @@ const config = {
     width: 800,
     height: 600,
   },
-  scene: [MainMenuScene, QuizScene, ResultsScene],
+  scene: [QuizScene, ResultsScene], // MainMenuScene, Test,
 };
 const game = new Phaser.Game(config);
 

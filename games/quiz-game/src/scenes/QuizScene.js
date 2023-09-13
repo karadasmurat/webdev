@@ -1,5 +1,6 @@
 import Card from "../components/Card.js";
-
+import ProgressBar from "../components/ProgressBar.js";
+import GameTimer from "../components/GameTimer.js";
 export default class QuizScene extends Phaser.Scene {
   constructor() {
     super({ key: "QuizScene" });
@@ -8,6 +9,12 @@ export default class QuizScene extends Phaser.Scene {
   preload() {}
 
   create() {
+    this.gameOver = false;
+
+    // Configuration parameter that represents the duration (or time limit) for each question
+    this.questionTimeLimit = 5;
+    this.questionTimeLeft = this.questionTimeLimit;
+
     // Load questions and answers from a data source (not shown here)
     this.questions = [
       {
@@ -39,49 +46,31 @@ export default class QuizScene extends Phaser.Scene {
 
     this.createOptionsContainer();
 
-    // Remaining time in seconds for each question
-    this.remainingTime = 5;
-
     // Display remaining time
-    this.addTimerDisplay();
+    this.progressbar = new ProgressBar(
+      this,
+      680,
+      60,
+      this.questionTimeLeft,
+      this.questionTimeLimit
+    );
 
-    // Start the timer
-    this.startTimer();
+    this.initTimer();
 
     this.displayQuestion();
+    // this.gameLoop();
+
     this.displayScoreBoard();
   }
 
-  startTimer() {
-    // Create a timer event to update the remaining time every second
-    this.timerEvent = this.time.addEvent({
-      delay: 1000,
-      callback: this.handleTick,
-      callbackScope: this,
-      loop: true,
+  initTimer() {
+    console.log("Create timer and start listening on it for a timeout event.");
+    this.gameTimer = new GameTimer(this, 680, 60, this.questionTimeLimit);
+
+    this.gameTimer.on("TIMEOUT", () => {
+      console.log("Time is up for the question.");
+      this.checkAndProceed(-1); // Call a special checkAnswer with -1 to indicate time's up
     });
-  }
-
-  handleTick() {
-    this.remainingTime -= 1;
-    console.log(this.remainingTime);
-
-    if (this.remainingTime == 0) {
-      // ... (handle time's up)
-      this.checkAnswer(-1); // Call a special checkAnswer with -1 to indicate time's up
-    }
-    this.updateTimerDisplay();
-  }
-
-  addTimerDisplay() {
-    this.timerText = this.add.text(700, 20, `Time: ${this.remainingTime}`, {
-      fontSize: "18px",
-      fill: "#FF1493",
-    });
-  }
-
-  updateTimerDisplay() {
-    this.timerText.setText(`Time: ${this.remainingTime}`);
   }
 
   displayScoreBoard() {
@@ -89,55 +78,35 @@ export default class QuizScene extends Phaser.Scene {
   }
 
   displayQuestion() {
-    if (this.currentQuestionContainer) {
-      this.currentQuestionContainer.destroy(); // Remove previous question container
-    }
-
-    this.remainingTime = 5;
+    // Reset the timer
+    this.gameTimer.reset();
 
     const currentQuestion = this.questions[this.currentQuestionIndex];
-    this.currentQuestionContainer = this.add.container(10, 100);
 
-    if (this.optionsContainer) {
-      this.optionsContainer.destroy(); // Remove previous question container
-    }
-    this.createOptionsContainer();
+    // A Card for Question Text
+    this.card && this.card.destroy();
+    this.card = new Card(this, 100, 300, currentQuestion.question);
 
-    const questionText = this.add.text(0, -50, currentQuestion.question, {
-      fontSize: "24px",
-      fill: "#fff",
-    });
-    this.currentQuestionContainer.add(questionText);
+    // A Card for each option
+    // Removes all Game Objects from this Container, optionally call destroy on each Game Object
+    this.optionsContainer.removeAll(true);
 
     currentQuestion.options.forEach((option, index) => {
-      const button = this.add
-        .text(50, index * 50, option, { fontSize: "18px", fill: "#fff" })
-        .setInteractive();
-      button.on(
+      const card = new Card(this, 100, 110 * (index + 1), option);
+      this.tweens.add({
+        targets: card,
+        duration: 5000,
+        // x: { randInt: [50, 300] },
+        x: 50,
+      });
+      card.on(
         "pointerdown",
         () => {
-          this.checkAnswer(index); //here "this" refers to scene
+          this.checkAndProceed(index); //here "this" refers to scene
         },
         this
       );
-      button.on("pointerover", () => {
-        console.log("pointerover option");
-        button.setStyle({
-          color: "#ffffff",
-          backgroundColor: "#ff00ff",
-        });
-      });
-      button.on("pointerout", () => {
-        console.log("pointerover option");
-        button.setStyle({
-          color: "#ffffff",
-          backgroundColor: "#000000",
-        });
-      });
-      this.currentQuestionContainer.add(button);
 
-      //Card
-      const card = new Card(this, 100, 110 * (index + 1), option);
       this.addCardToOptionsContainer(card);
     });
   }
@@ -151,19 +120,30 @@ export default class QuizScene extends Phaser.Scene {
     this.optionsContainer.add(card);
   }
 
-  checkAnswer(selectedIndex) {
-    const currentQuestion = this.questions[this.currentQuestionIndex];
-    if (selectedIndex === currentQuestion.correctOptionIndex) {
+  hasNextQuestion() {
+    return ++this.currentQuestionIndex < this.questions.length;
+  }
+
+  isCorrect(selectedIndex) {
+    return (
+      selectedIndex ===
+      this.questions[this.currentQuestionIndex].correctOptionIndex
+    );
+  }
+  checkAndProceed(selectedIndex) {
+    if (this.isCorrect(selectedIndex)) {
       this.score++;
       this.scoreBoard.text = `Score: ${this.score}`;
     }
 
-    this.currentQuestionIndex++;
-    if (this.currentQuestionIndex < this.questions.length) {
+    // Prepare the next question:
+
+    if (this.hasNextQuestion()) {
       // Display the next question
       this.displayQuestion();
     } else {
       // All questions answered, go to results screen
+      // console.log("THE END.");
       this.scene.start("ResultsScene", { score: this.score });
     }
   }

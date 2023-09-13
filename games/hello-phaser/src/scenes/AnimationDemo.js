@@ -51,16 +51,28 @@ export default class AnimationDemo extends Phaser.Scene {
       "assets/atlas/heart_atlas.png",
       "assets/atlas/heart_atlas.json"
     );
+
+    // load atlas
+    this.load.atlas(
+      "soldier",
+      "assets/atlas/soldier.png",
+      "assets/atlas/soldier.json"
+    );
   }
 
   create() {
-    this.createAnimations();
-
     this.btn = new Button(this, 300, 500, "arrow_right", 48, () => {
       this.scene.start("animationConsumer");
     });
 
     this.addPlayer();
+
+    // Create animation on a Specific Sprite
+    this.rambo = this.add.sprite(300, 300, "soldier");
+    this.createAnimations();
+
+    //  Because the rambo Sprite has its own 'walk' animation, it will play it:
+    this.rambo.play("walk");
 
     const cody = this.add.sprite(200, 200);
     cody.setScale(2);
@@ -165,6 +177,19 @@ export default class AnimationDemo extends Phaser.Scene {
       // frameRate: 24,
       // repeat: 1,
       // hideOnComplete: true, // Should sprite.visible = false when the animation finishes?
+    });
+
+    //  The following animation is created directly on the 'rambo' Sprite.
+    //  It cannot be used by any other sprite, and the key ('walk') is never added to the global Animation Manager, as it's kept local to this Sprite.
+    this.rambo.anims.create({
+      key: "walk",
+      frames: this.anims.generateFrameNames("soldier", {
+        prefix: "soldier_3_walk_",
+        start: 1,
+        end: 8,
+      }),
+      frameRate: 12,
+      repeat: -1,
     });
   }
 }

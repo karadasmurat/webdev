@@ -77,7 +77,7 @@ export default class Card extends Phaser.GameObjects.Container {
       cursor: "pointer",
     });
     //  Specify a different debug outline color
-    this.scene.input.enableDebug(this, colors.Aqua);
+    this.scene.input.enableDebug(this, "red");
 
     // Add the container to the scene
     scene.add.existing(this);

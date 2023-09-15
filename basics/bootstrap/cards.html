@@ -1,48 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/bootstrap-5.3.0-alpha3/bootstrap.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="../css/bootstrap-5.3.0-alpha3/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
     <title>Grid Cards</title>
-</head>
+  </head>
 
-<body>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Card 1</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor nibh
-                            vel justo dapibus, eu gravida sapien vehicula.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Card 2</h5>
-                        <p class="card-text">Fusce maximus sapien ut nisi aliquet elementum. Aliquam ac enim eget arcu
-                            placerat bibendum vel at turpis.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Card 3</h5>
-                        <p class="card-text">Praesent blandit sapien quis magna molestie, sed rutrum leo efficitur.
-                            Etiam vitae dui vitae quam sollicitudin laoreet.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Add more cards as needed -->
+  <body>
+    <div class="d-flex gap-2">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Card 1</h5>
+          <p class="card-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor
+            nibh vel justo dapibus, eu gravida sapien vehicula.
+          </p>
         </div>
+      </div>
+
+      <div class="card">
+        <img src="../images/potter1.webp" class="card-img-top" />
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">
+            Some quick example text to build on the card title and make up the
+            bulk of the card's content.
+          </p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
+
+      <!-- Add more cards as needed -->
     </div>
 
-</body>
+    <h2>Image overlays</h2>
+    <div class="d-flex gap-2">
+      <div class="card text-bg-dark" style="width: 400px">
+        <img src="../images/potter1.webp" class="card-img" />
+        <div class="card-img-overlay">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">
+            This is a wider card with supporting text below as a natural lead-in
+            to additional content. This content is a little bit longer.
+          </p>
+          <p class="card-text"><small>Last updated 3 mins ago</small></p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
 
+      <!-- overlay - button over image -->
+      <div class="card text-bg-dark" style="width: 400px">
+        <img src="../images/potter1.webp" class="card-img" />
+        <div class="card-img-overlay text-end">
+          <button class="btn btn-warning" onclick="alert('ok!')">
+            <i class="bi bi-heart-fill"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

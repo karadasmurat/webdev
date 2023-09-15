@@ -11,6 +11,62 @@
 
 <body>
 
+    <p>The display CSS property sets whether an element is treated as a block or inline element and the layout used for
+        its
+        children, such as flow layout, grid or flex.</p>
+    <h1>Flex</h1>
+    <p> Flex </p>
+
+    <h3>Direction</h3>
+    <p>Establish the main-axis.</p>
+    <ul>
+        <li>Use <code>.flex-row</code> to set a horizontal direction (the browser default)</li>
+        <li>Use <code>.flex-column</code> to set a vertical direction</li>
+    </ul>
+
+    <h3>Justify content</h3>
+    <p>Use <code>justify-content</code> utilities on flexbox containers to change the alignment of flex items on
+        the main axis</p>
+    <ul>
+
+        <li><code>.justify-content-start</code></li>
+        <li><code>.justify-content-end</code></li>
+        <li><code>.justify-content-center</code></li>
+        <li><code>.justify-content-between</code></li>
+        <li><code>.justify-content-around</code></li>
+        <li><code>.justify-content-evenly</code></li>
+    </ul>
+    <h3>Align items</h3>
+    <p>Use <code>align-items</code> utilities on flexbox containers to change the alignment of flex items on the cross
+        axis
+    </p>
+    <div class="d-flex flex-column p-2 border">
+        <div class="p-2 border">Flex item 1</div>
+        <div class="p-2 border">Flex item 2</div>
+        <div class="p-2 border">Flex item 3</div>
+    </div>
+
+    <div class="d-flex justify-content-end p-2 border">
+        <div class="p-2 border">Flex item 1</div>
+        <div class="p-2 border">Flex item 2</div>
+        <div class="p-2 border">Flex item 3</div>
+    </div>
+
+    <div class="d-flex p-2 border">
+        <div class="p-2 flex-grow-1 border">flex-grow-1</div>
+        <div class="p-2 border">Flex item</div>
+        <div class="p-2 border">Third flex item</div>
+    </div>
+    <br>
+    <h4>Auto margins</h4>
+    <p>pushing two items to the right <code>.me-auto</code>, and pushing two items to the left <code>.ms-auto</code>.
+    </p>
+    <div class="d-flex p-2 gap-1 border">
+        <div class="me-auto p-2 border rounded">me-auto</div>
+        <div class="p-2 border">Flex item</div>
+        <button type="button" class="btn btn-outline-secondary">Click</button>
+    </div>
+
     <h1>Containers</h1>
     <p>Containers are a fundamental building block of Bootstrap that contain, pad, and align your content within a given
         device or viewport.</p>
@@ -26,14 +82,16 @@
 
     <h2>Default Container</h2>
     <p>Our default <code>.container</code> class is a responsive, fixed-width container, meaning its
-        <code>max-width</code> changes at each breakpoint.</p>
+        <code>max-width</code> changes at each breakpoint.
+    </p>
     <div class="container text-light bg-secondary">
         Default Container Contents
     </div>
 
     <h2>Resposive Containers</h2>
     <p>bagimsizligini kazanip kendi max-width ini kazanması icin gerekli minimum buyukluk:
-        <code>.container-{breakpoint}</code></p>
+        <code>.container-{breakpoint}</code>
+    </p>
     <div class="container-sm text-light bg-primary">container-sm: 100% wide until small breakpoint</div>
     <div class="container-md text-light bg-secondary">container-md: 100% wide until medium breakpoint</div>
     <div class="container-lg text-light bg-success">container-lg: 100% wide until large breakpoint</div>
@@ -102,66 +160,83 @@
 
     <h3>Example: Equal width columns</h3>
     <p>Create 2 equal-width columns across all devices and viewports:</p>
-    <div class="container text-center">
-        <div class="row text-light bg-secondary">
-            <div class="col">
-                col
-            </div>
-            <div class="col">
-                col
-            </div>
-        </div>
+    <div class="row">
+        <div class="col bg-primary">col</div>
+        <div class="col bg-success">col</div>
     </div>
+
+
+
 
     <h3>Example: Setting column width</h3>
     <p>Auto-layout for flexbox grid columns also means you can set the width of one column and have the sibling columns
         automatically resize around it. </p>
 
-    <div class="container text-center">
-        <div class="row bg-secondary">
-            <div class="col">
-                col
-            </div>
-            <div class="col-6 bg-success">
-                col-6
-            </div>
-            <div class="col">
-                col
-            </div>
-        </div>
-        <div class="row bg-light">
-            <div class="col">
-                col
-            </div>
-            <div class="col-5 bg-warning">
-                col-5
-            </div>
-            <div class="col">
-                col
-            </div>
-        </div>
+    <div class="row text-white text-center">
+        <div class="col-4 bg-success">col-4</div>
+        <div class="col bg-danger">col</div>
     </div>
+
+    <div class="row text-white text-center">
+        <div class="col-4 bg-primary">col-4</div>
+        <div class="col-8 bg-secondary">col-8</div>
+    </div>
+
+    <br>
+    <h4>Exceeding 12</h4>
+
+    <div class="row text-light">
+        <div class="col  bg-primary">col #1</div>
+        <div class="col  bg-secondary">col</div>
+        <div class="col  bg-warning">col #3</div>
+        <div class="col  bg-success">col</div>
+        <div class="col  bg-danger">col #5</div>
+        <div class="col  bg-light">col</div>
+        <div class="col  bg-info">col #7</div>
+        <div class="col  bg-dark">col</div>
+        <div class="col  bg-primary">col #9</div>
+        <div class="col  bg-secondary">col</div>
+        <div class="col  bg-warning">col #11</div>
+        <div class="col  bg-success">col</div>
+        <div class="col  bg-danger">col #13</div>
+        <div class="col  bg-light">col</div>
+        <div class="col  bg-info">col #15</div>
+        <div class="col  bg-dark">col</div>
+        <div class="col  bg-primary">col #17</div>
+    </div>
+
+    <br>
+    <h4>Exceeding 12</h4>
+    <div class="row">
+        <div class="col">col</div>
+        <div class="col-6 bg-success">col-6</div>
+        <div class="col ">col</div>
+        <div class="col-2 bg-info">col-2</div>
+        <div class="col-5 bg-warning">col-5</div>
+        <div class="col bg-danger">col</div>
+    </div>
+
     <h2>Example: breakpoints</h2>
     <p>Bootstrap's grid includes six tiers of predefined classes for building complex responsive layouts.</p>
     <p>
         SATIR DEGIL DE KOLON GIBI DAVRANMASI ICIN, SAYFA GENISLIGI {breakpoint} DEN BUYUK OLMALI. SAYFA BUNDAN DAR ISE,
         ROW GİBİ
         DAVRANACAK (ALT ALTA), VE 100% width.)
-        <ul>
-            <li><code>col</code>
-                HER ZAMAN KOLON GIBI DAVRANIR - KOLON GENISLIGI OLARAK 1 ROWu PAYLASIR.</li>
-            <li><code>col-size</code>
-                HER ZAMAN KOLON GIBI DAVRANIR - KOLON GENISLIGI ORANSAL OLARAK SABIT = size/12 % - YANI CEP TELEFONUNDA
-                DA 2 KOLON, 4K EKRANDA DA 2 KOLON. KOLONLAR ALT SATIRA
-                KAYABILIR.</li>
-            <li><code>col-{breakpoint}</code>
-                EGER SAYFA breakpoint'ten GENISSE, o zaman KOLON GIBI DAVRANIR, GENISLIK OLARAK 1 rowu paylaşır.</li>
-            <li> <code>col-{breakpoint}-size</code>
-                EGER SAYFA breakpoint'ten GENISSE, o zaman KOLON GIBI DAVRANIR. KOLONUN GENISLIGI (size/12) * max-width.
-                BU DURUMDA YENI ALT SATIRA KAYABILIR.
-                <p>OYSA <code>col-size</code> KULLANSAK, SAYFA DARALDIKCA KUCULECEK AMA HEP COLUMN GIBI DAVRANACAK</p>
-            </li>
-        </ul>
+    <ul>
+        <li><code>col</code>
+            HER ZAMAN KOLON GIBI DAVRANIR - KOLON GENISLIGI OLARAK 1 ROWu PAYLASIR.</li>
+        <li><code>col-size</code>
+            HER ZAMAN KOLON GIBI DAVRANIR - KOLON GENISLIGI ORANSAL OLARAK SABIT = size/12 % - YANI CEP TELEFONUNDA
+            DA 2 KOLON, 4K EKRANDA DA 2 KOLON. KOLONLAR ALT SATIRA
+            KAYABILIR.</li>
+        <li><code>col-{breakpoint}</code>
+            EGER SAYFA breakpoint'ten GENISSE, o zaman KOLON GIBI DAVRANIR, GENISLIK OLARAK 1 rowu paylaşır.</li>
+        <li> <code>col-{breakpoint}-size</code>
+            EGER SAYFA breakpoint'ten GENISSE, o zaman KOLON GIBI DAVRANIR. KOLONUN GENISLIGI (size/12) * max-width.
+            BU DURUMDA YENI ALT SATIRA KAYABILIR.
+            <p>OYSA <code>col-size</code> KULLANSAK, SAYFA DARALDIKCA KUCULECEK AMA HEP COLUMN GIBI DAVRANACAK</p>
+        </li>
+    </ul>
 
 
     </p>
@@ -188,6 +263,22 @@
             <div class="col-md border">col-md</div>
             <div class="col-md border">col-md</div>
             <div class="col-md border">col-md</div>
+            <div class="col-md border">col-md</div>
+            <div class="col-md border">col-md</div>
+            <div class="col-md border">col-md</div>
+            <div class="col-md border">col-md</div>
+            <div class="col-md border">col-md</div>
+            <div class="col-md border">col-md</div>
+            <div class="col-md border">col-md</div>
+            <div class="col-md border">col-md</div>
+            <div class="col-md border">col-md</div>
+            <div class="col-md border">col-md</div>
+            <div class="col-md border">col-md</div>
+            <div class="col-md border">col-md</div>
+            <div class="col-md border">col-md</div>
+            <div class="col-md border">col-md</div>
+            <div class="col-md border">col-md</div>
+            <div class="col-md border">col-md</div>
         </div>
         <p>width = 6/12, 2 columns will share the row, after page length > md breakpoint:</p>
         <div class="row text-center bg-light mb-3">
@@ -196,14 +287,14 @@
             <div class="col-md-6 border">col-md-6</div>
         </div>
         <p> cok kolon var, her ekran daraldikca yuzde olarak daha fazla yer kaplasin:
-            <ul>
-                <li><code>col-md-6</code>: md sayfa genislikten itibaren, kolon genislik 6/12 => SATIRDA 2 KOLON</li>
-                <li><code>col-lx-4</code>: xl sayfa genislikten itibaren, kolon genislik 4/12 => SATIRDA 3 KOLON</li>
-            </ul>
-            <em>breakpoint ve size ters orantili gidiyor </em> - Zira bir elemanin yuksek cozunurluklu bir ekranda
-            sayfanin yarisini kaplamasi komik olurdu. <strong>sayfa buyudukce daha fazla kolon</strong> , yani tekil
-            kolon oransal olarak daha az yer kaplasin
-            istiyoruz. (size'i oran olarak dusunmek daha kolay olabiliyor: size/12 %)
+        <ul>
+            <li><code>col-md-6</code>: md sayfa genislikten itibaren, kolon genislik 6/12 => SATIRDA 2 KOLON</li>
+            <li><code>col-lx-4</code>: xl sayfa genislikten itibaren, kolon genislik 4/12 => SATIRDA 3 KOLON</li>
+        </ul>
+        <em>breakpoint ve size ters orantili gidiyor </em> - Zira bir elemanin yuksek cozunurluklu bir ekranda
+        sayfanin yarisini kaplamasi komik olurdu. <strong>sayfa buyudukce daha fazla kolon</strong> , yani tekil
+        kolon oransal olarak daha az yer kaplasin
+        istiyoruz. (size'i oran olarak dusunmek daha kolay olabiliyor: size/12 %)
 
         </p>
         <div class="row text-center bg-light mb-3">

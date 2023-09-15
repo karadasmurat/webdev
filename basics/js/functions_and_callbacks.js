@@ -206,6 +206,9 @@ function mutator(car, arr) {
 }
 
 function sum_rest(...theArgs) {
+  console.log("Type of arg: ", typeof theArgs); // object
+  console.log("Array.isArray(): ", Array.isArray(theArgs)); // true
+
   // The rest parameter syntax allows a function to accept an indefinite number of arguments as an array
   let total = 0;
   for (const arg of theArgs) {

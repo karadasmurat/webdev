@@ -11,11 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/basics/TypeScript/src/classes.ts",
-            "preLaunchTask":"tsc:build",
-            "outFiles": [
-                "${workspaceFolder}/**/*.js"
-            ]
+            "program": "${workspaceFolder}/basics/js/hello_node.js"
         }
     ]
 }

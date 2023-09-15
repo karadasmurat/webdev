@@ -53,5 +53,49 @@ function iterateMap(map) {
   }
 }
 
+function setBasics() {
+  console.log("Set Basics");
+  console.log("-----------");
+
+  const mySet1 = new Set();
+
+  mySet1.add(1); // Set(1) { 1 }
+  mySet1.add(5); // Set(2) { 1, 5 }
+  mySet1.add(5); // Set(2) { 1, 5 }
+  mySet1.add("some text"); // Set(3) { 1, 5, 'some text' }
+
+  const car = { make: "Kia", year: 2007 };
+  mySet1.add(car);
+
+  mySet1.delete(5); // removes 5 from the set
+
+  // false, 5 has been removed
+  if (mySet1.has(car)) {
+    console.log("value found.");
+  } else {
+    console.log("value not found.");
+  }
+
+  console.log(mySet1.size);
+
+  iterateSet(mySet1);
+}
+
+// A Set is an iterable, so it can be directly iterated.
+function iterateSet(set) {
+  console.log("Iterate through Set");
+  for (const entry of set) {
+    console.log(entry);
+  }
+
+  //   array destructuring
+  //   for (const [key, value] of map) {
+  //     console.log(key, ":", value);
+  //   }
+}
+
 // ############
-mapBasics();
+// mapBasics();
+setBasics();
+
+

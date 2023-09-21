@@ -1,15 +1,9 @@
 import "./App.css";
+import FormDemo from "./components/FormDemo";
+import Form from "./components/FormDemo";
 
-import CntButton from "./components/CntButton";
-import ColorGrid from "./components/ColorBox";
-import Garage from "./components/Garage";
-import Greeter, { NamedGreeter } from "./components/Greeter";
-import MediaDemo from "./components/MediaDemo";
-import MemoizationDemo from "./components/MemoizationDemo";
-import NameList from "./components/NameList";
-import Pokemon from "./components/Pokemon";
-import Slot from "./components/Slot";
-import Todo from "./components/Todo";
+import PropsPrinter from "./components/PropsPrinter";
+import Stopwatch from "./components/Stopwatch";
 
 function App() {
   const keeper = "Hagrid";
@@ -18,6 +12,12 @@ function App() {
     { id: 2, title: "Todo #2", isdone: false },
     { id: 3, title: "Todo #3", isdone: true },
   ];
+
+  const attributes = {
+    prop1: "Value 1",
+    prop2: "Value 2",
+    prop3: "Value 3",
+  };
 
   return (
     <div>
@@ -29,14 +29,15 @@ function App() {
       {/* <NameList names={["John", "Mike", "Sally"]} /> */}
       {/* <Pokemon /> */}
       {/* <Pokemon /> */}
-
       {/* <Slot /> */}
-
       {/* <Todo items={todos}/> */}
-
       {/* <ColorGrid boxCnt={25} /> */}
       {/* <MediaDemo /> */}
-      <MemoizationDemo />
+      {/* <MemoizationDemo /> */}
+      {/* Pass Props Using the Spread Operator: */}
+      {/* <PropsPrinter p1="a" p2={2} {...attributes} /> */}
+      {/* <FormDemo /> */}
+      <Stopwatch />
     </div>
   );
 }

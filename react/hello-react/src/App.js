@@ -1,9 +1,19 @@
 import "./App.css";
+import { CountDown, CountUp } from "./components/Counter";
+import Count from "./components/Counter";
+import CustomHookDemo from "./components/CustomHookDemo";
+import FetchDemo from "./components/FetchDemo";
 import FormDemo from "./components/FormDemo";
 import Form from "./components/FormDemo";
+import HOCDemo from "./components/HOCDemo";
 
 import PropsPrinter from "./components/PropsPrinter";
+import RecuderDemo from "./components/ReducerDemo";
 import Stopwatch from "./components/Stopwatch";
+import WindowEventsDemo from "./components/WindowEventsDemo";
+import SimpleHOC from "./hoc/SimpleHOC";
+import Greeter from "./components/Greeter";
+import EnhancedGreeter from "./hoc/SimpleHOC";
 
 function App() {
   const keeper = "Hagrid";
@@ -37,7 +47,20 @@ function App() {
       {/* Pass Props Using the Spread Operator: */}
       {/* <PropsPrinter p1="a" p2={2} {...attributes} /> */}
       {/* <FormDemo /> */}
-      <Stopwatch />
+      {/* <Stopwatch /> */}
+      {/* <FetchDemo /> */}
+      {/* <RecuderDemo /> */}
+      {/* <CustomHookDemo /> */}
+      {/* <CountDown
+        start={5}
+        onCountdownEnd={() => console.log("CountDown: THE END.")}
+      /> */}
+      {/* <CountUp
+        start={5}
+        onCountdownEnd={() => console.log("CountUp: THE END.")}
+      /> */}
+      {/* <WindowEventsDemo /> */}
+      <EnhancedGreeter name="MK" location="IST" />
     </div>
   );
 }

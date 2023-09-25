@@ -1,5 +1,4 @@
-import { NamedGreeter } from "../components/Greeter";
-
+import { NamedGreeter } from "../Greeter";
 export function simpleHOC(WrappedComponent, newProp) {
   return (props) => {
     return (

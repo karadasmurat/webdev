@@ -1,19 +1,5 @@
 import "./App.css";
-import { CountDown, CountUp } from "./components/Counter";
-import Count from "./components/Counter";
-import CustomHookDemo from "./components/CustomHookDemo";
-import FetchDemo from "./components/FetchDemo";
-import FormDemo from "./components/FormDemo";
-import Form from "./components/FormDemo";
-import HOCDemo from "./components/HOCDemo";
-
-import PropsPrinter from "./components/PropsPrinter";
-import RecuderDemo from "./components/ReducerDemo";
-import Stopwatch from "./components/Stopwatch";
-import WindowEventsDemo from "./components/WindowEventsDemo";
-import SimpleHOC from "./hoc/SimpleHOC";
-import Greeter from "./components/Greeter";
-import EnhancedGreeter from "./hoc/SimpleHOC";
+import HOCDemo from "./components/hoc/HOCDemo";
 
 function App() {
   const keeper = "Hagrid";
@@ -60,7 +46,10 @@ function App() {
         onCountdownEnd={() => console.log("CountUp: THE END.")}
       /> */}
       {/* <WindowEventsDemo /> */}
-      <EnhancedGreeter name="MK" location="IST" />
+
+      <HOCDemo />
+      {/* <Wrapper render={BtnClick} /> */}
+      {/* <Wrapper render={BtnHover} /> */}
     </div>
   );
 }

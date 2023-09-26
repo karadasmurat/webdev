@@ -1,4 +1,5 @@
 import "./App.css";
+import Quantity from "./components/Quantity";
 import HOCDemo from "./components/hoc/HOCDemo";
 
 function App() {
@@ -47,9 +48,11 @@ function App() {
       /> */}
       {/* <WindowEventsDemo /> */}
 
-      <HOCDemo />
+      {/* <HOCDemo /> */}
       {/* <Wrapper render={BtnClick} /> */}
       {/* <Wrapper render={BtnHover} /> */}
+
+      <Quantity />
     </div>
   );
 }

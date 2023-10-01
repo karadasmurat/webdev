@@ -8,10 +8,12 @@ import ReducerDemo from "./components/ReducerDemo.tsx";
 import FetchDemo from "./components/FetchDemo.tsx";
 import Rating from "./components/Rating.tsx";
 import RatingDemo from "./components/Rating.tsx";
+import ItemListDemo from "./components/ItemList.tsx";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <RatingDemo />
+    <ItemListDemo />
+    {/* <RatingDemo /> */}
     {/* <MealsApp /> */}
     {/* <VideoDemo /> */}
     {/* <FetchDemo /> */}

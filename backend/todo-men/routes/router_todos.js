@@ -30,7 +30,9 @@ function requireAuth(req, res, next) {
   next();
 }
 
-router.get("/", requireAuth, getAllTodos);
+// require auth
+// router.get("/", requireAuth, getAllTodos);
+router.get("/", getAllTodos);
 
 router.get("/:id", getTodoById);
 

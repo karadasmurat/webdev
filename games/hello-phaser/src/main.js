@@ -1,5 +1,6 @@
 import CurveDemo from "./scenes/CurveDemo.js";
 import BackendDemo from "./scenes/BackendDemo.js";
+import HelloWorld from "./scenes/HelloWorld.js";
 
 /*
 The type property can be either Phaser.CANVAS, Phaser.WEBGL, or Phaser.AUTO. 

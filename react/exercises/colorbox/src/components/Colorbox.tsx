@@ -28,6 +28,7 @@ export default function Colorbox() {
         value={selectedColor}
         onChange={(e) => setSelectedColor(e.target.value)}
         placeholder="Add color name"
+        autoFocus
       />
     </>
   );

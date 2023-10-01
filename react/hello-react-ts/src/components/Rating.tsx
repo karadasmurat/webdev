@@ -47,7 +47,7 @@ type RatingProps = {
 };
 
 // "passive" component
-// decorate itself and "report" clicks using callback provided by props.
+// decorate itself and "report" clicks using callback provided by props. (Sending interaction back up)
 function Rating({ isOn, onSelect }: RatingProps) {
   const [isHovered, setIsHovered] = useState(false);
 

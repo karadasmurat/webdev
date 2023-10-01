@@ -9,13 +9,57 @@
 </head>
 
 <body>
-    <h1>Containers</h1>
+    <h3>container</h3>
     <div class="container">
         <div class="alert alert-primary">container</div>
     </div>
 
+    <h3>responsive containers <code>width: 100%</code> <strong>until the breakpoint</strong> </h3>
     <div class="container-lg">
         <div class="alert alert-info">container-lg</div>
+    </div>
+
+    <h1>Grid System</h1>
+    <h3>Equal-width: easy column sizing without an explicit numbered class</h3>
+
+    <!-- every column will be the same width -->
+    <div class="row text-center my-3">
+        <div class="col bg-primary-subtle">col</div>
+        <div class="col bg-secondary-subtle">col</div>
+        <div class="col bg-primary-subtle">col</div>
+        <div class="col bg-secondary-subtle">col</div>
+        <div class="col bg-primary-subtle">col</div>
+    </div>
+
+    <h3>Setting column width</h3>
+    <div class="row text-center mb-5">
+        <div class="col-8 bg-success-subtle">col-8</div>
+        <div class="col-6 bg-danger-subtle">col-6</div>
+        <div class="col-9 bg-warning-subtle">col-9</div>
+        <div class="col-3 bg-info-subtle">col-3</div>
+        <div class="col-6 bg-success-subtle">col-6</div>
+        <div class="col-6 bg-danger-subtle">col-6</div>
+    </div>
+
+    <h3>Responsive <code>col-{breakpoint}</code></h3>
+    <div class="row text-center mb-3">
+        <div class="col-md bg-primary-subtle">col-md</div>
+        <div class="col-md bg-secondary-subtle">col-md</div>
+        <div class="col-md bg-success-subtle">col-md</div>
+        <div class="col-md bg-danger-subtle">col-md</div>
+    </div>
+
+    <div class="row text-center mb-3">
+        <div class="col-md-9 bg-warning-subtle">col-md-9</div>
+        <div class="col-md-3 bg-info-subtle">col-md-3</div>
+        <div class="col-md-6 bg-success-subtle">col-md-6</div>
+        <div class="col-md-6 bg-danger-subtle">col-md-6</div>
+    </div>
+
+
+    <div class="row justify-content-center">
+        <div class="col-10 col-md-8 bg-primary-subtle">responsive</div>
+        <div class="col-10 col-md-4 bg-secondary-subtle">responsive</div>
     </div>
 </body>
 

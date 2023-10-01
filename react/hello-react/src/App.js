@@ -1,5 +1,7 @@
 import "./App.css";
+import ChakraUIDemo from "./components/ChakraUIDemo";
 import Quantity from "./components/Quantity";
+import Header from "./components/chakraui/Header";
 import HOCDemo from "./components/hoc/HOCDemo";
 
 function App() {
@@ -52,7 +54,8 @@ function App() {
       {/* <Wrapper render={BtnClick} /> */}
       {/* <Wrapper render={BtnHover} /> */}
 
-      <Quantity />
+      {/* <Quantity /> */}
+      <ChakraUIDemo />
     </div>
   );
 }

@@ -6,4 +6,9 @@
 
 **/dist
 
-/react/hello-vite/
+favicon_io/
+
+react/coursera/
+react/hello-vite/
+react/tmp/
+react/hello-redux/

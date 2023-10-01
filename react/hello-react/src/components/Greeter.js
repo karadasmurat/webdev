@@ -10,3 +10,7 @@ export function NamedGreeter({ name, location }) {
     </h1>
   );
 }
+
+
+
+

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- To reduce duplication, we will leverage EJS partials. -->
+    <%- include('../partials/head.ejs') %>
+    <title>Create Todo</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Create a Todo</h1>
+
+        <form action="/todos" method="POST">
+            <div class="col-12">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" name="title">
+            </div>
+            <div class="col-12">
+                <label for="description" class="form-label">Short Description</label>
+                <input type="text" class="form-control" id="description" name="description">
+            </div>
+
+            <!-- Rows are wrappers for columns. -->
+            <div class="row">
+
+                <div class="col-md-6">
+                    <label for="due_date">Due</label>
+                    <input type="date" class="form-control" name="due_date" id="due_date" required>
+                </div>
+
+                <div class="col-md-6">
+                    <div>Priority</div>
+                    <!-- The radio group must have share the same name (the value of the name attribute) to be treated as a group. -->
+                    <input type="radio" class="btn-check" name="priority" value="low" id="priority-low"
+                        autocomplete="off" checked>
+                    <label class="btn btn-outline-success" for="priority-low">Low</label>
+
+                    <input type="radio" class="btn-check" name="priority" value="high" id="priority-high"
+                        autocomplete="off">
+                    <label class="btn btn-outline-danger" for="priority-high">High</label>
+                </div>
+            </div>
+
+
+
+
+
+
+            <hr>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <%- include('../partials/footer.ejs') %>
+</body>
+
+</html>

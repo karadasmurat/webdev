@@ -9,12 +9,12 @@ require("dotenv").config();
 const path = require("path");
 
 // Mongoose - ODM layer for MongoDB
-const connect = require("./config/db-config");
+const connect = require("./src/config/db-config");
 connect();
 
 // import mongoose models
-const { Author, Book } = require("./model/Library");
-const Car = require("./model/Car");
+const { Author, Book } = require("./src/model/Library");
+const Car = require("./src/model/Car");
 
 // Serving static files: use the express.static built-in middleware function
 // here, we use a directory, at the same level of this script, named "public"
@@ -50,10 +50,11 @@ const getACar = () => {
   const make = makes[Math.floor(Math.random() * makes.length)];
   const model = "model";
   const year = Math.floor(Math.random() * 100) + 1923;
+  const newField = "MK"; // This field is not in the schema
 
   // An instance of a model is called a document.
   // note that the argument is object
-  return new Car({ make, model, year });
+  return new Car({ make, model, year, newField });
 };
 
 app.get("/create-car", async (req, res) => {

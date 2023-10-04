@@ -10,8 +10,8 @@ const options = {};
 
 const connect = () => {
   mongoose
-    .connect(process.env.LOCAL_CONN_STR, options)
-    .then(console.log("Connected to mongodb.", process.env.LOCAL_CONN_STR))
+    .connect(process.env.ATLAS_CONN_STR, options)
+    .then(console.log("Connected to mongodb.", process.env.ATLAS_CONN_STR))
     .catch((error) => console.log("Cannot connect. " + error));
 };
 

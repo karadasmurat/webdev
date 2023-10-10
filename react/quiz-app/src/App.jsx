@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Question, { QuestionControl } from "./components/Question";
+import useFetch from "./hooks/useFetch";
+import Loading from "./components/Loading";
 
 const questions = [
   {
@@ -42,6 +44,11 @@ const questions = [
 
 function App() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [timeLimit, setTimeLimit] = useState(undefined);
+
+  const { isLoading, data, error, fetchData } = useFetch(
+    "http://localhost:3000/api/questions/"
+  );
 
   const handleAnswer = () => {
     setCurrentQuestionIndex((prev) => prev + 1);
@@ -49,15 +56,23 @@ function App() {
   };
 
   const handlePass = () => {
-    setCurrentQuestionIndex((prev) => prev + 1);
+    if (currentQuestionIndex + 1 < data.length) {
+      setCurrentQuestionIndex((prev) => prev + 1);
+    }
     console.log("User passed!");
   };
 
   return (
-    <>
-      <Question question={questions[currentQuestionIndex]} />
-      <QuestionControl onAnswer={handleAnswer} onPass={handlePass} />
-    </>
+    <div className="container">
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <Question question={data[currentQuestionIndex]} />
+          <QuestionControl onAnswer={handleAnswer} onPass={handlePass} />
+        </>
+      )}
+    </div>
   );
 }
 

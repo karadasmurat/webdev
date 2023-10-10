@@ -57,12 +57,17 @@ const getACar = () => {
   return new Car({ make, model, year, newField });
 };
 
-app.get("/create-car", async (req, res) => {
+app.get("/create-car", async (req, res, next) => {
   const myCar = getACar();
 
-  // Saves this document by inserting a new document into the database if document.isNew
-  // or sends an updateOne operation with just the modified paths if isNew is false.
-  await myCar.save();
+  try {
+    // Saves this document by inserting a new document into the database if document.isNew
+    // or sends an updateOne operation with just the modified paths if isNew is false.
+    await myCar.save();
+  } catch (error) {
+    // IMPORTANT - async handler - we must catch the error and pass it to the next() function
+    next(error);
+  }
 
   res.json(myCar);
 });
@@ -72,27 +77,51 @@ app.get("/query-car", async (req, res) => {
   // const cars = await Car.find({}).exec();
 
   // find all documents named john and at least 18
-  const cars = await Car.find({ year: { $gte: 1960 } }).exec();
+  const cars = await Car.find({ year: { $gte: 1990 } }).exec();
 
+  for (let car of cars) {
+    // calling custom document instance method
+    car.startEngine();
+    console.log(car.getFullName());
+  }
   res.json(cars);
 });
 
-app.get("/mongoose-create", async (req, res) => {
-  // Constructing Documents and saving to the DB
-  // v1 - Model.prototype.save()
-  // const author = new Author({name: "J.K. Rowling"})
-  // await author.save()
+app.get("/query-car/:year", async (req, res) => {
+  const { year } = req.params;
 
-  // v2 - Model.create() is a shortcut for saving one or more documents to the database.
-  const author = await Author.create({ name: "J.K. Rowling" });
+  // custom query, using "statics"
+  const cars = await Car.findByYear(year).exec();
 
-  // Saving refs to other documents works the same way you normally save properties, just assign the _id value:
-  const book = new Book({
-    title: "Harry Potter and the Philosopher's Stone",
-    author: author._id, // NOTE: Manual assignment of FK!
-  });
+  for (let car of cars) {
+    // calling custom document instance method
+    car.startEngine();
+    console.log(car.getFullName());
+  }
+  res.json(cars);
+});
 
-  await book.save();
+app.get("/mongoose-create", async (req, res, next) => {
+  try {
+    // Constructing Documents and saving to the DB
+    // v1 - Model.prototype.save()
+    // const author = new Author({name: "J.K. Rowling"})
+    // await author.save()
+
+    // v2 - Model.create() is a shortcut for saving one or more documents to the database.
+    const author = await Author.create({ name: "J.K. Rowling" });
+
+    // Saving refs to other documents works the same way you normally save properties, just assign the _id value:
+    const book = new Book({
+      title: "Harry Potter and the Philosopher's Stone",
+      author: author._id, // NOTE: Manual assignment of FK!
+    });
+
+    await book.save();
+  } catch (error) {
+    // IMPORTANT - async handler - we must catch the error and pass it to the next() function
+    next(error);
+  }
 
   res.json(book);
 });
@@ -107,6 +136,13 @@ app.get("/mongoose-query", async (req, res) => {
 
   console.log(book.author.name);
   res.json(book);
+});
+
+// Define error-handling middleware functions in the same way as other middleware functions,
+// except error-handling functions have four arguments instead of three: (err, req, res, next)
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("We have a problem!");
 });
 
 // bind and listen for connections on the specified host and port.

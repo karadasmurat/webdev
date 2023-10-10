@@ -6,7 +6,7 @@ require("dotenv").config();
  */
 
 const mongoose = require("mongoose");
-const options = {};
+const options = { autoIndex: false };
 
 const connect = () => {
   mongoose

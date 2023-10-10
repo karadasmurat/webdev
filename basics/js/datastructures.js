@@ -94,8 +94,40 @@ function iterateSet(set) {
   //   }
 }
 
+function simpleQueue() {
+  console.log("Simple Queue Implementation");
+  console.log("---------------------------");
+
+  const myQueue = [];
+  myQueue.push(100);
+  myQueue.push(101);
+  myQueue.push(102);
+
+  for (let key in myQueue) {
+    console.log(`[${key}]: ${myQueue[key]}`);
+  }
+
+  console.log(myQueue); // [ 100, 101, 102 ]
+
+  // Peeking at the front element (without removing)
+  let frontElementPeek = myQueue[0];
+  console.log(frontElementPeek); // 100
+
+  const dequeued = myQueue.shift();
+  console.log(".shift()", dequeued);
+
+  for (let key in myQueue) {
+    console.log(`[${key}]: ${myQueue[key]}`);
+  }
+
+  console.log(myQueue); // [ 101, 102 ]
+  // Peeking at the front element (without removing)
+  frontElementPeek = myQueue[0];
+  console.log(frontElementPeek); // 101
+}
+
 // ############
 // mapBasics();
-setBasics();
+// setBasics();
 
-
+simpleQueue();

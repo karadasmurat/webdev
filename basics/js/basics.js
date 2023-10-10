@@ -709,7 +709,7 @@ If the next line is indented, the extra spaces will also be present in the strin
   // option 1 toString() of number
   console.log("#digits: " + x.toString().length);
   // option 2 casting(think of it as a constructor)
-  x_str = String(x);
+  const x_str = String(x);
   digits = x_str.length;
   console.log(`${x} ${x_str} ${digits}`); // x = 123456 x_str = '123456' digits = 6
 
@@ -717,7 +717,7 @@ If the next line is indented, the extra spaces will also be present in the strin
   // A string is a sequence of characters. You can access the characters one at a time with the subscript operator: string[n]
   //[] notation with the zero - based index.
   // length property returns the length of the string.
-  word = "JavaScript";
+  const word = "JavaScript";
   console.log("First char:", word[0], "Last char:", word[word.length - 1]);
 
   // It's important to note that trying to access an index that is out of bounds for a string
@@ -758,7 +758,7 @@ If the next line is indented, the extra spaces will also be present in the strin
   // trim() trims whitespace from the beginning and end of the string.
   console.log("  MK  ".trim());
 
-  // The split() method takes a pattern and divides a String into an ordered list of substrings
+  // The split(seperator, limit) method takes a pattern and divides a String into an ordered list of substrings
   // by searching for the pattern, puts these substrings into an array, and returns the array.
   const str = "The quick brown fox jumps over the lazy dog.";
 
@@ -1091,9 +1091,9 @@ function getMaxValue(a, b) {
 // printBasics();
 // variableBasics();
 // input_basics();
-operatorBasics();
+// operatorBasics();
 // booleanBasics();
-// stringBasics();
+stringBasics();
 // arrayBasics();
 // array_higherOrder();
 // objectBasics(); // moved to objects.js
@@ -1104,3 +1104,4 @@ operatorBasics();
 
 // randomBasics();
 // errorBasics();
+

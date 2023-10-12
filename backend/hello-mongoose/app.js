@@ -15,6 +15,7 @@ connect();
 // import mongoose models
 const { Author, Book } = require("./src/model/Library");
 const Car = require("./src/model/Car");
+const { Product, Category } = require("./src/model/Product");
 
 // Serving static files: use the express.static built-in middleware function
 // here, we use a directory, at the same level of this script, named "public"
@@ -99,6 +100,50 @@ app.get("/query-car/:year", async (req, res) => {
     console.log(car.getFullName());
   }
   res.json(cars);
+});
+
+app.post("/api/products", async (req, res, next) => {
+  // res.json({ msg: "POST a new item" });
+  // Get properties from the request.body object. (object destructuring)
+  // console.log(req.body);
+  // const { type, category, difficulty, text, options } = req.body;
+
+  try {
+    const item = new Category(req.body);
+    await item.save();
+
+    res.status(200).send(item);
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+});
+
+app.get("/product-create", async (req, res, next) => {
+  try {
+    // Constructing Documents and saving to the DB
+    // v1 - Model.prototype.save()
+    // const author = new Author({name: "J.K. Rowling"})
+    // await author.save()
+
+    // v2 - Model.create() is a shortcut for saving one or more documents to the database.
+    const testCategory = await Category.create({
+      name: "testCategory",
+      description: "testCategory",
+    });
+
+    const testProduct = await Product.create({
+      name: "testProduct",
+      description: "testProduct",
+      brand: "testBrand",
+      categories: [testCategory._id],
+    });
+
+    res.json(testProduct);
+  } catch (error) {
+    // IMPORTANT - async handler - we must catch the error and pass it to the next() function
+    next(error);
+  }
 });
 
 app.get("/mongoose-create", async (req, res, next) => {

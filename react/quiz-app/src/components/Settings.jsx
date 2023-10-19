@@ -51,7 +51,8 @@ export default function Settings() {
     // Make an API request, update state, or perform other tasks here
 
     // Update Context through setter provided by ContextProvider value:
-    setAppSettings(formData);
+    // setAppSettings(formData);
+    setAppSettings({ ...appSettings, ...formData });
   };
 
   const onError = (error) => {

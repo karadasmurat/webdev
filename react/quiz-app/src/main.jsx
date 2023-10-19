@@ -6,6 +6,8 @@ import "./index.css";
 import Settings from "./components/Settings.jsx";
 import NotFound from "./components/NotFound.jsx";
 import { SettingsProvider } from "./context/SettingsContext.jsx";
+import GameResults from "./components/GameResults.jsx";
+import QuestionForm from "./components/QuestionForm.jsx";
 
 // createBrowserRouter is the recommended router for all React Router web projects.
 const browserRouter = createBrowserRouter([
@@ -22,6 +24,22 @@ const browserRouter = createBrowserRouter([
     element: (
       <SettingsProvider>
         <Settings />
+      </SettingsProvider>
+    ),
+  },
+  {
+    path: "create",
+    element: (
+      <SettingsProvider>
+        <QuestionForm />
+      </SettingsProvider>
+    ),
+  },
+  {
+    path: "/results",
+    element: (
+      <SettingsProvider>
+        <GameResults />
       </SettingsProvider>
     ),
   },

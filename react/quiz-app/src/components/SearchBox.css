@@ -1,0 +1,14 @@
+.form-control:focus {
+  border-color: #eee;
+  outline: 0;
+  box-shadow: none;
+  border-bottom: 2px solid coral;
+}
+
+.searchbox-header {
+  /* outline: red 1px dashed; */
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

@@ -1,35 +1,39 @@
 // import mongoose models
-const { Question } = require("../model/Question");
+const { Tag } = require("../model/Tag");
 
 // get all items
 // GET /items
 const getAllItems = async (req, res, next) => {
   // res.json({ msg: "Get all items" });
 
-  // maximum number of documents the query will return
-  const { numberOfQuestions, level } = req.query;
-  // console.log("Filter difficulty:", level);
-  // console.log("Filter limit:", numberOfQuestions);
-
+  // Define limit and filters
+  // note that "limit" is also part of the query string, but it is not part of actual find filter: find(filter).limit(limit)
   // let filter = req.query;
-  let filter = { difficulty: level };
+  // ?text=Ne&limit=3
+  const { limit, text } = req.query;
+
+  // Construct a regular expression to perform a 'LIKE' query
+  const regex = new RegExp(text, "i"); // 'i' flag makes the regex case-insensitive
+  const filter = { text: { $regex: regex } };
   console.log("Filter:", filter);
 
   try {
     // Note that Model.find() returns an empty array when no documents match the query!
-    let query = Question.find(filter);
-    if (numberOfQuestions) {
-      console.log("Limit query:", numberOfQuestions);
-      query = query.limit(numberOfQuestions);
+    let query = Tag.find(filter);
+
+    // LIMIT and SORT
+    if (limit > 0) {
+      console.log("Limit:", limit);
+      query = query.limit(limit);
     }
-    query = query.sort({
-      createdAt: "desc",
-    });
+    // query = query.sort({
+    //   createdAt: "desc",
+    // });
 
-    const questions = await query.exec();
-    // console.log(questions);
+    const results = await query.exec();
+    // console.log(results);
 
-    res.status(200).send(questions);
+    res.status(200).send(results);
   } catch (err) {
     next(err);
   }
@@ -44,6 +48,7 @@ const getItem = async (req, res) => {
   res.json({ msg: "GET the Item: " + id });
 };
 
+// TODO: copy paste code
 // create an Item
 // POST /items/
 const createItem = async (req, res, next) => {

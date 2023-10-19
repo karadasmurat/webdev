@@ -32,10 +32,13 @@ connect();
 
 // import mongoose models
 const { Question } = require("./src/model/Question");
+const { Tag } = require("./src/model/Tag");
 
 /* * * * * * *    Express Router middlewares   * * * * * * */
 const routerQuestion = require("./src/router/router_Question");
+const routerTag = require("./src/router/router_Tag");
 app.use("/api/questions", routerQuestion);
+app.use("/api/tags", routerTag);
 
 // Serving static files: use the express.static built-in middleware function
 // here, we use a directory, at the same level of this script, named "public"

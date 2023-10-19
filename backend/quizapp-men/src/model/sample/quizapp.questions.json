@@ -1,0 +1,108 @@
+[{
+  "_id": {
+    "$oid": "652516699c685c23cd4f7de0"
+  },
+  "type": "selectOne",
+  "category": "Geography",
+  "text": "True or False: The capital of France is Paris.",
+  "options": [
+    "True",
+    "False"
+  ],
+  "createdAt": {
+    "$date": "2023-10-10T09:16:25.162Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-10T09:16:25.162Z"
+  },
+  "__v": 0,
+  "difficulty": "medium"
+},
+{
+  "_id": {
+    "$oid": "652521a1dc2b7db0a623ddbb"
+  },
+  "type": "selectOne",
+  "category": "Geography",
+  "difficulty": "medium",
+  "text": "What is the capital of United Kingdom?",
+  "options": [
+    "Paris",
+    "London",
+    "Istanbul",
+    "Washington"
+  ],
+  "createdAt": {
+    "$date": "2023-10-10T10:04:17.461Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-10T10:04:17.461Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6525590dc2b2a25d112e3bcb"
+  },
+  "type": "selectMany",
+  "category": "Geography",
+  "difficulty": "easy",
+  "text": "Select all true",
+  "options": [
+    "France - Paris",
+    "United Kingdom - London",
+    "Germany - Istanbul",
+    "United States - Washington"
+  ],
+  "createdAt": {
+    "$date": "2023-10-10T14:00:45.386Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-10T14:00:45.386Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6525593de443894014483dee"
+  },
+  "type": "selectOne",
+  "category": "Geography",
+  "difficulty": "medium",
+  "text": "What is the capital of United States?",
+  "options": [
+    "Paris",
+    "London",
+    "Istanbul",
+    "Washington"
+  ],
+  "createdAt": {
+    "$date": "2023-10-10T14:01:33.648Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-10T14:01:33.648Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65255a3143471f68af107a2f"
+  },
+  "type": "selectOne",
+  "category": "Geography",
+  "difficulty": "easy",
+  "text": "What is the capital of Germany?",
+  "options": [
+    "Paris",
+    "Berlin",
+    "Istanbul",
+    "Washington"
+  ],
+  "createdAt": {
+    "$date": "2023-10-10T14:05:37.756Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-10T14:05:37.756Z"
+  },
+  "__v": 0
+}]

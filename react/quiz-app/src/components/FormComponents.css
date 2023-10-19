@@ -1,0 +1,17 @@
+.dots {
+  height: 7px;
+  width: 7px;
+  background-color: coral;
+  display: flex;
+  border-radius: 50%;
+  margin-left: 7px;
+  margin-right: 7px;
+}
+
+.result-line {
+  cursor: pointer;
+}
+
+.result-line:hover {
+  background-color: pink;
+}

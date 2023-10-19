@@ -4,7 +4,8 @@
  */
 
 import { BsArrowBarUp, BsChevronDoubleRight } from "react-icons/bs";
-export default function Question({ question }) {
+
+export default function Question({ question = {} }) {
   switch (question.type) {
     case "selectOne":
       return <SelectOneQuestionRadio question={question} />;
@@ -21,7 +22,7 @@ function SelectOneQuestionButtonGroup({ question }) {
   return (
     <>
       <div>Select One Question</div>
-      <span className="badge text-bg-primary">{question.category}</span>
+      <QuestionTags question={question} />
       <h1>{question.text}</h1>
       <div
         class="btn-group"
@@ -48,11 +49,23 @@ function SelectOneQuestionButtonGroup({ question }) {
   );
 }
 
+function QuestionTags({ question }) {
+  return (
+    <div className="d-flex gap-2">
+      <span className="badge rounded-pill text-bg-primary">
+        {question.category}
+      </span>
+      <span className="badge rounded-pill text-bg-secondary">
+        {question.difficulty}
+      </span>
+    </div>
+  );
+}
 function SelectOneQuestionRadio({ question }) {
   return (
     <>
       <div>Select One Question</div>
-      <span className="badge text-bg-primary">{question.category}</span>
+      <QuestionTags question={question} />
       <h1>{question.text}</h1>
       {question.options.map((option, index) => (
         <div key={index} className="form-check">
@@ -75,7 +88,7 @@ function SelectManyQuestion({ question }) {
   return (
     <>
       <div>Select Many Question</div>
-      <span className="badge text-bg-primary">{question.category}</span>
+      <QuestionTags question={question} />
       <h1>{question.text}</h1>
 
       {question.options.map((option, index) => (
@@ -99,7 +112,7 @@ function OpenEndedQuestion({ question }) {
   return (
     <>
       <div>Select Many Question</div>
-      <span className="badge text-bg-primary">{question.category}</span>
+      <QuestionTags question={question} />
       <h1>{question.text}</h1>
       <div className="mb-3">
         <textarea

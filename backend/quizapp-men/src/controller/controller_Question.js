@@ -6,21 +6,26 @@ const { Question } = require("../model/Question");
 const getAllItems = async (req, res, next) => {
   // res.json({ msg: "Get all items" });
 
-  // maximum number of documents the query will return
-  const { numberOfQuestions, level } = req.query;
-  // console.log("Filter difficulty:", level);
-  // console.log("Filter limit:", numberOfQuestions);
+  // Define filters
 
   // let filter = req.query;
-  let filter = { difficulty: level };
+
+  // Deconstruct the object with different variable names
+  const { numberOfQuestions: limit, level } = req.query;
+  // note that "limit" is also part of the query string, but it is not part of actual find filter: find(filter).limit(limit)
+  // const limit = req.query.numberOfQuestions;
+  // const filter = req.query;
+  // delete filter.numberOfQuestions;
+
+  let filter = level ? { difficulty: level } : {};
   console.log("Filter:", filter);
 
   try {
     // Note that Model.find() returns an empty array when no documents match the query!
     let query = Question.find(filter);
-    if (numberOfQuestions) {
+    if (limit) {
       console.log("Limit query:", numberOfQuestions);
-      query = query.limit(numberOfQuestions);
+      query = query.limit(limit);
     }
     query = query.sort({
       createdAt: "desc",

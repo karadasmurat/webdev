@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./SearchBox.css";
-import { ListItem } from "./FormComponents";
+import { DismissableBadge, ListItem } from "./FormComponents";
 import useToggle from "../hooks/useToggle";
 import {
   Bs0CircleFill,
@@ -10,18 +10,20 @@ import {
   BsGrid,
 } from "react-icons/bs";
 import { toQueryString } from "../util/util";
+import { AnimatePresence } from "framer-motion";
 
 export default function SearchBox({
-  q,
-  onSelect,
-  action,
   url = "http://localhost:3000/api/tags",
+  q,
+  values,
+  onSelectResult,
+  action,
   resultsDisplayConfig = {
     propertyName_title: "text",
     propertyName_subtitle: "_id",
   },
 }) {
-  console.log("SearchBox: render");
+  console.log("SearchBox: render", url, q, values);
   // url = "https://jsonplaceholder.typicode.com/todos";
 
   // the value of this component, like form elements.
@@ -68,25 +70,16 @@ export default function SearchBox({
     fetchData();
   }, [searchTerm]);
 
-  // callback for click action on results
-  const handleSelectResult = (selectedResult) => {
-    setValue(selectedResult);
-    console.log("click on result:", selectedResult);
-    setSearchTerm("");
-
-    // callback
-    onSelect(selectedResult);
-  };
-
   return (
     <div>
       <SearchInput q={searchTerm} setQ={setSearchTerm} />
 
       <SearchResults
         results={searchResults}
+        values={values}
         isLoading={isLoading}
         action={action}
-        onClick={handleSelectResult}
+        onClick={onSelectResult}
         resultsDisplayConfig={resultsDisplayConfig}
       />
     </div>
@@ -118,11 +111,17 @@ function SearchInput({ q, setQ }) {
 
 function SearchResults({
   results,
+  values = [],
   isLoading,
   action,
   onClick,
   resultsDisplayConfig,
 }) {
+  const getSelectionStatus = (item) => {
+    // console.log("checked for:", item);
+    return values.includes(item);
+  };
+
   // if the results prop has a length of zero, display an info message
   if (isLoading) {
     return (
@@ -142,7 +141,7 @@ function SearchResults({
   } else {
     return (
       <div className="container mt-2">
-        <small class="text-body-secondary">
+        <small className="text-body-secondary">
           {results.length} records found.
         </small>
         <ul
@@ -150,15 +149,19 @@ function SearchResults({
           style={{ maxHeight: "200px" }}
         >
           {results.map((item) => (
-            <div key={item._id} className="list-group-item p-0">
+            <li key={item._id} className="list-group-item p-0">
               {/* {item[resultsDisplayConfig.propertyName_title]} */}
               <ListItem
+                checkbox
+                checked={getSelectionStatus(
+                  item[resultsDisplayConfig.propertyName_title]
+                )}
                 leadingIcon={<BsGrid color="coral" />}
                 title={item[resultsDisplayConfig.propertyName_title]}
                 subtitle={item[resultsDisplayConfig.propertyName_subtitle]}
                 onClick={onClick}
               />
-            </div>
+            </li>
           ))}
         </ul>
       </div>
@@ -166,34 +169,88 @@ function SearchResults({
   }
 }
 
-export function SelectWithSearch() {
+export function SelectWithSearch({ url }) {
   const [q, setQ] = useState("");
-  const [val, setVal] = useState("Select Tags");
+  // single select
+  const [val, setVal] = useState();
+
+  // multi-select
+  const [values, setValues] = useState(["New"]);
 
   const [searchable, toggleSearchable] = useToggle(false);
 
-  const handleSelect = (selection) => {
+  const placeholder = "Select Tags";
+
+  const handleSelectOption = (selection) => {
+    // single
     setVal(selection);
-    // setQ(selection);
+
+    // multi values
+    // if it already contains, remove
+    // else, add
+    if (values.includes(selection)) {
+      console.log("Values already contains, removing.", selection);
+      setValues(values.filter((v) => v !== selection));
+    } else {
+      console.log("Adding", selection);
+      setValues([...values, selection]);
+    }
+
+    // Close select
+    // toggleSearchable();
+  };
+
+  const toggleSelectMenu = () => {
+    console.log("Toggle Select Menu!");
     toggleSearchable();
   };
+
+  const dismissBadge = (e, val) => {
+    console.log("Dismiss badge:", val);
+
+    // single
+    setVal(undefined);
+
+    // multi
+    setValues(values.filter((v) => v != val));
+
+    // prevent the event from reaching ancestors of the target element - Event bubbling
+    e.stopPropagation();
+  };
+
   return (
     <>
-      <div className="card p-2 mb-3">
-        <div className="searchbox-header" onClick={toggleSearchable}>
-          <strong>{val}</strong>
-          {/* <input value={val} disabled className="border-0" /> */}
+      <div className="card p-2 mb-1">
+        <div className="searchbox-header" onClick={toggleSelectMenu}>
+          {/* badges container */}
+
+          <div className="d-flex flex-wrap gap-1">
+            <AnimatePresence>
+              {values.length > 0
+                ? values.map((value) => (
+                    <DismissableBadge
+                      key={value}
+                      text={value}
+                      onClose={(e) => dismissBadge(e, value)}
+                    />
+                  ))
+                : placeholder}
+            </AnimatePresence>
+          </div>
 
           {searchable ? <BsChevronUp /> : <BsChevronDown />}
         </div>
-
-        {searchable && (
-          <>
-            <hr />
-            <SearchBox q={q} onSelect={handleSelect} />
-          </>
-        )}
       </div>
+      {searchable && (
+        <div className="card p-2 mb-3">
+          <SearchBox
+            url={url}
+            q={q}
+            values={values}
+            onSelectResult={handleSelectOption}
+          />
+        </div>
+      )}
     </>
   );
 }

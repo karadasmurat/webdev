@@ -30,7 +30,6 @@ export default function QuestionForm() {
           </label>
           <textarea className="form-control" id="text" rows="3"></textarea>
         </div>
-
         <fieldset>
           <legend className="col-form-label">Question Type</legend>
           <div className="mb-3">
@@ -71,10 +70,10 @@ export default function QuestionForm() {
             <div className="form-text text-danger">{errors.type.message}</div>
           )}
         </fieldset>
-
         {/* <SearchBox /> */}
-        <SelectWithSearch />
-
+        {/* https://jsonplaceholder.typicode.com/todos */}
+        {/* http://localhost:3000/api/questions */}
+        <SelectWithSearch url="http://localhost:3000/api/tags" />
         <button type="submit" className="btn btn-success">
           Save
         </button>

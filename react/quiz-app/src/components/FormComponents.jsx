@@ -1,4 +1,5 @@
 import "./FormComponents.css";
+import { AnimatePresence, motion } from "framer-motion";
 
 import {
   BsSearch,
@@ -112,12 +113,17 @@ export function ColorPicker({
 }
 
 export function ListItem({
+  checkbox,
+  checked,
   leadingIcon,
   title,
   subtitle,
   trailingIcon,
+  trailingText,
   onClick,
 }) {
+  // console.log("ListItem checked:", checked);
+
   return (
     <div
       className="result-line d-flex justify-content-between align-items-center p-2"
@@ -125,10 +131,24 @@ export function ListItem({
       onClick={() => onClick(title)}
     >
       <div className="d-flex align-items-center gap-2">
+        {/* checkbox */}
+        {checkbox && (
+          <input
+            className="form-check-input me-1"
+            type="checkbox"
+            checked={checked}
+            onChange={onClick}
+            id={title}
+          />
+        )}
+
         {/* leading icon */}
         {leadingIcon && leadingIcon}
-        <div className="d-flex flex-column">
-          <span>{title}</span>
+
+        <div>
+          <div>
+            <label htmlFor={title}>{title}</label>
+          </div>
           <div className="d-flex flex-row align-items-center time-text">
             {/* faded secondary text */}
             <span className="text-body-secondary">
@@ -145,5 +165,27 @@ export function ListItem({
       {trailingIcon && trailingIcon}
       {/* <span className="content-text-1">BA</span> */}
     </div>
+  );
+}
+
+export function DismissableBadge({ text, onClose }) {
+  return (
+    <motion.div
+      key={text}
+      className="badge text-bg-primary"
+      initial={{ y: 10, opacity: 0.5 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: 10, opacity: 0 }}
+    >
+      <div className="d-flex align-items-center justify-content-between gap-2">
+        {text}
+        <button
+          type="button"
+          className="btn-close"
+          aria-label="Close"
+          onClick={onClose}
+        ></button>
+      </div>
+    </motion.div>
   );
 }

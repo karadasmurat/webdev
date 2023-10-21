@@ -1,20 +1,21 @@
 import Card from "./components/Card";
 import mkImg from "./assets/images/mk.jpeg";
+import { HelloFramer } from "./components/HelloFramer";
 
 function App() {
   return (
     <>
       {/* <Navbar />*/}
       {/* <MoveIt /> */}
-      {/* <HelloFramer /> */}
+      <HelloFramer />
       {/* <HelloVariants /> */}
-      <div className="d-flex justify-content-center gap-2">
+      {/* <div className="d-flex justify-content-center gap-2">
         <Card> {Math.floor(Math.random() * 9) + 1} </Card>
         <Card> x </Card>
         <Card>
           <img src={mkImg} alt="image" />{" "}
         </Card>
-      </div>
+      </div> */}
     </>
   );
 }

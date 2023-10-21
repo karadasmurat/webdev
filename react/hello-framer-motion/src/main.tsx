@@ -10,7 +10,8 @@ import ToastifyDemo from "./components/ToastifyDemo.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Game />
+    {/* <Game /> */}
+    <App />
     {/* <ToastifyDemo /> */}
   </React.StrictMode>
 );

@@ -687,9 +687,41 @@ function callbackBasics() {
   completeSomeTasks_thenFollowProvidedCommands(() => doubleTheValue(11)); // 22
 }
 
+function optionsArgument_v1(options = {}) {
+  // parse argument object with default values
+  const firstOption = options.firstProp || "default1";
+  const secondOption = options.secondProp || "default2";
+  const thirdOption = options.thirdProp || "default3";
+
+  console.log("options argument passed:", options);
+  console.log(firstOption);
+  console.log(secondOption);
+  console.log(thirdOption);
+}
+
+function optionsArgument_v2({
+  firstProp = "default1",
+  secondProp = "default1",
+  thirdProp = "default1",
+} = {}) {
+  console.log(firstProp);
+  console.log(secondProp);
+  console.log(thirdProp);
+}
+
+function defaultParameters() {
+  console.log("default parameters");
+
+  optionsArgument_v1();
+  optionsArgument_v1({ secondProp: "222" });
+
+  optionsArgument_v2();
+  optionsArgument_v2({ secondProp: "222" });
+}
+
 // scopeBasics();
 // parameterBasics();
-
+defaultParameters();
 // functionExpressions();
 // firstClassFunctions();
 
@@ -698,7 +730,7 @@ function callbackBasics() {
 // fpstyle();
 
 // spreadBasics();
-restParametersBasics();
+// restParametersBasics();
 // check(11);
 // passByRef();
 

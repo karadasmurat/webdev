@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 200px;
+            height: 200px;
+            border: 1px solid coral;
+        }
+
+        .draggable-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 75px;
+            height: 75px;
+            border: 1px solid olive;
+            border-radius: 50%;
+        }
+    </style>
+    <title>Drag and Drop</title>
+</head>
+
+<body>
+    <div id="draggable1" class="draggable-item" draggable="true">Draggable1</div>
+    <div id="draggable2" class="draggable-item" draggable="true" ondragstart="dragstartHandler(event)">Draggable2</div>
+
+    <div class="box" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)">
+        <p id="target">
+            Drop Area
+        </p>
+    </div>
+
+    <script src="js/draganddrop.js" />
+</body>
+
+</html>

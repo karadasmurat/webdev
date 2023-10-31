@@ -1,12 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
+// Argon2 is the winner of the 2015 Password Hashing Competition
 const argon2 = require("argon2");
 
 // import mongoose Model
-const { User } = require("../model/User");
+const { User } = require("../model/model_user_passport");
 
 const passport = require("passport");
+/* 
+
 var LocalStrategy = require("passport-local").Strategy;
 
 var GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -30,6 +33,7 @@ passport.use(
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+*/
 
 // custom error
 const { AuthError } = require("../lib/AppError");

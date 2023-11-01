@@ -4,8 +4,11 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
 import { BsLock, BsEnvelope } from "react-icons/bs";
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
+
+import { GOOGLE_CLIENT_ID } from "../../config/env";
+import SignInWithGoogleButton from "./SignInWithGoogleButton";
 
 // zod: creating a schema
 const schema_formdata = z.object({
@@ -18,8 +21,7 @@ const schema_formdata = z.object({
 // type FormData = z.infer<typeof schema_formdata>;
 
 export default function SigninForm() {
-  // Custom hook to manage the entire form,
-  // OF TYPE "FormData"
+  // Custom hook to manage the entire form
   const {
     register,
     handleSubmit,
@@ -67,6 +69,13 @@ export default function SigninForm() {
       });
   };
 
+  const onError = (error) => {
+    // Handle errors here, e.g., displaying error messages
+    console.error(error);
+
+    // Update the UI to show error messages or take other corrective actions
+  };
+
   return (
     // <div
     //   className="row justify-content-center align-items-center"
@@ -75,7 +84,7 @@ export default function SigninForm() {
     // <div className="col-md-6" style={{ maxWidth: "500px" }}></div>
     <>
       <h1 className=" text-center mb-5">Sign In</h1>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form onSubmit={handleSubmit(onSubmit, onError)} noValidate>
         <div className="form-floating mb-3">
           <input
             type="email"
@@ -93,7 +102,6 @@ export default function SigninForm() {
           </div>
           <div className="invalid-feedback">Please provide a username.</div>
         </div>
-
         <div className="form-floating mb-3">
           <input
             type="password"
@@ -111,21 +119,15 @@ export default function SigninForm() {
           </div>
           <div className="invalid-feedback">Please provide a password.</div>
         </div>
-
-        <div className="d-grid gap-2 col-6 mx-auto mb-3">
+        <div className="d-grid col-xl-6 mx-auto mb-3">
           <button type="submit" className="btn btn-success">
             Sign in
           </button>
         </div>
-
         <p className="text-center">or</p>
-        <div className="d-grid gap-2 col-6 mx-auto">
-          <a href="/auth/signin/google" className="btn btn-outline-primary">
-            <i className="bi bi-google"></i> Sign in with Google
-          </a>
-        </div>
       </form>
 
+      <SignInWithGoogleButton />
       <div className="container text-center text-muted my-3">
         <hr /> Don't you have an account?{" "}
         <NavLink to="/signup">Sign Up</NavLink>

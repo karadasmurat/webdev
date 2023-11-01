@@ -48,6 +48,13 @@ export default function SignupForm() {
         console.log(error.data);
       });
   };
+  const onError = (error) => {
+    // Handle errors here, e.g., displaying error messages
+    console.error(error);
+
+    // Update the UI to show error messages or take other corrective actions
+  };
+
   return (
     // <div
     //   className="row justify-content-center align-items-center"
@@ -57,7 +64,7 @@ export default function SignupForm() {
 
     <>
       <h1 className=" text-center mb-5">Create your account</h1>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form onSubmit={handleSubmit(onSubmit, onError)} noValidate>
         <div className="form-floating mb-3">
           <input
             type="email"

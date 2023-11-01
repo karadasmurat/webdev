@@ -1,6 +1,21 @@
 const express = require("express");
 const router = express.Router();
 
+// An implementation of JSON Web Tokens
+const jwt = require("jsonwebtoken");
+
+// Google API Client Library
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client();
+async function verifyCredential(token, client_id) {
+  const ticket = await client.verifyIdToken({
+    idToken: token,
+    audience: client_id,
+  });
+  const payload = ticket.getPayload();
+  console.log("payload:", payload);
+}
+
 // Argon2 is the winner of the 2015 Password Hashing Competition
 const argon2 = require("argon2");
 
@@ -253,7 +268,7 @@ router.post(
   }
 );
 
-// 3. Sign in with Google
+// 3. Sign in with Google, Passport
 router.get(
   "/signin/google",
   passport.authenticate("google", {
@@ -261,7 +276,7 @@ router.get(
   })
 );
 
-// Sign in with Google - Redirect URL
+// Sign in with Google, Passport - Redirect URL
 router.get(
   "/google/callback",
   passport.authenticate("google", {
@@ -269,6 +284,15 @@ router.get(
     failureRedirect: "/auth/signin",
   })
 );
+
+// Sign in with Google, Manual - Redirect URL
+// Your server-side endpoints must handle the following HTTP POST requests.
+router.post("/google/redirect", (req, res) => {
+  console.log(req.body.credential);
+  verifyCredential(req.body.credential, process.env.GOOGLE_CLIENT_ID).catch(
+    console.error
+  );
+});
 
 // LOGOUT
 // In the case of a /logout route, which is used to log out a user, it makes more sense to use the POST method.

@@ -28,6 +28,10 @@ app.use(
   })
 );
 
+//enable CORS for all routes in the Express app:
+const cors = require("cors");
+app.use(cors());
+
 // Serving static files: use the express.static built-in middleware function
 // app.use(express.static(path.join(__dirname, "public")));
 

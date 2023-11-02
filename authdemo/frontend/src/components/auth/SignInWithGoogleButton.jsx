@@ -1,15 +1,14 @@
 import { GOOGLE_CLIENT_ID } from "../../config/env";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
+
+// import axios with a configuration
+import axios from "../../config/axios-config";
 
 export default function SignInWithGoogleButton() {
+  const [IDToken, setIDToken] = useState("");
   const GISBtnRef = useRef(null);
 
-  // callback for ux_mode: "popup"
-  function handleCredentialResponse(response) {
-    console.log("Encoded JWT ID token: " + response.credential);
-  }
-
-  // GIS - Render the sign-in button using JavaScript
+  // GIS - Render the sign-in button using JavaScript *on mount*
   // The google.accounts.id.initialize method initializes the Sign In With Google client based on the configuration object.
   // Notice "window.onload" vs useEffect(()=>{}, [])
   useEffect(() => {
@@ -29,6 +28,34 @@ export default function SignInWithGoogleButton() {
       width: "250",
     });
   }, []);
+
+  // Send the token to your app's backend, to sign in or sign up a user
+  useEffect(() => {
+    if (IDToken) {
+      console.log("Sending ID Token to backend.");
+      axios
+        .post("auth/google/redirect", {
+          credential: IDToken,
+        })
+        .then(function (resp) {
+          console.log(resp);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  }, [IDToken]);
+
+  // callback for ux_mode: "popup"
+  function handleCredentialResponse(credentialResponse) {
+    console.log("Encoded JWT ID token: " + credentialResponse.credential);
+
+    // To sign in or sign up a user with an ID token, send the token to your app's backend.
+    // axios.post(); // moved into a useEffect instead.
+
+    // update state, so that related effect will run - axios.post()
+    setIDToken(credentialResponse.credential);
+  }
 
   return (
     <div

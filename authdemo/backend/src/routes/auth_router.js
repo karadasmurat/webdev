@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 // Google API Client Library
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client();
-async function verifyCredential(token, client_id) {
+async function verifyGoogleCredential(token, client_id) {
   const ticket = await client.verifyIdToken({
     idToken: token,
     audience: client_id,
@@ -289,7 +289,7 @@ router.get(
 // Your server-side endpoints must handle the following HTTP POST requests.
 router.post("/google/redirect", (req, res) => {
   console.log(req.body.credential);
-  verifyCredential(req.body.credential, process.env.GOOGLE_CLIENT_ID).catch(
+  verifyGoogleCredential(req.body.credential, process.env.GOOGLE_CLIENT_ID).catch(
     console.error
   );
 });

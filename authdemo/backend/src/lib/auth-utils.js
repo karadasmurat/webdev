@@ -2,7 +2,7 @@ const argon2 = require("argon2");
 const bcrypt = require("bcrypt");
 const SALTROUNDS = 10;
 
-// // hash the password in plaintext
+// hash the password in plaintext
 async function hash(plaintext) {
   // bcrypt
   // const salt = await bcrypt.genSalt(SALTROUNDS);

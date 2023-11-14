@@ -1,5 +1,8 @@
-const mongoose = require("mongoose");
-const passportLocalMongoose = require("passport-local-mongoose");
+const mongoose = require("mongoose"); // CommonJS
+// import mongoose from "mongoose"; // ES6 Modules
+const { hash, verify } = require("../lib/auth-utils"); // CommonJS
+const { AuthError } = require("../lib/Error");
+// import { hash, verify } from "../lib/auth-utils"; // ES6 Modules
 
 // const {Schema} = require('mongoose');
 
@@ -7,70 +10,104 @@ const passportLocalMongoose = require("passport-local-mongoose");
 // check this ?
 // Note that here in this schema we did not add any field for password unlike we do normally.
 //This is because passport-local-mongoose doesn’t need it.
-const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    unique: [true, "Username is not available."],
-    required: [true, "Username required."],
+const userSchema = new mongoose.Schema(
+  {
+    // username: {
+    //   type: String,
+    //   unique: [true, "Username is not available."],
+    //   required: [true, "Username required."],
+    // },
+    email: {
+      type: String,
+      trim: true,
+      unique: true,
+      required: [true, "Email is required."],
+    },
+    password: {
+      type: String,
+      trim: true,
+      required: [true, "Password is required."],
+    },
+    // googleId: String,
+    // displayName: String,
   },
-  password: {
-    type: String,
-    //required: [true, 'Password required.']
-  },
-  googleId: String,
-  displayName: String,
-  email: String,
+  // The timestamps option assigns createdAt and updatedAt fields
+  { timestamps: true }
+);
+
+// pre save middleware function: check unique email
+// intercept and modify the behavior of specific document methods
+userSchema.pre("save", async function (next) {
+  console.log("userSchema.pre('save')");
+  try {
+    const existingUser = await User.findOne({ email: this.email });
+    if (existingUser) {
+      // throw new Error();
+      return next(new AuthError(`${this.email} already taken!`));
+      // return;
+    }
+    // If no user is found, move on to the next middleware
+    next();
+    // If no user is found, move on to the next middleware
+  } catch (error) {
+    // Pass error to next midddleware
+    next(error);
+  }
 });
 
-// plugin for passport-local-mongoose
-// passport-local-mangoose adds fields and methods related to authentication:
-// salt, hash properties
-// authenticate(), register(), serialize(), deserialize() methods
-userSchema.plugin(passportLocalMongoose);
-// userSchema.plugin(passportLocalMongoose, {
-//     usernameField: 'email'
-// });
-
-userSchema.statics.findOrCreate = async function findOrCreate(profile, done) {
-  console.log("User.findOrCreate()");
-  // console.log(profile);
-
+// Add a static function to User model:  signup
+// hash the plaintext password, and store in db:
+userSchema.statics.signup = async function (email, password_plaintext) {
+  let password_hash;
   try {
-    // Find or create the user in the database
-    var userObj = new this();
-    const existingUser = await this.findOne({
-      googleId: profile.googleId, // search using googleId field
-      // username: profile.email
-    }).exec();
-
-    if (!existingUser) {
-      // Create a new user
-      console.log("Creating user with Google credentials.");
-      const newUser = new User({
-        username: profile.email,
-        googleId: profile.googleId,
-        displayName: profile.displayName,
-        email: profile.emails[0].value,
-        // Set any other user properties from the profile if needed
-      });
-
-      await newUser.save();
-      done(null, newUser);
-    } else {
-      console.log("Existing User with related Google credentials is found.");
-      done(null, existingUser);
-    }
+    password_hash = await hash(password_plaintext);
   } catch (error) {
-    done(error);
+    console.log(error);
+    // note that this is not a middleware, we can throw the error
+    // next(error);
+    throw error;
   }
+
+  // return an existing model method
+  return User.create({
+    email,
+    password: password_hash,
+  });
 };
+
+// userSchema.statics.signup = async function (email, password_plaintext) {
+
+//   let user = undefined;
+//   try {
+//     const hashedPassword = await hash(password_plaintext);
+
+//     // create a model instance with the same email, but hashed password:
+//     // notice there is a .pre('save) middleware
+//     user = await User.create({
+//       email,
+//       password: hashedPassword,
+//     });
+
+//     // Successfully signed up.
+//     console.log("User created.");
+//     // done(null, new_user);
+//   } catch (error) {
+//     console.log("userSchema.statics.signup:", error);
+
+//     // note that this is not a middleware, we can throw the error
+//     // next(error);
+//     throw error;
+//   }
+
+//   return user;
+// };
 
 // Creating and exporting model
 // To use our schema definition, we need to convert our Schema into a Model we can work with.
 // To do so, we pass it into mongoose.model(modelName, schema):
-const User1 = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 
 // export the model from Mongoose schema using CommonJS syntax
 module.exports = {
-  User1,
+  User,
 };

@@ -157,13 +157,12 @@ app.use(function (req, res, next) {
 // Define error-handling middleware functions in the same way as other middleware functions,
 // except error-handling functions have four arguments instead of three: (err, req, res, next)
 app.use((err, req, res, next) => {
-  // console.error(err.statusCode);
-  // next(err); // we can pass the error is explicitly to the next error handler (i.e default, or custom below this one).
-  // res.status(500).send('Something broke!');
+  console.error(err.stack);
 
-  // render a custom error page with the err object
-  res.status(err.statusCode || 500).render("error.ejs", {
-    err,
+  res.status(err.statusCode || 500).json({
+    error: err.message,
+    name: err.name,
+    stack: err.stack, // dev mode
   });
 });
 

@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
+const z = require("zod");
+const { AuthError, InvalidParameterError } = require("../lib/Error");
+
 // An implementation of JSON Web Tokens
 const jwt = require("jsonwebtoken");
 
@@ -19,8 +22,12 @@ async function verifyGoogleCredential(token, client_id) {
 // Argon2 is the winner of the 2015 Password Hashing Competition
 const argon2 = require("argon2");
 
+// import bcrypt
+const bcrypt = require("bcrypt");
+const SALTROUNDS = 12;
+
 // import mongoose Model
-const { User } = require("../model/model_user_passport");
+const { User } = require("../model/User");
 
 const passport = require("passport");
 /* 
@@ -50,39 +57,46 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 */
 
-// custom error
-const { AuthError } = require("../lib/AppError");
-
-// server-side validation
-const Joi = require("joi");
-// object desct, like without a module name
-const { userJoiSchema } = require("../lib/joi_schemas");
-
-// import bcrypt
-const bcrypt = require("bcrypt");
-const SALTROUNDS = 12;
-
-// function for validation, will be middleware
-// SERVER-SIDE VALIDATION USING JOI
-const validateUser = (req, res, next) => {
-  // 1. a schema is constructed (we imported using require)
+// validation middleware for user payload of the request.
+function validateUser(req, res, next) {
+  // 1. a schema is constructed / imported
+  // zod: creating a schema
+  const schema = z.object({
+    email: z.string().email({ message: "Oops! Please check email" }),
+    password: z.string(),
+  });
 
   // 2. the value is validated against the defined schema:
-  // returns an object. we can use object destructuring to access properties:
-  const { error, value } = userJoiSchema.validate(req.body);
+  // extract value from request body
+  const { user } = req.body;
 
-  // If the input is valid, then the error will be undefined
-  // ValidationError: "campground" is required
-  // "campground.title" is not allowed to be empty
-  // "campground.price" must be greater than or equal to 0
-  if (error) {
-    console.log(error);
+  try {
+    schema.parse(user); // => throws ZodError
+  } catch (err) {
+    console.log("We have a problem.");
     // next with an error:
-    return next(new AuthError("Invalid User Data.", 400));
-  } else {
-    next(); // note that this is a middleware, so call next() without arguments to go on.
+    return next(new InvalidParameterError("Invalid User Data."));
   }
-};
+
+  next();
+}
+
+// wrap middleware to accept arguments: schema.parse(value);
+function validate(schema, value) {
+  // return a middleware
+  return (req, res, next) => {
+    // 2. the value is validated against the defined schema:
+    try {
+      schema.parse(value); // => throws ZodError
+    } catch (err) {
+      console.log("We have a problem.");
+      // next with an error:
+      return next(new InvalidParameterError("Invalid User Data."));
+    }
+
+    next();
+  };
+}
 
 // middleware to check auth status
 // highly coupled with the login implementation which sets a session object named "account"
@@ -111,42 +125,33 @@ router.get("/topsecret", requireLogin, (req, res, next) => {
 });
 
 // GET register form
-
 router.get("/register", (req, res) => {
   res.render("auth/register");
 });
 
-// 1. manual register
+// 1. manual signup
 // CREATE a new user after validating.
 // there could be errors handled to next, so there is a third parameter in the route handler.
-router.post("/register", validateUser, async (req, res, next) => {
-  console.log("/POST register");
-  // res.send(req.body);
+router.post("/signup", validateUser, async (req, res, next) => {
+  console.log("/POST signup");
+  let newUser = undefined;
 
   // get form information in request body
-  const userinfo = req.body.user;
+  const { user } = req.body;
 
-  // hash the password, and store in db:
-  const salt = await bcrypt.genSalt(SALTROUNDS);
-  const hash = await bcrypt.hash(userinfo.password, salt);
-
-  // create a model instance with the same email, but hashed password:
-  const user = new User({
-    username: userinfo.username,
-    password: hash,
-  });
-
+  // note that signup logic is implemented as a static model function:
   try {
-    await user.save();
-  } catch (e) {
-    // res.send(e);
-    // res.send(e.errmsg);
-
-    // catch the error, stop executing, create a custom error and give this error to the next:
-    return next(new AuthError(e.errmsg));
+    console.log("Begin Registering user.", user);
+    newUser = await User.signup(user.email, user.password);
+    console.log("Done Registering user.", newUser);
+  } catch (error) {
+    console.log("Error registering user.", error);
+    // give this error to the next:
+    return next(error);
   }
 
-  res.redirect("/auth/signin");
+  res.json(newUser);
+  // res.redirect("/auth/signin");
 });
 
 // 2. passport-local register
@@ -289,9 +294,10 @@ router.get(
 // Your server-side endpoints must handle the following HTTP POST requests.
 router.post("/google/redirect", (req, res) => {
   console.log(req.body.credential);
-  verifyGoogleCredential(req.body.credential, process.env.GOOGLE_CLIENT_ID).catch(
-    console.error
-  );
+  verifyGoogleCredential(
+    req.body.credential,
+    process.env.GOOGLE_CLIENT_ID
+  ).catch(console.error);
 });
 
 // LOGOUT

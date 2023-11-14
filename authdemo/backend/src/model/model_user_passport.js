@@ -4,7 +4,7 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const argon2 = require("argon2");
 const bcrypt = require("bcrypt");
 const SALTROUNDS = 10;
-const pwdUtils = require("../lib/password_utils");
+const pwdUtils = require("../lib/auth-utils");
 
 // const {Schema} = require('mongoose');
 
@@ -129,9 +129,9 @@ userSchema.statics.findOrCreate = async function findOrCreate(profile, done) {
 // To use our schema definition, we need to convert our Schema into a Model we can work with.
 // To do so, we pass it into mongoose.model(modelName, schema):
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("PassportUser", userSchema);
 
-// const User = mongoose.model("User", userSchema);
+// const PassportUser = mongoose.model("PassportUser", userSchema);
 // module.exports = {
-//   User,
+//   PassportUser,
 // };

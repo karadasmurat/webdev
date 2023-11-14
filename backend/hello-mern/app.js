@@ -7,26 +7,36 @@ const app = express();
 // The Path module provides a way of working with directories and file paths.
 const path = require("path");
 
-//express-session with connect-mongo
-const session = require("express-session");
-const MongoStore = require("connect-mongo");
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * *    Mongoose - ODM layer for MongoDB   * * * * *
+ */
+const { connect, mongostore } = require("./src/config/db-config");
+connect();
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * *   express-session with connect-mongo    * * * * *
+ */
+
+const session = require("express-session");
+
+// Put the session middleware before all of the routes.
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
-    saveUninitialized: false, // don't create session until something stored
-    resave: false, //don't save session if unmodified
+    // The name of the session ID cookie to set in the response (and read from in the request).
+    // The default value is 'connect.sid'.
+    name: "authtest.sid",
+    // Forces the session to be saved back to the session store, even if the session was never modified during the request
+    resave: false,
+    saveUninitialized: true,
+    // Settings object for the session ID cookie.
     cookie: {
+      // sameSite: "None",
       httpOnly: true,
-      expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      secure: false, // require https-enabled website
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     },
-    store: MongoStore.create({
-      mongoUrl: process.env.ATLAS_CONN_STR,
-      touchAfter: 24 * 60 * 60, // 24 hours period in seconds
-      crypto: {
-        secret: process.env.MONGOSTORE_SECRET,
-      },
-    }),
+    store: mongostore,
   })
 );
 
@@ -61,17 +71,6 @@ app.use(
 // passport.use(new LocalStrategy(User.authenticate()));
 // passport.serializeUser(User.serializeUser());
 // passport.deserializeUser(User.deserializeUser());
-
-// Mongoose - ODM layer for MongoDB
-const mongoose = require("mongoose");
-
-const EXPRESS_PORT = 3000;
-const options = {};
-
-mongoose
-  .connect(process.env.ATLAS_CONN_STR, options)
-  .then(console.log("Connected to mongodb."))
-  .catch((error) => console.log("Cannot connect. " + error));
 
 // Set the "views" directory, relative to this file
 // If you run the express app from another directory, it’s safer to use the absolute path of the directory
@@ -108,8 +107,15 @@ app.use(
 );
 
 // custom middlewares
-const logger = require("./middlewares/logger");
+const logger = require("./src/middlewares/logger");
 app.use(logger);
+
+const {
+  validateParam,
+  requirePositiveInt,
+  positiveIntegerSchema,
+} = require("./src/middlewares/validation");
+// app.use(validator);
 
 // const ejsLocals = require("./middlewares/ejs-locals");
 // app.use(ejsLocals);
@@ -117,12 +123,17 @@ app.use(logger);
 // Express Router middlewares
 // const routerDummy = require("./routes/router_dummy");
 // app.use("/items", routerDummy);
-const routerWorkouts = require("./routes/router_workouts");
+const routerWorkouts = require("./src/routes/router_workouts");
 app.use("/api/workouts", routerWorkouts);
 
 // GET /hello
 app.get("/hello", (req, res) => {
   res.send("Hello, there!");
+});
+
+app.get("/validate/:id", requirePositiveInt("id"), (req, res) => {
+  const { id } = req.params;
+  res.json({ id });
 });
 
 // last middlewares, 404 and error handler
@@ -133,6 +144,8 @@ app.use(function (req, res, next) {
 
 // bind and listen for connections on the specified host and port.
 // identical to Node’s http.Server.listen()
+const EXPRESS_PORT = process.env.EXPRESS_PORT;
+
 app.listen(EXPRESS_PORT, () => {
-  console.log(`mongoose-express app listening on port ${EXPRESS_PORT}`);
+  console.log(`Express app listening on port ${EXPRESS_PORT}`);
 });

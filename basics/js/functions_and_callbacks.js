@@ -653,12 +653,58 @@ function createMultiplier(factor) {
   return (number) => number * factor;
 }
 
+// Currying is an advanced technique of working with functions.
+// Currying is a transformation of functions that translates a function from callable as f(a, b, c) into callable as f(a)(b)(c)
+// Currying doesn’t call a function. It just transforms it.
+// the implementation is straightforward: it’s wrapper(s).
+// isGreaterThan(limit)(value)
+function isGreaterThan(limit) {
+  return function (value) {
+    return value > limit;
+  };
+}
+
+// Non-curried function
+function add(x, y) {
+  return x + y;
+}
+
+// Curried function
+// Calling curried function returns a partially specialized version of non-curried function.
+function curryAdd(x) {
+  return function (y) {
+    return x + y;
+  };
+}
+
 function returningAFunction() {
+  console.log(add(2, 3)); //  5
+
+  // Usage of curried function
+  // v1 - Partially specialized function, returned by wrapper.
+  const add2 = curryAdd(2);
+  console.log(add2(3)); //  5
+
+  // v2 - Usage of curried function with both arguments
+  console.log(curryAdd(2)(3)); //  5
+
   const twoTimes = createMultiplier(2);
   console.log(twoTimes(5));
 
   const tenTimes = createMultiplier(10);
   console.log(tenTimes(5));
+
+  // v1
+  // note that isGreaterThan5 is a function as well, returned by wrapper.
+  const isGreaterThan5 = isGreaterThan(5);
+  const isGreaterThan2 = isGreaterThan(2);
+  console.log(isGreaterThan5(3)); // false
+  console.log(isGreaterThan2(3)); // true
+
+  // v2
+  // isGreaterThan(limit)(value)
+  console.log(isGreaterThan(5)(3)); // false;
+  console.log(isGreaterThan(2)(3)); // true;
 }
 
 function passByRef() {
@@ -721,7 +767,7 @@ function defaultParameters() {
 
 // scopeBasics();
 // parameterBasics();
-defaultParameters();
+// defaultParameters();
 // functionExpressions();
 // firstClassFunctions();
 
@@ -734,4 +780,4 @@ defaultParameters();
 // check(11);
 // passByRef();
 
-// returningAFunction();
+returningAFunction();

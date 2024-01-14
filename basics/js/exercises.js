@@ -188,3 +188,28 @@ function drawTriangle(h) {
 // console.log(flatten(arrays));
 
 drawTriangle(10);
+
+// find the most frequent letter in a string
+function mostFrequentLetter(str) {
+  str = str.toLowerCase();
+  const mostFreqEntry = { letter: "", count: 0 };
+  const letterFrequencies = new Map();
+
+  for (const letter of str) {
+    // Check if the character is already in the map
+    if (letterFrequencies.has(letter)) {
+      newFreq = letterFrequencies.get(letter) + 1;
+      if (newFreq > mostFreqEntry.count) {
+        mostFreqEntry.letter = letter;
+        mostFreqEntry.count = newFreq;
+      }
+      letterFrequencies.set(letter, newFreq);
+    } else {
+      letterFrequencies.set(letter, 1);
+    }
+  }
+  console.log(letterFrequencies);
+  console.log(mostFreqEntry);
+}
+
+mostFrequentLetter("ABCDE");

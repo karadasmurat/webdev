@@ -434,9 +434,36 @@ function methodBasics() {
   console.log("circle.radius", circle.radius, "circle.area()", circle.area());
 }
 
+function destructuringBasics() {
+  const user1 = { lastname: "Alice", age: 30, isActive: true };
+
+  const user2 = user1; // copy reference
+  user2.age = 22;
+
+  const user3 = { ...user1 }; // copy value
+  user3.age = 33;
+
+  console.log(user1); // { lastname: 'Alice', age: 22, isActive: true }
+  console.log(user2); // { lastname: 'Alice', age: 22, isActive: true }
+  console.log(user3); // { lastname: 'Alice', age: 33, isActive: true }
+
+  // The spread syntax (...) is designed to expand iterable objects
+  // Not directly applicable to regular objects in the context of console.log or function calls that expect individual arguments.
+  // console.log(...user1);
+
+  const phones = new Map();
+  phones.set("MK", "1111111");
+  phones.set("MSL", "2222222");
+  phones.set("BRC", "3333333");
+
+  console.log(phones); // Map(3) { 'MK' => '1111111', 'MSL' => '2222222', 'BRC' => '3333333' }
+  console.log(...phones); // [ 'MK', '1111111' ] [ 'MSL', '2222222' ] [ 'BRC', '3333333' ]
+}
+
 // objectBasics();
-objectIdentity();
+// objectIdentity();
 // propertyValueShorthand();
+destructuringBasics();
 // checkIfPropertyExists();
 // methodBasics();
 // passByRef();

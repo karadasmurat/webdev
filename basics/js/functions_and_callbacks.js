@@ -682,6 +682,7 @@ function returningAFunction() {
 
   // Usage of curried function
   // v1 - Partially specialized function, returned by wrapper.
+  // g = f(a)
   const add2 = curryAdd(2);
   console.log(add2(3)); //  5
 

@@ -149,6 +149,33 @@ function timeoutOrder() {
   // second done.
 }
 
+function processTodo(t) {
+  console.log(t);
+}
+
+function fetch_then() {
+  // v0 - just regular call an asynchronous function without attaching a callback with .then or await
+  fetch("https://jsonplaceholder.typicode.com/todos/1");
+
+  // v1. then
+  fetch("https://jsonplaceholder.typicode.com/todos/2")
+    .then((res) => res.json())
+    .then(processTodo); // or (data) => processTodo(data)
+}
+
+async function fetch_await() {
+  // await is only valid in async functions
+  const res = await fetch("https://jsonplaceholder.typicode.com/todos/3");
+  const todo = await res.json();
+  processTodo(todo); // {userId: 1, id: 2, title: 'quis ut nam facilis et officia qui', completed: false}
+}
+
+function fetchBasics() {
+  console.log("Fetch API Basics");
+  fetch_then();
+  // fetch_await();
+}
+
 // ##############
 // ##############
 
@@ -156,5 +183,8 @@ function timeoutOrder() {
 // timeoutOrder();
 // asyncOrderDemo();
 
-workWithPromises();
+// workWithPromises();
 // promiseOrderDemo();
+fetchBasics();
+
+

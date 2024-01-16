@@ -309,38 +309,21 @@ function prototypeBasics() {
   console.log("Prototype-based programming");
   console.log("---------------------------");
 
-  // Example of true prototypal inheritance style in JavaScript.
-
-  // object creation using the literal object notation {}.
-  const base = {
-    name: "base",
-    one: 1,
-    two: 2,
+  // An object named employee is created using object literal syntax
+  const employee = {
+    name: "",
+    occupation: "",
+    salary: 0,
+    getDetails() {
+      return `Name: ${this.name}, Occupation: ${this.occupation}, Salary: ${this.salary}`;
+    },
   };
 
-  // Another object.
-  const sub = {
-    two: "two",
-    three: "three",
-  };
-
-  // Object.setPrototypeOf() is a method introduced in ECMAScript 2015.
-  Object.setPrototypeOf(sub, base); // foo is now the prototype of bar.
-
-  // If we try to access base's properties from text from now on, we'll succeed.
-  console.log(sub.name); // "base"
-  console.log(base.name); // "base"
-
-  // The child object's properties are accessible.
-  console.log(sub.three); // "three".
-
-  // Own properties shadow prototype properties
-  console.log(sub.two); // "two"
-
-  // Note. if you are concerned about performance, you should avoid setting the [[Prototype]] of an object.
-  // Instead, create a new object with the desired [[Prototype]] using Object.create().
-  const sub2 = Object.create(base);
-  console.log(sub2.name); // "base"
+  // Inheritance with Object.create:
+  // This means mk inherits the properties and methods from employee as its prototype.
+  const mk = Object.create(employee);
+  mk.name = "MK";
+  console.log(mk.getDetails());
 }
 
 function constructorFunctions() {
@@ -410,7 +393,7 @@ function constructorBasics() {
 /************ calls ***************/
 // objectLiterals();
 // propertiesThatHoldFunctionValues();
-// prototypeBasics();
+prototypeBasics();
 // constructorFunctions();
-classBasics();
+// classBasics();
 // inheritanceBasics();

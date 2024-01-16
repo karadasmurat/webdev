@@ -205,6 +205,17 @@ function mutator(car, arr) {
   arr[0] = 0;
 }
 
+// function takes a parameter named wizard, which is expected to be an object.
+// Objects in JavaScript are passed by reference, not by value.
+// This means that if you change the object's properties, you will also change the original object.
+function referenceSemantics(wizard) {
+    wizard.house = "Slytherin";
+}
+
+const wiz = {name: "Potter", house: "Gryffindor"};
+referenceSemantics(wiz); // modify the original object.
+console.log(wiz); // { name: 'Potter', house: 'Slytherin' }
+
 function sum_rest(...theArgs) {
   console.log("Type of arg: ", typeof theArgs); // object
   console.log("Array.isArray(): ", Array.isArray(theArgs)); // true
@@ -720,6 +731,10 @@ function passByRef() {
 
   console.log(mycar);
   console.log(scores);
+
+  const wiz = { name: "Potter", house: "Gryffindor" };
+  referenceSemantics(wiz); // modify the original object.
+  console.log(wiz); // { name: 'Potter', house: 'Slytherin' }
 }
 
 function callbackBasics() {
@@ -782,3 +797,6 @@ function defaultParameters() {
 // passByRef();
 
 returningAFunction();
+
+
+

@@ -65,7 +65,32 @@ function merge_spread() {
   // }
 }
 
+function shallow_copy_spread() {
+  // an array of strings (value type)
+  names = ["Alice", "Bob"];
+  // an array of objects (reference type)
+  students = [
+    { name: "Alice", age: 20 },
+    { name: "Bob", age: 21 },
+  ];
+
+  // shallow copy an array of primitives
+  names_copy = [...names];
+  names_copy[0] = "MODIFIED";
+  console.log(names, names_copy); // [ 'Alice', 'Bob' ] [ 'MODIFIED', 'Bob' ]
+
+  // shallow copy an array of references (like an array of pointers)
+  students_copy = [...students];
+  students_copy[0] = { name: "MODIFIED", age: 20 }; // assign a new object: ORIGINAL object is NOT modified
+  students_copy[1].age = 99; // modify object property through the reference: ORIGINAL object is modified!
+  console.log(students); // [ { name: 'Alice', age: 20 }, { name: 'MODIFIED', age: 21 } ]
+  console.log(students_copy); // [ { name: 'MODIFIED', age: 20 }, { name: 'MODIFIED', age: 21 } ]
+}
+
 // ###############################################
 
-copy_spread();
-merge_spread();
+shallow_copy_spread();
+// copy_spread();
+// merge_spread();
+
+
